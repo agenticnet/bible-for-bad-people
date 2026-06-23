@@ -1,20 +1,38 @@
 @import "tailwindcss";
 
 @theme {
-  --color-void: #050505;
-  --color-abyss: #0a0a0f;
-  --color-shadow: #12121a;
-  --color-smoke: #1a1a24;
-  --color-ash: #2a2a3a;
-  --color-muted: #6b6b80;
-  --color-bone: #c8c8d4;
-  --color-neon-purple: #a855f7;
-  --color-neon-cyan: #22d3ee;
-  --color-neon-pink: #f472b6;
-  --color-neon-gold: #fbbf24;
-  --color-neon-red: #ef4444;
-  --font-display: "Georgia", "Times New Roman", serif;
-  --font-body: system-ui, -apple-system, sans-serif;
+  /* Scripture palette — OKLCH */
+  --color-parchment: oklch(0.975 0.004 90);
+  --color-page: oklch(0.965 0.005 90);
+  --color-ink: oklch(0.22 0.025 265);
+  --color-ink-soft: oklch(0.42 0.018 265);
+  --color-binding: oklch(0.2 0.035 30);
+  --color-binding-raised: oklch(0.24 0.03 30);
+  --color-rule: oklch(0.88 0.008 90);
+  --color-wine: oklch(0.45 0.11 25);
+  --color-wine-deep: oklch(0.38 0.1 25);
+  --color-ember: oklch(0.5 0.14 30);
+  --color-plum: oklch(0.42 0.08 320);
+  --color-slate: oklch(0.48 0.04 250);
+  --color-terra: oklch(0.52 0.1 45);
+  --color-ivory: oklch(0.94 0.006 90);
+
+  /* Legacy aliases — mapped to scripture roles */
+  --color-void: var(--color-binding);
+  --color-abyss: var(--color-binding-raised);
+  --color-shadow: var(--color-page);
+  --color-smoke: oklch(0.93 0.005 90);
+  --color-ash: var(--color-rule);
+  --color-muted: var(--color-ink-soft);
+  --color-bone: var(--color-ink);
+  --color-neon-gold: var(--color-wine);
+  --color-neon-purple: var(--color-plum);
+  --color-neon-cyan: var(--color-slate);
+  --color-neon-pink: var(--color-terra);
+  --color-neon-red: var(--color-ember);
+
+  --font-display: var(--font-serif), "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --font-body: var(--font-sans), system-ui, -apple-system, sans-serif;
 }
 
 @layer base {
@@ -23,94 +41,112 @@
   }
 
   body {
-    @apply bg-void text-bone antialiased;
+    @apply bg-parchment text-ink antialiased;
     font-family: var(--font-body);
   }
 
   ::selection {
-    @apply bg-neon-purple/40 text-white;
+    background: oklch(0.45 0.11 25 / 0.2);
+    color: var(--color-ink);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
   }
 }
 
 @layer utilities {
-  .text-glow-purple {
-    text-shadow: 0 0 20px rgba(168, 85, 247, 0.6), 0 0 40px rgba(168, 85, 247, 0.3);
+  .font-serif {
+    font-family: var(--font-display);
   }
 
-  .text-glow-gold {
-    text-shadow: 0 0 20px rgba(251, 191, 36, 0.6), 0 0 40px rgba(251, 191, 36, 0.3);
+  .font-sans {
+    font-family: var(--font-body);
   }
 
-  .text-glow-cyan {
-    text-shadow: 0 0 20px rgba(34, 211, 238, 0.6), 0 0 40px rgba(34, 211, 238, 0.3);
+  .font-mono {
+    font-family: var(--font-mono), ui-monospace, "SF Mono", Menlo, monospace;
   }
 
-  .border-glow-purple {
-    box-shadow: 0 0 15px rgba(168, 85, 247, 0.3), inset 0 0 15px rgba(168, 85, 247, 0.05);
+  .text-binding-ivory {
+    color: oklch(0.94 0.006 90);
   }
 
-  .border-glow-gold {
-    box-shadow: 0 0 15px rgba(251, 191, 36, 0.3), inset 0 0 15px rgba(251, 191, 36, 0.05);
+  .text-binding-muted {
+    color: oklch(0.72 0.015 90);
   }
 
-  .gradient-border {
-    position: relative;
-    background: var(--color-shadow);
-    border-radius: 0.75rem;
+  .scripture-block {
+    font-family: var(--font-display);
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    letter-spacing: 0.01em;
   }
 
-  .gradient-border::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, var(--color-neon-purple), var(--color-neon-cyan), var(--color-neon-pink));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
+  .verse-ref {
+    font-family: var(--font-mono);
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
   }
 
-  .scanlines {
-    background-image: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 2px,
-      rgba(0, 0, 0, 0.15) 2px,
-      rgba(0, 0, 0, 0.15) 4px
-    );
+  .page-enter {
+    animation: page-enter 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
   }
 
-  .noise-overlay {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  @media (prefers-reduced-motion: reduce) {
+    .page-enter {
+      animation: none;
+    }
   }
 }
 
-@keyframes pulse-glow {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 1; }
-}
-
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes typing-dot {
-  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
-  30% { opacity: 1; transform: translateY(-4px); }
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-4px);
+  }
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 3s ease-in-out infinite;
+.typing-dot:nth-child(1) {
+  animation: typing-dot 1.4s infinite 0s;
+}
+.typing-dot:nth-child(2) {
+  animation: typing-dot 1.4s infinite 0.2s;
+}
+.typing-dot:nth-child(3) {
+  animation: typing-dot 1.4s infinite 0.4s;
 }
 
-.animate-float {
-  animation: float 6s ease-in-out infinite;
+@media (prefers-reduced-motion: reduce) {
+  .typing-dot:nth-child(1),
+  .typing-dot:nth-child(2),
+  .typing-dot:nth-child(3) {
+    animation: none;
+    opacity: 0.6;
+  }
 }
-
-.typing-dot:nth-child(1) { animation: typing-dot 1.4s infinite 0s; }
-.typing-dot:nth-child(2) { animation: typing-dot 1.4s infinite 0.2s; }
-.typing-dot:nth-child(3) { animation: typing-dot 1.4s infinite 0.4s; }

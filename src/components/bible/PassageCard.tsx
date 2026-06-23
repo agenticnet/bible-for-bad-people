@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ChevronUp, Globe } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import type { BiblePassage, PassageTag } from "@/lib/bibleTypes";
 import { TAG_LABELS } from "@/lib/bibleTypes";
 import { cn } from "@/lib/utils";
@@ -11,50 +11,41 @@ interface PassageCardProps {
 }
 
 const TAG_COLORS: Record<PassageTag, string> = {
-  violent: "border-neon-red/30 bg-neon-red/10 text-neon-red",
-  weird: "border-neon-purple/30 bg-neon-purple/10 text-neon-purple",
-  contradictory: "border-neon-pink/30 bg-neon-pink/10 text-neon-pink",
-  absurd: "border-neon-gold/30 bg-neon-gold/10 text-neon-gold",
-  cruel: "border-orange-400/30 bg-orange-400/10 text-orange-400",
-  "bizarre-laws": "border-neon-cyan/30 bg-neon-cyan/10 text-neon-cyan",
-  "skipped-in-church": "border-muted/30 bg-smoke text-muted",
-  sexual: "border-neon-pink/30 bg-neon-pink/10 text-neon-pink",
-  genocide: "border-neon-red/30 bg-neon-red/10 text-neon-red",
+  violent: "text-ember",
+  weird: "text-plum",
+  contradictory: "text-terra",
+  absurd: "text-wine",
+  cruel: "text-ember",
+  "bizarre-laws": "text-slate",
+  "skipped-in-church": "text-ink-soft",
+  sexual: "text-terra",
+  genocide: "text-ember",
 };
 
 export default function PassageCard({ passage }: PassageCardProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <article className="rounded-xl border border-ash bg-shadow transition-all hover:border-ash/80">
+    <article className="bg-page transition-colors hover:bg-smoke/60">
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
-        className="flex w-full items-start gap-4 p-5 text-left"
+        className="flex w-full items-start gap-4 px-1 py-6 text-left sm:px-2"
+        aria-expanded={expanded}
       >
-        <div className="flex-1 min-w-0">
-          <div className="mb-2 flex flex-wrap items-center gap-2">
-            <span className="font-mono text-sm text-neon-gold">
-              {passage.reference}
-            </span>
-            <span className="rounded-full border border-ash bg-smoke px-2 py-0.5 text-[10px] text-muted">
-              {passage.book}
-            </span>
+        <div className="min-w-0 flex-1">
+          <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+            <span className="verse-ref text-wine">{passage.reference}</span>
+            <span className="verse-ref text-ink-soft/70">{passage.book}</span>
           </div>
-          <p
-            className="mb-3 text-base font-semibold leading-snug text-bone"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
+          <p className="mb-3 font-serif text-lg leading-snug text-ink">
             {passage.tldr}
           </p>
-          <div className="flex flex-wrap gap-1.5">
+          <div className="flex flex-wrap gap-x-3 gap-y-1">
             {passage.tags.map((tag) => (
               <span
                 key={tag}
-                className={cn(
-                  "rounded-full border px-2 py-0.5 text-[9px] uppercase tracking-wider",
-                  TAG_COLORS[tag]
-                )}
+                className={cn("verse-ref text-[0.65rem]", TAG_COLORS[tag])}
               >
                 {TAG_LABELS[tag]}
               </span>
@@ -62,36 +53,30 @@ export default function PassageCard({ passage }: PassageCardProps) {
           </div>
         </div>
         {expanded ? (
-          <ChevronUp className="h-5 w-5 shrink-0 text-muted" />
+          <ChevronUp className="mt-1 h-4 w-4 shrink-0 text-ink-soft" />
         ) : (
-          <ChevronDown className="h-5 w-5 shrink-0 text-muted" />
+          <ChevronDown className="mt-1 h-4 w-4 shrink-0 text-ink-soft" />
         )}
       </button>
 
       {expanded && (
-        <div className="border-t border-ash px-5 pb-5">
-          <div className="mt-4">
-            <p className="mb-1.5 text-[10px] uppercase tracking-wider text-muted">
-              The Passage (Abridged)
-            </p>
-            <blockquote className="border-l-2 border-neon-gold/40 pl-4 text-sm italic leading-relaxed text-bone/80">
+        <div className="border-t border-rule px-1 pb-6 sm:px-2">
+          <div className="mt-5">
+            <p className="verse-ref mb-3 text-ink-soft">The passage (abridged)</p>
+            <blockquote className="scripture-block border-l border-wine/30 pl-5 text-ink/90 italic">
               &ldquo;{passage.excerpt}&rdquo;
             </blockquote>
           </div>
 
-          <div className="mt-5 rounded-lg border border-neon-cyan/25 bg-neon-cyan/5 p-4">
-            <p className="mb-2 flex items-center gap-2 text-[10px] uppercase tracking-wider text-neon-cyan">
-              <Globe className="h-3.5 w-3.5" />
-              Modern World Connection
-            </p>
-            <p className="text-sm leading-relaxed text-bone/90">
+          <div className="mt-6 border-t border-rule pt-5">
+            <p className="verse-ref mb-2 text-ink-soft">Modern world connection</p>
+            <p className="text-sm leading-relaxed text-ink-soft">
               {passage.modernWorld}
             </p>
           </div>
 
-          <p className="mt-4 text-[10px] text-muted/50">
-            Content warning: This database is satirical education, not theology.
-            Read the full passage in context before quoting at Thanksgiving.
+          <p className="verse-ref mt-5 text-ink-soft/60">
+            Satirical education, not theology. Read in context before quoting at Thanksgiving.
           </p>
         </div>
       )}

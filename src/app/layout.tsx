@@ -1,5 +1,24 @@
 import type { Metadata } from "next";
+import { Figtree, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
+
+const fontSerif = Source_Serif_4({
+  subsets: ["latin"],
+  variable: "--font-serif",
+  display: "swap",
+});
+
+const fontSans = Figtree({
+  subsets: ["latin"],
+  variable: "--font-sans",
+  display: "swap",
+});
+
+const fontMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Bible for Bad People",
@@ -13,9 +32,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="min-h-screen">
-        <div className="pointer-events-none fixed inset-0 noise-overlay" />
+    <html
+      lang="en"
+      className={`${fontSerif.variable} ${fontSans.variable} ${fontMono.variable}`}
+    >
+      <body className="min-h-screen font-sans">
         {children}
       </body>
     </html>

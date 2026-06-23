@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import Link from "next/link";
-import { ArrowLeft, BookOpen, Search, Sparkles, X } from "lucide-react";
+import { ArrowLeft, BookOpen, Search, X } from "lucide-react";
 import PassageCard from "./PassageCard";
 import { searchPassages } from "@/lib/biblePassages";
 import { ALL_TAGS, TAG_LABELS } from "@/lib/bibleTypes";
@@ -34,70 +34,53 @@ export default function CynicsBible() {
   const hasFilters = query.trim() !== "" || activeTags.size > 0;
 
   return (
-    <div className="min-h-dvh bg-void">
-      <div className="border-b border-ash/50 bg-void/80 px-4 py-3 backdrop-blur-xl sm:px-6">
+    <div className="min-h-dvh bg-parchment">
+      <div className="border-b border-ivory/10 bg-binding px-4 py-3 sm:px-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-lg border border-ash px-3 py-1.5 text-sm text-muted transition-colors hover:border-neon-gold/50 hover:text-bone"
+          className="inline-flex items-center gap-2 rounded-sm border border-ivory/15 px-3 py-1.5 text-sm text-binding-muted transition-colors hover:border-ivory/30 hover:text-binding-ivory"
         >
           <ArrowLeft className="h-4 w-4" />
           <span className="hidden sm:inline">Back to Home</span>
         </Link>
       </div>
 
-      <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 sm:py-12">
-        {/* Header */}
-        <div className="mb-8">
-          <div className="mb-4 flex flex-wrap items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl border border-neon-gold/40 bg-neon-gold/10">
-              <BookOpen className="h-6 w-6 text-neon-gold" />
-            </div>
+      <div className="page-enter mx-auto max-w-3xl px-4 py-10 sm:px-6 sm:py-14">
+        <header className="mb-10 border-b border-rule pb-8">
+          <div className="mb-5 flex items-start gap-4">
+            <BookOpen className="mt-1 h-6 w-6 shrink-0 text-wine" strokeWidth={1.5} />
             <div>
-              <h1
-                className="text-2xl font-bold text-neon-gold text-glow-gold sm:text-3xl"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
+              <p className="verse-ref mb-2 text-ink-soft">Canon, abridged</p>
+              <h1 className="font-serif text-[clamp(1.75rem,4vw,2.5rem)] leading-tight text-ink">
                 The Cynic&apos;s TL;DR Bible
               </h1>
-              <p className="text-sm text-muted">
+              <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-soft">
                 The verses your Sunday school definitely skipped — with modern
-                receipts.
+                receipts. Not theology. Cultural autopsy.
               </p>
             </div>
-            <div className="ml-auto flex items-center gap-1.5 rounded-full border border-neon-purple/30 bg-neon-purple/5 px-3 py-1">
-              <Sparkles className="h-3 w-3 text-neon-purple" />
-              <span className="text-[10px] uppercase tracking-wider text-neon-purple">
-                Visions Approximate
-              </span>
-            </div>
           </div>
+        </header>
 
-          <p className="max-w-2xl text-sm leading-relaxed text-muted">
-            Search weird, violent, and contradictory scripture — then see how
-            the same patterns show up in politics, workplaces, relationships,
-            and the group chat. Not theology. Cultural autopsy.
-          </p>
-        </div>
-
-        {/* Search */}
         <div className="mb-6">
+          <label htmlFor="passage-search" className="verse-ref mb-2 block text-ink-soft">
+            Search
+          </label>
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+            <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-ink-soft" />
             <input
+              id="passage-search"
               type="search"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search by book, verse, topic, or vibe (e.g. 'bears', 'slavery', 'shrimp')..."
-              className="w-full rounded-xl border border-ash bg-shadow py-3.5 pr-4 pl-11 text-sm text-bone placeholder:text-muted/50 focus:border-neon-gold/50 focus:outline-none focus:ring-1 focus:ring-neon-gold/30"
+              placeholder="Book, verse, topic, or vibe (e.g. bears, slavery, shrimp)…"
+              className="w-full rounded-sm border border-rule bg-page py-3 pr-4 pl-10 text-sm text-ink placeholder:text-ink-soft/50 focus:border-wine/40 focus:outline-none focus:ring-1 focus:ring-wine/20"
             />
           </div>
         </div>
 
-        {/* Tag filters */}
-        <div className="mb-6">
-          <p className="mb-2 text-[10px] uppercase tracking-wider text-muted">
-            Filter by sin category
-          </p>
+        <div className="mb-8">
+          <p className="verse-ref mb-2 text-ink-soft">Filter by category</p>
           <div className="flex flex-wrap gap-2">
             {ALL_TAGS.map((tag) => (
               <button
@@ -105,10 +88,10 @@ export default function CynicsBible() {
                 type="button"
                 onClick={() => toggleTag(tag)}
                 className={cn(
-                  "rounded-full border px-3 py-1 text-xs transition-all",
+                  "rounded-sm border px-3 py-1 text-xs transition-colors",
                   activeTags.has(tag)
-                    ? "border-neon-gold/50 bg-neon-gold/15 text-neon-gold"
-                    : "border-ash bg-smoke text-muted hover:border-neon-gold/30 hover:text-bone"
+                    ? "border-wine/35 bg-wine/8 text-wine"
+                    : "border-rule bg-page text-ink-soft hover:border-ink-soft/25 hover:text-ink"
                 )}
               >
                 {TAG_LABELS[tag]}
@@ -118,7 +101,7 @@ export default function CynicsBible() {
               <button
                 type="button"
                 onClick={clearFilters}
-                className="flex items-center gap-1 rounded-full border border-ash px-3 py-1 text-xs text-muted hover:text-bone"
+                className="flex items-center gap-1 rounded-sm border border-rule px-3 py-1 text-xs text-ink-soft hover:text-ink"
               >
                 <X className="h-3 w-3" />
                 Clear
@@ -127,32 +110,29 @@ export default function CynicsBible() {
           </div>
         </div>
 
-        {/* Results count */}
-        <p className="mb-4 text-sm text-muted">
-          {results.length} passage{results.length !== 1 ? "s" : ""} found
-          {hasFilters ? " matching your search" : ""}
+        <p className="verse-ref mb-6 text-ink-soft">
+          {results.length} passage{results.length !== 1 ? "s" : ""}
+          {hasFilters ? " matching" : ""}
         </p>
 
-        {/* Results */}
         {results.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-ash bg-shadow/50 px-6 py-16 text-center">
-            <BookOpen className="mx-auto mb-4 h-10 w-10 text-muted/30" />
-            <p className="text-muted">No passages match that search.</p>
-            <p className="mt-1 text-sm text-muted/60">
+          <div className="border border-dashed border-rule px-6 py-16 text-center">
+            <BookOpen className="mx-auto mb-4 h-8 w-8 text-ink-soft/30" strokeWidth={1.25} />
+            <p className="text-ink-soft">No passages match that search.</p>
+            <p className="mt-1 text-sm text-ink-soft/70">
               Try &ldquo;violent,&rdquo; &ldquo;Lot,&rdquo; or &ldquo;contradictory.&rdquo;
             </p>
           </div>
         ) : (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col divide-y divide-rule border-y border-rule">
             {results.map((passage) => (
               <PassageCard key={passage.id} passage={passage} />
             ))}
           </div>
         )}
 
-        <p className="mt-10 text-center text-xs text-muted/40">
+        <p className="verse-ref mt-10 text-center text-ink-soft/70">
           {results.length} curated passages — full searchable API coming later.
-          Expand any card for the abridged verse and modern world connection.
         </p>
       </div>
     </div>

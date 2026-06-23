@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bible Aesthetic Directions — Bible for Bad People</title>
+  <style>
+    :root {
+      --ink: #1a1a22;
+      --muted: #5c5c6a;
+      --rule: #e4e2dc;
+      --wine: #6b2d3c;
+      --page: #faf9f6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      background: var(--page);
+      color: var(--ink);
+      line-height: 1.6;
+    }
+    .shell { max-width: 52rem; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; }
+    h1 { font-size: 2rem; font-weight: 400; letter-spacing: -0.02em; margin: 0 0 0.5rem; }
+    .meta { font-family: ui-monospace, monospace; font-size: 0.75rem; color: var(--muted); margin-bottom: 2rem; }
+    h2 { font-size: 1.25rem; margin: 2.5rem 0 0.75rem; color: var(--wine); }
+    .candidate { border: 1px solid var(--rule); padding: 1.25rem 1.5rem; margin: 1rem 0; background: #fff; }
+    .rank { font-family: ui-monospace, monospace; font-size: 0.7rem; color: var(--wine); }
+    .candidate h3 { margin: 0.25rem 0 0.5rem; font-size: 1.1rem; }
+    .reject { opacity: 0.55; }
+    .reject h3::after { content: " (rejected)"; font-size: 0.8rem; color: var(--muted); font-weight: normal; }
+    ul { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+    li { margin: 0.35rem 0; font-size: 0.95rem; }
+    .picked { border-color: var(--wine); border-width: 2px; }
+    .picked .rank::after { content: " · implemented"; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <p class="meta">Ideation · 2026-06-23 · Bible for Bad People</p>
+    <h1>Bible aesthetic directions</h1>
+    <p>Goal: feel like reading scripture, not a souvenir shop or a neon sin-casino. Typography follows Anthropic’s role split (serif editorial, sans UI, mono metadata) with open-source substitutes.</p>
+
+    <h2>Survivors</h2>
+
+    <div class="candidate picked">
+      <p class="rank">#1</p>
+      <h3>Study Bible (light page, dark binding)</h3>
+      <p>Parchment body, leather-toned header/footer, wine accent. Source Serif 4 + Figtree + JetBrains Mono. Passages as ruled columns, not glowing cards.</p>
+      <ul>
+        <li><strong>Why it wins:</strong> Dignified frame lets satire live in copy; matches “read the Bible” muscle memory.</li>
+        <li><strong>Anthropic parallel:</strong> Ivory editorial surfaces with dark structural chrome; serif headlines, sans controls.</li>
+      </ul>
+    </div>
+
+    <div class="candidate">
+      <p class="rank">#2</p>
+      <h3>Red-letter reader</h3>
+      <p>Same light page, but ember accent reserved for quoted or divine-voice lines only. Everything else stays ink-neutral.</p>
+      <ul>
+        <li><strong>Tradeoff:</strong> Powerful when sparse; becomes tacky if overused on buttons and badges.</li>
+      </ul>
+    </div>
+
+    <div class="candidate">
+      <p class="rank">#3</p>
+      <h3>Full leather dark mode</h3>
+      <p>Entire app on binding-dark with ivory type, like reading a gilt-edged Bible under lamplight.</p>
+      <ul>
+        <li><strong>Tradeoff:</strong> Atmospheric but harder WCAG on muted text; fights Anthropic’s light editorial default.</li>
+      </ul>
+    </div>
+
+    <h2>Rejected</h2>
+
+    <div class="candidate reject">
+      <h3>Faux parchment texture pack</h3>
+      <p>Noise overlays, yellowed paper JPGs, gothic borders. Reads souvenir-shop immediately.</p>
+    </div>
+
+    <div class="candidate reject">
+      <h3>Neon cyberpurgatory (status quo)</h3>
+      <p>Purple/cyan glow, gradient borders, scanlines. Opposite of scripture gravitas.</p>
+    </div>
+
+    <div class="candidate reject">
+      <h3>Church bulletin clipart</h3>
+      <p>Halos, flames, stained-glass gradients as UI chrome. Kitsch without irony control.</p>
+    </div>
+
+    <h2>Next steps</h2>
+    <ul>
+      <li>Roll Study Bible tokens through remaining chambers (chat, oracle, confessional).</li>
+      <li><code>/impeccable polish cynics-bible</code> for a passage typography pass.</li>
+      <li><code>/impeccable animate</code> for subtle page entrance only; no glow.</li>
+    </ul>
+  </div>
+</body>
+</html>
