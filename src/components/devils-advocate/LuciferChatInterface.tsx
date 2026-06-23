@@ -62,7 +62,7 @@ export default function LuciferChatInterface() {
           title="Devil's Advocate Mode"
           status="Lucifer — Online & enabling poor choices"
           badge="Visions Approximate"
-          online={false}
+          online
         />
       }
       banner={

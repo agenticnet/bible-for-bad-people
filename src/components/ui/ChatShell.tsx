@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { accentStyles, type Accent } from "./tokens";
 import IconButton from "./IconButton";
 import { Textarea } from "./Input";
+import VisionsBadge from "./VisionsBadge";
 
 interface ChatComposerProps {
   accent: Accent;
@@ -26,12 +27,14 @@ export default function ChatComposer({
 }: ChatComposerProps) {
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (disabled || !value.trim()) return;
     onSubmit(value);
   }
 
   function handleKeyDown(e: KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
+      if (disabled || !value.trim()) return;
       onSubmit(value);
     }
   }
@@ -137,18 +140,11 @@ export function ChatHeader({
           <p className="text-xs text-ink-soft">{status}</p>
         </div>
         {badge && (
-          <div className="ml-auto hidden sm:block">
-            <span
-              className={cn(
-                "verse-ref rounded-full border px-3 py-1",
-                accentStyles.plum.borderMuted,
-                accentStyles.plum.bgMuted,
-                accentStyles.plum.text
-              )}
-            >
-              {badge}
-            </span>
-          </div>
+          <VisionsBadge
+            label={badge}
+            accent={accent}
+            className="ml-auto hidden sm:block"
+          />
         )}
       </div>
     </div>

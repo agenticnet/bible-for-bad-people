@@ -118,9 +118,10 @@ export const statusStyles: Record<
 export const chamberAccent = {
   confessional: "plum",
   chat: "wine",
+  "cynics-bible": "wine",
   "devils-advocate": "plum",
   indulgences: "wine",
-  oracle: "ember",
+  oracle: "plum",
   sin: "terra",
   smite: "ember",
   support: "slate",
