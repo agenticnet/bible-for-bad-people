@@ -11,19 +11,19 @@ import {
   Users,
 } from "lucide-react";
 
-export type FeatureStatus = "live" | "coming-soon";
+export type ChamberStatus = "live" | "coming-soon";
 
-export interface Feature {
+export interface Chamber {
   id: string;
   title: string;
   description: string;
   icon: LucideIcon;
   accent: "purple" | "cyan" | "pink" | "gold" | "red";
-  status: FeatureStatus;
+  status: ChamberStatus;
   href?: string;
 }
 
-export const features: Feature[] = [
+export const chambers: Chamber[] = [
   {
     id: "speak-with-god",
     title: "Speak with GOD",

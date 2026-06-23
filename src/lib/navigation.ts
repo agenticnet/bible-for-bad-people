@@ -5,13 +5,13 @@ export interface NavLink {
 }
 
 export const primaryNavLinks: NavLink[] = [
-  { href: "/#features", label: "Features" },
+  { href: "/#chambers", label: "The Chambers" },
   { href: "/chat", label: "Speak with GOD" },
 ];
 
-export const featureNavGroups: { title: string; links: NavLink[] }[] = [
+export const chamberNavGroups: { title: string; links: NavLink[] }[] = [
   {
-    title: "Chat & Divine",
+    title: "Confession & Prophecy",
     links: [
       { href: "/chat", label: "Speak with GOD", description: "Vent to the divine" },
       { href: "/devils-advocate", label: "Devil's Advocate", description: "Chat with Lucifer" },
@@ -19,7 +19,7 @@ export const featureNavGroups: { title: string; links: NavLink[] }[] = [
     ],
   },
   {
-    title: "Tools & Study",
+    title: "Scripture & Translation",
     links: [
       { href: "/support-desk", label: "Divine Support Desk", description: "Prayer tickets" },
       { href: "/cynics-bible", label: "Cynic's TL;DR Bible", description: "Skipped verses" },
@@ -27,7 +27,7 @@ export const featureNavGroups: { title: string; links: NavLink[] }[] = [
     ],
   },
   {
-    title: "Chaos & Commerce",
+    title: "Indulgences & Wrath",
     links: [
       { href: "/indulgences", label: "Modern Indulgences", description: "Buy absolution" },
       { href: "/smite", label: "Smite Button", description: "Deploy plagues" },
@@ -36,4 +36,4 @@ export const featureNavGroups: { title: string; links: NavLink[] }[] = [
   },
 ];
 
-export const allFeatureLinks: NavLink[] = featureNavGroups.flatMap((g) => g.links);
+export const allChamberLinks: NavLink[] = chamberNavGroups.flatMap((g) => g.links);

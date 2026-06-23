@@ -88,7 +88,7 @@ export default function LuciferChatInterface() {
           <div className="ml-auto hidden items-center gap-1.5 rounded-full border border-neon-purple/30 bg-neon-purple/5 px-3 py-1 sm:flex">
             <Sparkles className="h-3 w-3 text-neon-purple" />
             <span className="text-[10px] uppercase tracking-wider text-neon-purple">
-              Mock Mode
+              Visions Approximate
             </span>
           </div>
         </div>

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { Cross, Menu, X } from "lucide-react";
 import { useState } from "react";
-import { primaryNavLinks, featureNavGroups } from "@/lib/navigation";
+import { primaryNavLinks, chamberNavGroups } from "@/lib/navigation";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -51,10 +51,10 @@ export default function Header() {
         {/* Tablet — CTA only */}
         <div className="hidden items-center gap-3 md:flex lg:hidden">
           <Link
-            href="/#features"
+            href="/#chambers"
             className="text-sm text-muted transition-colors hover:text-neon-cyan"
           >
-            Features
+            The Chambers
           </Link>
           <Link
             href="/chat"
@@ -99,7 +99,7 @@ export default function Header() {
               </Link>
             </div>
 
-            {featureNavGroups.map((group) => (
+            {chamberNavGroups.map((group) => (
               <div key={group.title} className="mb-4 border-t border-ash/50 pt-4">
                 <p className="mb-2 px-3 text-[10px] uppercase tracking-[0.2em] text-muted">
                   {group.title}
@@ -120,7 +120,7 @@ export default function Header() {
             ))}
 
             <p className="px-3 pt-2 text-center text-[10px] text-muted/50">
-              All features also listed in the footer
+              Every chamber is listed below
             </p>
           </div>
         </nav>

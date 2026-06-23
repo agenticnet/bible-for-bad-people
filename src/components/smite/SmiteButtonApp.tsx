@@ -141,7 +141,7 @@ export default function SmiteButtonApp() {
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-neon-purple/30 bg-neon-purple/5 px-4 py-1.5">
             <Sparkles className="h-3.5 w-3.5 text-neon-purple" />
             <span className="text-xs uppercase tracking-[0.25em] text-neon-purple">
-              AI Visuals — Grok Soon
+              Visions Approximate
             </span>
           </div>
           <h1

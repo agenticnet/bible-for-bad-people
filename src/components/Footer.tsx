@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Cross } from "lucide-react";
-import { featureNavGroups } from "@/lib/navigation";
+import { chamberNavGroups } from "@/lib/navigation";
 
 export default function Footer() {
   return (
@@ -9,10 +9,10 @@ export default function Footer() {
         {/* Explore grid */}
         <div className="mb-10">
           <p className="mb-6 text-center text-xs uppercase tracking-[0.3em] text-neon-purple sm:text-left">
-            Explore the App
+            Wander the Chambers
           </p>
           <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-            {featureNavGroups.map((group) => (
+            {chamberNavGroups.map((group) => (
               <div key={group.title}>
                 <h3 className="mb-3 text-sm font-semibold text-bone">{group.title}</h3>
                 <ul className="flex flex-col gap-2">
@@ -49,10 +49,10 @@ export default function Footer() {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:justify-end">
             <Link
-              href="/#features"
+              href="/#chambers"
               className="text-xs text-muted/70 transition-colors hover:text-bone"
             >
-              Features
+              The Chambers
             </Link>
             <Link
               href="/chat"

@@ -76,7 +76,7 @@ export default function SinTranslationApp() {
             <div className="ml-auto flex items-center gap-1.5 rounded-full border border-neon-purple/30 bg-neon-purple/5 px-3 py-1">
               <Sparkles className="h-3 w-3 text-neon-purple" />
               <span className="text-[10px] uppercase tracking-wider text-neon-purple">
-                Grok API Soon
+                True prophecy pending
               </span>
             </div>
           </div>

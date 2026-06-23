@@ -13,7 +13,7 @@ export default function Hero() {
         <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-neon-purple/30 bg-neon-purple/5 px-4 py-1.5">
           <Sparkles className="h-3.5 w-3.5 text-neon-purple" />
           <span className="text-[10px] uppercase tracking-[0.15em] text-neon-purple sm:text-xs sm:tracking-[0.25em]">
-            All 9 Features — Now Live
+            All Nine Chambers Open
           </span>
         </div>
 
@@ -45,10 +45,10 @@ export default function Hero() {
             <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
           </Link>
           <Link
-            href="/#features"
+            href="/#chambers"
             className="rounded-xl border border-ash px-6 py-3.5 text-center text-sm text-muted transition-colors hover:border-neon-purple/50 hover:text-bone sm:px-8 sm:py-4 sm:text-base"
           >
-            Explore Features
+            Explore the Chambers
           </Link>
         </div>
       </div>

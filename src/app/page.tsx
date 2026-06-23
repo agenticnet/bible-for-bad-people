@@ -1,7 +1,7 @@
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
-import FeatureGrid from "@/components/FeatureGrid";
+import ChamberGrid from "@/components/ChamberGrid";
 import CTASection from "@/components/CTASection";
 
 export default function HomePage() {
@@ -10,7 +10,7 @@ export default function HomePage() {
       <Header />
       <main className="relative">
         <Hero />
-        <FeatureGrid />
+        <ChamberGrid />
         <CTASection />
       </main>
       <Footer />
