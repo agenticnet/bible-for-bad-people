@@ -6,7 +6,6 @@ export interface NavLink {
 
 export const primaryNavLinks: NavLink[] = [
   { href: "/#chambers", label: "The Chambers" },
-  { href: "/chat", label: "Speak with GOD" },
 ];
 
 export const chamberNavGroups: { title: string; links: NavLink[] }[] = [

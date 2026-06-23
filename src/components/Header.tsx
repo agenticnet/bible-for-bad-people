@@ -29,8 +29,7 @@ export default function Header() {
           </div>
         </Link>
 
-        {/* Desktop — minimal */}
-        <nav className="hidden items-center gap-6 lg:flex">
+        <nav className="hidden items-center gap-6 md:flex">
           {primaryNavLinks.map((link) => (
             <Link
               key={link.href}
@@ -40,29 +39,7 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/chat"
-            className="whitespace-nowrap rounded-lg border border-neon-gold/50 bg-neon-gold/10 px-4 py-2 text-sm font-medium text-neon-gold transition-all hover:border-neon-gold hover:bg-neon-gold/20 hover:shadow-[0_0_20px_rgba(251,191,36,0.3)]"
-          >
-            Enter the Confessional
-          </Link>
         </nav>
-
-        {/* Tablet — CTA only */}
-        <div className="hidden items-center gap-3 md:flex lg:hidden">
-          <Link
-            href="/#chambers"
-            className="text-sm text-muted transition-colors hover:text-neon-cyan"
-          >
-            The Chambers
-          </Link>
-          <Link
-            href="/chat"
-            className="rounded-lg border border-neon-gold/50 bg-neon-gold/10 px-3 py-1.5 text-sm font-medium text-neon-gold transition-all hover:border-neon-gold hover:bg-neon-gold/20"
-          >
-            Confessional
-          </Link>
-        </div>
 
         <button
           type="button"
@@ -90,13 +67,6 @@ export default function Header() {
                   {link.label}
                 </Link>
               ))}
-              <Link
-                href="/chat"
-                className="rounded-lg border border-neon-gold/50 bg-neon-gold/10 px-3 py-2.5 text-center text-sm font-medium text-neon-gold"
-                onClick={closeMobile}
-              >
-                Enter the Confessional
-              </Link>
             </div>
 
             {chamberNavGroups.map((group) => (

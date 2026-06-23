@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 export default function Hero() {
   return (
@@ -10,13 +10,6 @@ export default function Hero() {
       <div className="pointer-events-none absolute bottom-0 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-neon-gold/5 blur-[80px]" />
 
       <div className="relative mx-auto max-w-4xl text-center">
-        <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-neon-purple/30 bg-neon-purple/5 px-4 py-1.5">
-          <Sparkles className="h-3.5 w-3.5 text-neon-purple" />
-          <span className="text-[10px] uppercase tracking-[0.15em] text-neon-purple sm:text-xs sm:tracking-[0.25em]">
-            All Nine Chambers Open
-          </span>
-        </div>
-
         <h1
           className="mb-6 text-3xl leading-tight font-bold tracking-tight sm:text-5xl lg:text-7xl"
           style={{ fontFamily: "var(--font-display)" }}
