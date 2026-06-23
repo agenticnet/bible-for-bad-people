@@ -5,7 +5,9 @@ import type { SinCategory } from "@/lib/sinTypes";
 import { CATEGORY_LABELS } from "@/lib/sinTypes";
 import { SIN_LIBRARY, searchSins } from "@/lib/sinLibrary";
 import { loadCommunitySins } from "@/lib/sinStorage";
+import { fetchCommunitySins } from "@/lib/data/sin";
 import type { ContributedSin } from "@/lib/sinTypes";
+import { useAuth } from "@/components/auth/AuthProvider";
 import {
   Badge,
   Input,
@@ -21,6 +23,7 @@ interface SinLibraryPanelProps {
 }
 
 export default function SinLibraryPanel({ refreshKey }: SinLibraryPanelProps) {
+  const { user } = useAuth();
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("");
   const [community, setCommunity] = useState<ContributedSin[]>([]);
@@ -28,8 +31,21 @@ export default function SinLibraryPanel({ refreshKey }: SinLibraryPanelProps) {
 
   useEffect(() => {
     setMounted(true);
-    setCommunity(loadCommunitySins());
-  }, [refreshKey]);
+    async function load() {
+      const serverSins = await fetchCommunitySins();
+      const localSins = user ? [] : loadCommunitySins();
+      const merged = [...serverSins, ...localSins];
+      const seen = new Set<string>();
+      const unique = merged.filter((sin) => {
+        const key = `${sin.petty}:${sin.translation}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      });
+      setCommunity(unique);
+    }
+    void load();
+  }, [refreshKey, user]);
 
   const libraryResults = useMemo(
     () => searchSins(query, category || undefined),
@@ -55,7 +71,7 @@ export default function SinLibraryPanel({ refreshKey }: SinLibraryPanelProps) {
       <SectionHeader
         kicker="Inspiration Archive"
         title="Sin Library"
-        description={`${SIN_LIBRARY.length} curated sins + ${community.length} community contributions. Browse for ideas, copy to translate, or just feel seen.`}
+        description={`${SIN_LIBRARY.length} curated sins + ${community.length} community contributions. Browse for ideas or just feel seen.`}
         accent="terra"
       />
 

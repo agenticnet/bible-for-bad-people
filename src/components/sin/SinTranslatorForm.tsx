@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { ScrollText } from "lucide-react";
-import { translatePettySin, generateSinId } from "@/lib/sinTranslationEngine";
-import { addToSinLog } from "@/lib/sinStorage";
+import { translatePettySin } from "@/lib/sinTranslationEngine";
+import { addSinLogItem } from "@/lib/data/sin";
 import { SIN_LIBRARY } from "@/lib/sinLibrary";
 import {
   Button,
@@ -38,10 +38,9 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
     }, 800);
   }
 
-  function logTranslation() {
+  async function logTranslation() {
     if (!translation || !input.trim()) return;
-    addToSinLog({
-      id: generateSinId(),
+    await addSinLogItem({
       petty: input.trim(),
       translation,
       completedAt: new Date().toISOString(),
@@ -64,7 +63,7 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
       <SectionHeader
         kicker="Confession Booth"
         title="Translate Your Sin"
-        description="Type a petty thing you did. Our engine converts it to dramatic King James-style prose. Grok API coming soon — for now, template sorcery."
+        description="Type a petty thing you did. Our engine converts it to dramatic King James-style prose."
         accent="terra"
       />
 
@@ -93,7 +92,7 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
           </p>
           <button
             type="button"
-            onClick={logTranslation}
+            onClick={() => void logTranslation()}
             className={cn("text-sm hover:underline", accentStyles.terra.text)}
           >
             Log this sin to my confession record →

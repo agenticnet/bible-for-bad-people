@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Figtree, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
+import { AuthProvider } from "@/components/auth/AuthProvider";
 import "./globals.css";
 
 const fontSerif = Source_Serif_4({
@@ -37,7 +38,7 @@ export default function RootLayout({
       className={`${fontSerif.variable} ${fontSans.variable} ${fontMono.variable}`}
     >
       <body className="min-h-screen font-sans">
-        {children}
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

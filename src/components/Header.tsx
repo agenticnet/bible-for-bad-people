@@ -4,9 +4,12 @@ import Link from "next/link";
 import { Cross, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { primaryNavLinks, chamberNavGroups } from "@/lib/navigation";
+import UserMenu from "@/components/auth/UserMenu";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { user } = useAuth();
 
   function closeMobile() {
     setMobileOpen(false);
@@ -41,7 +44,9 @@ export default function Header() {
           ))}
         </nav>
 
-        <button
+        <div className="flex items-center gap-3">
+          <UserMenu />
+          <button
           type="button"
           className="shrink-0 rounded-sm border border-ivory/15 p-2 text-binding-muted md:hidden"
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -50,6 +55,7 @@ export default function Header() {
         >
           {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
+        </div>
       </div>
 
       {mobileOpen && (
@@ -67,6 +73,25 @@ export default function Header() {
                 </Link>
               ))}
             </div>
+
+            {!user && (
+              <div className="mb-4 flex gap-2 border-t border-ivory/10 pt-4">
+                <Link
+                  href="/login"
+                  className="flex-1 rounded-sm border border-ivory/15 px-3 py-2 text-center text-sm text-binding-muted"
+                  onClick={closeMobile}
+                >
+                  Log In
+                </Link>
+                <Link
+                  href="/signup"
+                  className="flex-1 rounded-sm border border-ivory/20 bg-ivory/5 px-3 py-2 text-center text-sm text-binding-ivory"
+                  onClick={closeMobile}
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
 
             {chamberNavGroups.map((group) => (
               <div key={group.title} className="mb-4 border-t border-ivory/10 pt-4">

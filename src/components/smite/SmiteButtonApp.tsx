@@ -15,11 +15,13 @@ import {
 } from "@/lib/smiteTypes";
 import { generateSmiteResult, generateSmiteId } from "@/lib/smiteEngine";
 import {
-  addSmiteRecord,
-  getDailySmiteCount,
+  fetchSmiteHistory,
+  addSmiteRecord as addSmiteRecordServer,
+  fetchDailySmiteCount,
   incrementDailySmiteCount,
-  loadSmiteHistory,
-} from "@/lib/smiteStorage";
+} from "@/lib/data/smite-oracle";
+import { useAuth } from "@/components/auth/AuthProvider";
+import AuthGate from "@/components/auth/AuthGate";
 import { getDateKey } from "@/lib/sinLibrary";
 import {
   Input,
@@ -35,6 +37,7 @@ const TARGETS = Object.keys(TARGET_LABELS) as SmiteTarget[];
 const PLAGUES = Object.keys(PLAGUE_LABELS) as PlagueType[];
 
 export default function SmiteButtonApp() {
+  const { user } = useAuth();
   const [target, setTarget] = useState<SmiteTarget>("boss");
   const [plague, setPlague] = useState<PlagueType>("locusts");
   const [customName, setCustomName] = useState("");
@@ -51,9 +54,14 @@ export default function SmiteButtonApp() {
 
   useEffect(() => {
     setMounted(true);
-    setHistory(loadSmiteHistory());
-    setDailyCount(getDailySmiteCount(dateKey));
-  }, [dateKey]);
+    if (user) {
+      void fetchSmiteHistory().then(setHistory);
+      void fetchDailySmiteCount(dateKey).then(setDailyCount);
+    } else {
+      setHistory([]);
+      setDailyCount(0);
+    }
+  }, [dateKey, user]);
 
   const freeRemaining = Math.max(FREE_DAILY_LIMIT - dailyCount, 0);
   const needsPremium = freeRemaining <= 0;
@@ -64,7 +72,7 @@ export default function SmiteButtonApp() {
   }, []);
 
   function handleSmite() {
-    if (smiteing) return;
+    if (smiteing || !user) return;
     if (target === "custom" && !customName.trim()) return;
 
     const usePremium = premium || needsPremium;
@@ -80,7 +88,7 @@ export default function SmiteButtonApp() {
       usePremium
     );
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const record: SmiteRecord = {
         id: generateSmiteId(),
         target,
@@ -95,13 +103,15 @@ export default function SmiteButtonApp() {
       };
 
       if (!usePremium) {
-        incrementDailySmiteCount(dateKey);
-        setDailyCount(getDailySmiteCount(dateKey));
+        const { count } = await incrementDailySmiteCount(dateKey);
+        setDailyCount(count);
       }
 
-      addSmiteRecord(record);
-      setHistory(loadSmiteHistory());
-      setLastResult(record);
+      const saved = await addSmiteRecordServer(record);
+      if (saved.record) {
+        setHistory((prev) => [saved.record!, ...prev].slice(0, 50));
+        setLastResult(saved.record);
+      }
     }, 2200);
   }
 
@@ -219,23 +229,29 @@ export default function SmiteButtonApp() {
         </Surface>
 
         <div className="mb-8 flex justify-center">
-          <button
-            type="button"
-            onClick={handleSmite}
-            disabled={smiteing || (target === "custom" && !customName.trim())}
-            className={cn(
-              "group flex h-32 w-32 flex-col items-center justify-center rounded-full border-4 transition-colors disabled:opacity-50 sm:h-40 sm:w-40",
-              accentStyles.ember.border,
-              accentStyles.ember.bg,
-              accentStyles.ember.text,
-              accentStyles.ember.bgHover
-            )}
+          <AuthGate
+            tone="ember"
+            title="Sign in to smite"
+            description="Configure your plague for free. Log in to unleash digital wrath and save your smite history."
           >
-            <Zap className="mb-1 h-10 w-10 transition-transform group-hover:scale-110 sm:h-12 sm:w-12" />
-            <span className="text-sm font-bold uppercase tracking-[0.2em] sm:text-base">
-              {smiteing ? "..." : "Smite"}
-            </span>
-          </button>
+            <button
+              type="button"
+              onClick={handleSmite}
+              disabled={smiteing || (target === "custom" && !customName.trim())}
+              className={cn(
+                "group flex h-32 w-32 flex-col items-center justify-center rounded-full border-4 transition-colors disabled:opacity-50 sm:h-40 sm:w-40",
+                accentStyles.ember.border,
+                accentStyles.ember.bg,
+                accentStyles.ember.text,
+                accentStyles.ember.bgHover
+              )}
+            >
+              <Zap className="mb-1 h-10 w-10 transition-transform group-hover:scale-110 sm:h-12 sm:w-12" />
+              <span className="text-sm font-bold uppercase tracking-[0.2em] sm:text-base">
+                {smiteing ? "..." : "Smite"}
+              </span>
+            </button>
+          </AuthGate>
         </div>
 
         {lastResult && !smiteing && (

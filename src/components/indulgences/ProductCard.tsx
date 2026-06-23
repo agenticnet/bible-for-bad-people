@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ShoppingCart } from "lucide-react";
 import type { IndulgenceProduct } from "@/lib/indulgenceTypes";
 import { formatPrice, generateCertificateId } from "@/lib/indulgenceProducts";
-import { addPurchase } from "@/lib/indulgenceStorage";
+import { addIndulgencePurchase } from "@/lib/data/indulgences";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { Badge, Button, Modal, Surface } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
@@ -27,28 +30,29 @@ export default function ProductCard({
   onPurchased,
   displayName,
 }: ProductCardProps) {
+  const { user } = useAuth();
+  const pathname = usePathname();
   const [showModal, setShowModal] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
   const accent = tierAccents[product.tier];
 
-  function handlePurchase() {
-    if (processing) return;
+  async function handlePurchase() {
+    if (processing || !user) return;
     setProcessing(true);
 
-    setTimeout(() => {
-      addPurchase(
-        {
-          id: `purchase-${Date.now()}`,
-          productId: product.id,
-          productName: product.name,
-          purchasedAt: new Date().toISOString(),
-          certificateId: generateCertificateId(),
-          pricePaid: product.price,
-        },
-        displayName || "Anonymous Sinner"
-      );
+    setTimeout(async () => {
+      const result = await addIndulgencePurchase({
+        productId: product.id,
+        productName: product.name,
+        purchasedAt: new Date().toISOString(),
+        certificateId: generateCertificateId(),
+        pricePaid: product.price,
+      });
+
       setProcessing(false);
+      if (result.error) return;
+
       setSuccess(true);
       onPurchased();
 
@@ -87,10 +91,19 @@ export default function ProductCard({
           <span className="text-lg font-bold text-wine">
             {formatPrice(product.price, product.priceLabel)}
           </span>
-          <Button accent="wine" size="sm" onClick={() => setShowModal(true)}>
-            <ShoppingCart className="h-4 w-4" />
-            Buy
-          </Button>
+          {user ? (
+            <Button accent="wine" size="sm" onClick={() => setShowModal(true)}>
+              <ShoppingCart className="h-4 w-4" />
+              Buy
+            </Button>
+          ) : (
+            <Link
+              href={`/login?next=${encodeURIComponent(pathname)}`}
+              className="inline-flex items-center gap-2 rounded-lg border border-wine/40 bg-wine/10 px-3 py-1.5 text-sm font-semibold text-wine transition-colors hover:bg-wine/20"
+            >
+              Log in to buy
+            </Link>
+          )}
         </div>
       </Surface>
 
@@ -108,8 +121,7 @@ export default function ProductCard({
               {formatPrice(product.price, product.priceLabel)}
             </p>
             <p className="mb-6 text-sm text-ink-soft">
-              No real payment processed. This is satire. Your soul remains your
-              own problem. Stripe integration coming never (maybe).
+              No real payment processed. Purchasing as {displayName || "you"}.
             </p>
             <Button
               accent="wine"
@@ -127,8 +139,7 @@ export default function ProductCard({
             <span className="mb-4 block text-5xl">{product.icon}</span>
             <p className="mb-2 text-lg font-bold text-wine">Purchase Complete!</p>
             <p className="text-sm text-ink-soft">
-              Certificate added to your vault. Salvation score updated. The
-              LORD&apos;s accounting department has been notified (not really).
+              Certificate added to your vault. Salvation score updated.
             </p>
           </div>
         )}

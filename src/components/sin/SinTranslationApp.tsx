@@ -14,6 +14,7 @@ import SinTranslatorForm from "./SinTranslatorForm";
 import SinLogPanel, { notifySinLogUpdate } from "./SinLogPanel";
 import ContributeSinForm from "./ContributeSinForm";
 import SinLibraryPanel from "./SinLibraryPanel";
+import AuthGate from "@/components/auth/AuthGate";
 import { SIN_LIBRARY } from "@/lib/sinLibrary";
 import { ChamberHeader, PageShell, TabGroup } from "@/components/ui";
 
@@ -26,7 +27,7 @@ const TABS = [
 ];
 
 export default function SinTranslationApp() {
-  const [activeTab, setActiveTab] = useState<SinTab>("daily");
+  const [activeTab, setActiveTab] = useState<SinTab>("library");
   const [communityRefresh, setCommunityRefresh] = useState(0);
 
   function handleLogUpdate() {
@@ -57,14 +58,24 @@ export default function SinTranslationApp() {
       />
 
       {activeTab === "daily" && (
-        <DailySinChecklist onLogUpdate={handleLogUpdate} />
+        <AuthGate tone="terra" title="Sign in to track daily sins">
+          <DailySinChecklist onLogUpdate={handleLogUpdate} />
+        </AuthGate>
       )}
       {activeTab === "translate" && (
-        <SinTranslatorForm onLogUpdate={handleLogUpdate} />
+        <AuthGate tone="terra" title="Sign in to translate and log sins">
+          <SinTranslatorForm onLogUpdate={handleLogUpdate} />
+        </AuthGate>
       )}
-      {activeTab === "log" && <SinLogPanel />}
+      {activeTab === "log" && (
+        <AuthGate tone="terra" title="Sign in to view your sin log">
+          <SinLogPanel />
+        </AuthGate>
+      )}
       {activeTab === "contribute" && (
-        <ContributeSinForm onContributed={handleContributed} />
+        <AuthGate tone="terra" title="Sign in to contribute sins">
+          <ContributeSinForm onContributed={handleContributed} />
+        </AuthGate>
       )}
       {activeTab === "library" && (
         <SinLibraryPanel refreshKey={communityRefresh} />

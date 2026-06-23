@@ -5,12 +5,10 @@ import { Check, Circle, Sparkles } from "lucide-react";
 import type { SinEntry } from "@/lib/sinTypes";
 import { getDailySins, getDateKey } from "@/lib/sinLibrary";
 import {
-  loadDailyCompleted,
-  markDailySinDone,
-  unmarkDailySinDone,
-  addToSinLog,
-} from "@/lib/sinStorage";
-import { generateSinId } from "@/lib/sinTranslationEngine";
+  fetchDailyCompleted,
+  saveDailyCompleted,
+  addSinLogItem,
+} from "@/lib/data/sin";
 import { Callout, SectionHeader } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
@@ -34,18 +32,18 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
   useEffect(() => {
     setMounted(true);
     setDailySins(getDailySins(dateKey, 7));
-    setCompleted(loadDailyCompleted(dateKey));
+    void fetchDailyCompleted(dateKey).then((ids) => setCompleted(new Set(ids)));
   }, [dateKey]);
 
-  function toggleSin(sin: SinEntry) {
+  async function toggleSin(sin: SinEntry) {
     const isDone = completed.has(sin.id);
+    const next = new Set(completed);
 
     if (isDone) {
-      setCompleted(unmarkDailySinDone(dateKey, sin.id));
+      next.delete(sin.id);
     } else {
-      setCompleted(markDailySinDone(dateKey, sin.id));
-      addToSinLog({
-        id: generateSinId(),
+      next.add(sin.id);
+      await addSinLogItem({
         sinId: sin.id,
         petty: sin.petty,
         translation: sin.translation,
@@ -54,6 +52,9 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
       });
       onLogUpdate();
     }
+
+    setCompleted(next);
+    await saveDailyCompleted(dateKey, [...next]);
   }
 
   if (!mounted) return null;
@@ -86,7 +87,7 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
             <li key={sin.id}>
               <button
                 type="button"
-                onClick={() => toggleSin(sin)}
+                onClick={() => void toggleSin(sin)}
                 className={cn(
                   "flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-colors",
                   isDone

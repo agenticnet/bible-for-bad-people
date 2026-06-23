@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Clock, Sparkles, Ticket, Users } from "lucide-react";
 import TicketForm from "./TicketForm";
 import TicketCard from "./TicketCard";
@@ -9,6 +9,9 @@ import {
   generateTicketNumber,
   getMockSupportResponse,
 } from "@/lib/mockSupportResponses";
+import { fetchSupportTickets, createSupportTicket } from "@/lib/data/chat-support";
+import { useAuth } from "@/components/auth/AuthProvider";
+import AuthGate from "@/components/auth/AuthGate";
 import {
   ChamberHeader,
   EmptyState,
@@ -18,8 +21,17 @@ import {
 } from "@/components/ui";
 
 export default function SupportDesk() {
+  const { user } = useAuth();
   const [tickets, setTickets] = useState<PrayerTicket[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!user) {
+      setTickets([]);
+      return;
+    }
+    void fetchSupportTickets().then(setTickets);
+  }, [user]);
 
   function handleSubmit(data: {
     subject: string;
@@ -27,13 +39,12 @@ export default function SupportDesk() {
     priority: PrayerTicket["priority"];
     description: string;
   }) {
-    if (isSubmitting) return;
+    if (isSubmitting || !user) return;
 
     const ticketNumber = generateTicketNumber();
-    const id = `ticket-${Date.now()}`;
 
     const newTicket: PrayerTicket = {
-      id,
+      id: `ticket-${Date.now()}`,
       ticketNumber,
       subject: data.subject,
       category: data.category,
@@ -46,10 +57,19 @@ export default function SupportDesk() {
     setTickets((prev) => [newTicket, ...prev]);
     setIsSubmitting(true);
 
+    void createSupportTicket({
+      ticketNumber,
+      subject: data.subject,
+      category: data.category,
+      priority: data.priority,
+      description: data.description,
+      status: "processing",
+    });
+
     setTimeout(() => {
       setTickets((prev) =>
         prev.map((t) =>
-          t.id === id ? { ...t, status: "queued" as const } : t
+          t.ticketNumber === ticketNumber ? { ...t, status: "queued" as const } : t
         )
       );
     }, 800);
@@ -64,7 +84,7 @@ export default function SupportDesk() {
 
       setTickets((prev) =>
         prev.map((t) =>
-          t.id === id
+          t.ticketNumber === ticketNumber
             ? {
                 ...t,
                 status: "resolved" as const,
@@ -99,14 +119,20 @@ export default function SupportDesk() {
 
       <div className="grid gap-8 lg:grid-cols-5">
         <div className="lg:col-span-2">
-          <Surface className="sticky top-4" padding="lg">
-            <h2 className="mb-1 text-lg font-semibold text-ink">Submit a Prayer Ticket</h2>
-            <p className="mb-6 text-sm text-ink-soft">
-              File your request with Heavenly Administration. Response times may
-              vary by sin level and planetary alignment.
-            </p>
-            <TicketForm onSubmit={handleSubmit} disabled={isSubmitting} />
-          </Surface>
+          <AuthGate
+            tone="slate"
+            title="Sign in to file a ticket"
+            description="Browse the support desk for free. Log in to submit prayer tickets and track responses."
+          >
+            <Surface className="sticky top-4" padding="lg">
+              <h2 className="mb-1 text-lg font-semibold text-ink">Submit a Prayer Ticket</h2>
+              <p className="mb-6 text-sm text-ink-soft">
+                File your request with Heavenly Administration. Response times may
+                vary by sin level and planetary alignment.
+              </p>
+              <TicketForm onSubmit={handleSubmit} disabled={isSubmitting} />
+            </Surface>
+          </AuthGate>
         </div>
 
         <div className="lg:col-span-3">
@@ -123,7 +149,7 @@ export default function SupportDesk() {
             <EmptyState
               icon={Ticket}
               title="No tickets yet."
-              description="Submit a prayer request to get a corporate-style divine response."
+              description="Sign in and submit a prayer request to get a corporate-style divine response."
             />
           ) : (
             <div className="flex flex-col gap-4">

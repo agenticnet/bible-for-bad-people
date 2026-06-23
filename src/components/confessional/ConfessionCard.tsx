@@ -11,6 +11,7 @@ interface ConfessionCardProps {
   confession: Confession;
   userVote: VoteType | null;
   onVote: (id: string, vote: VoteType) => void;
+  votingDisabled?: boolean;
 }
 
 const verdictTones: Record<
@@ -32,6 +33,7 @@ export default function ConfessionCard({
   confession,
   userVote,
   onVote,
+  votingDisabled = false,
 }: ConfessionCardProps) {
   const verdict = getVerdict(confession.absolveVotes, confession.condemnVotes);
   const score = getScore(confession.absolveVotes, confession.condemnVotes);
@@ -60,6 +62,7 @@ export default function ConfessionCard({
             variant={userVote === "absolve" ? "success" : "ghost"}
             accent="wine"
             size="sm"
+            disabled={votingDisabled}
             onClick={() => onVote(confession.id, "absolve")}
             className={cn(
               userVote !== "absolve" &&
@@ -74,6 +77,7 @@ export default function ConfessionCard({
             variant={userVote === "condemn" ? "danger" : "ghost"}
             accent="ember"
             size="sm"
+            disabled={votingDisabled}
             onClick={() => onVote(confession.id, "condemn")}
           >
             <ThumbsDown className="h-4 w-4" />

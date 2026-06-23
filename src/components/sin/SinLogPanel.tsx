@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { Trash2 } from "lucide-react";
 import type { SinLogItem } from "@/lib/sinTypes";
-import { loadSinLog, saveSinLog } from "@/lib/sinStorage";
+import { fetchSinLog, clearSinLog } from "@/lib/data/sin";
 import {
   Badge,
   Button,
@@ -16,23 +16,24 @@ export default function SinLogPanel() {
   const [log, setLog] = useState<SinLogItem[]>([]);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-    setLog(loadSinLog());
-  }, []);
-
-  function refresh() {
-    setLog(loadSinLog());
+  async function refresh() {
+    const items = await fetchSinLog();
+    setLog(items);
   }
 
   useEffect(() => {
-    const handler = () => refresh();
+    setMounted(true);
+    void refresh();
+  }, []);
+
+  useEffect(() => {
+    const handler = () => void refresh();
     window.addEventListener("sin-log-updated", handler);
     return () => window.removeEventListener("sin-log-updated", handler);
   }, []);
 
-  function clearLog() {
-    saveSinLog([]);
+  async function handleClearLog() {
+    await clearSinLog();
     setLog([]);
   }
 
@@ -44,11 +45,11 @@ export default function SinLogPanel() {
         <SectionHeader
           kicker="Confession Record"
           title="My Sin Log"
-          description="Every petty sin you've checked off, translated, or confessed — stored locally on thy device."
+          description="Every petty sin you've checked off, translated, or confessed — synced to your account."
           accent="terra"
         />
         {log.length > 0 && (
-          <Button variant="ghost" accent="ember" size="sm" onClick={clearLog}>
+          <Button variant="ghost" accent="ember" size="sm" onClick={() => void handleClearLog()}>
             <Trash2 className="h-3.5 w-3.5" />
             Clear all
           </Button>

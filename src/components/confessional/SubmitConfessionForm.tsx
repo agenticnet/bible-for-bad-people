@@ -3,8 +3,9 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
 import type { Confession } from "@/lib/confessionalTypes";
-import { generateAnonymousLabel, generateConfessionId } from "@/lib/confessionalPosts";
-import { addUserPost } from "@/lib/confessionalStorage";
+import { submitConfession } from "@/lib/data/confessional";
+import { useAuth } from "@/components/auth/AuthProvider";
+import AuthGate from "@/components/auth/AuthGate";
 import { Button, Surface, Textarea } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
@@ -13,29 +14,28 @@ interface SubmitConfessionFormProps {
   onSubmitted: (post: Confession) => void;
 }
 
-export default function SubmitConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
+function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
+  const { profile } = useAuth();
   const [content, setContent] = useState("");
   const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     const trimmed = content.trim();
     if (!trimmed || submitting) return;
 
     setSubmitting(true);
+    setError(null);
 
-    const post: Confession = {
-      id: generateConfessionId(),
-      content: trimmed,
-      absolveVotes: 0,
-      condemnVotes: 0,
-      createdAt: new Date().toISOString(),
-      authorLabel: generateAnonymousLabel(),
-      isUser: true,
-    };
+    const result = await submitConfession(trimmed);
+    if (result.error) {
+      setError(result.error);
+      setSubmitting(false);
+      return;
+    }
+    if (result.confession) onSubmitted(result.confession);
 
-    addUserPost(post);
-    onSubmitted(post);
     setContent("");
     setSubmitting(false);
   }
@@ -43,25 +43,38 @@ export default function SubmitConfessionForm({ onSubmitted }: SubmitConfessionFo
   return (
     <Surface as="form" accent="plum" accentTint onSubmit={handleSubmit}>
       <p className={cn("verse-ref mb-1", accentStyles.plum.text)}>
-        Anonymous Confession
+        {profile ? `Posting as u/${profile.username}` : "Confession"}
       </p>
       <h2 className="mb-3 font-serif text-lg font-semibold text-ink">Unburden Thyself</h2>
       <Textarea
         accent="plum"
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Confess a sin, grievance, or petty crime. You'll get a random anonymous username. Judgment from strangers included."
+        placeholder="Confess a sin, grievance, or petty crime. Judgment from strangers included."
         rows={4}
         maxLength={500}
         className="mb-3"
       />
+      {error && <p className="mb-2 text-sm text-ember">{error}</p>}
       <div className="flex items-center justify-between gap-3">
         <span className="text-[10px] text-ink-soft">{content.length}/500</span>
         <Button type="submit" accent="plum" disabled={!content.trim() || submitting}>
           <Send className="h-4 w-4" />
-          Post to the Confessional
+          {submitting ? "Posting..." : "Confess"}
         </Button>
       </div>
     </Surface>
+  );
+}
+
+export default function SubmitConfessionForm(props: SubmitConfessionFormProps) {
+  return (
+    <AuthGate
+      tone="plum"
+      title="Sign in to confess"
+      description="Browse the feed for free. Log in to post confessions as u/yourname and sync votes across devices."
+    >
+      <ConfessionForm {...props} />
+    </AuthGate>
   );
 }

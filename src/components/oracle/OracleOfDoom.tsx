@@ -11,6 +11,9 @@ import {
   loadReading,
   saveReading,
 } from "@/lib/mockOracleDeck";
+import { fetchOracleReading, saveOracleReading } from "@/lib/data/smite-oracle";
+import { useAuth } from "@/components/auth/AuthProvider";
+import AuthGate from "@/components/auth/AuthGate";
 import {
   Button,
   PageShell,
@@ -21,6 +24,7 @@ import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
 export default function OracleOfDoom() {
+  const { user } = useAuth();
   const [reading, setReading] = useState<DailyReading | null>(null);
   const [revealing, setRevealing] = useState(false);
   const [cardsRevealed, setCardsRevealed] = useState(false);
@@ -35,15 +39,30 @@ export default function OracleOfDoom() {
 
   useEffect(() => {
     setMounted(true);
-    const stored = loadReading(dateKey);
-    if (stored) {
-      setReading(stored);
-      setCardsRevealed(stored.revealed);
-    } else {
+
+    async function load() {
+      if (user) {
+        const stored = await fetchOracleReading(dateKey);
+        if (stored) {
+          setReading(stored);
+          setCardsRevealed(stored.revealed);
+          return;
+        }
+      } else {
+        const local = loadReading(dateKey);
+        if (local) {
+          setReading(local);
+          setCardsRevealed(local.revealed);
+          return;
+        }
+      }
+
       const generated = generateDailyReading(dateKey);
       setReading({ ...generated, revealed: false });
     }
-  }, [dateKey]);
+
+    void load();
+  }, [dateKey, user]);
 
   const revealReading = useCallback(() => {
     if (!reading || revealing || cardsRevealed) return;
@@ -54,10 +73,16 @@ export default function OracleOfDoom() {
       setCardsRevealed(true);
       const updated = { ...reading, revealed: true };
       setReading(updated);
-      saveReading(updated);
+
+      if (user) {
+        void saveOracleReading(updated);
+      } else {
+        saveReading(updated);
+      }
+
       setRevealing(false);
     }, 1200);
-  }, [reading, revealing, cardsRevealed]);
+  }, [reading, revealing, cardsRevealed, user]);
 
   if (!mounted || !reading) {
     return (
@@ -124,22 +149,28 @@ export default function OracleOfDoom() {
       )}
 
       {!cardsRevealed && (
-        <div className="flex justify-center">
-          <Button
-            accent="plum"
-            className="rounded-xl px-10 py-4 text-base"
-            onClick={revealReading}
-            disabled={revealing}
-          >
-            <Eye className="h-5 w-5" />
-            {revealing ? "The cards are turning..." : "Reveal Your Daily Doom"}
-          </Button>
-        </div>
+        <AuthGate
+          tone="plum"
+          title="Sign in to reveal your reading"
+          description="Preview the spread for free. Log in to lock in today's doom and sync across devices."
+        >
+          <div className="flex justify-center">
+            <Button
+              accent="plum"
+              className="rounded-xl px-10 py-4 text-base"
+              onClick={revealReading}
+              disabled={revealing}
+            >
+              <Eye className="h-5 w-5" />
+              {revealing ? "The cards are turning..." : "Reveal Your Daily Doom"}
+            </Button>
+          </div>
+        </AuthGate>
       )}
 
       {cardsRevealed && (
         <p className="text-center text-xs text-ink-soft">
-          Come back tomorrow for a fresh reading. Same doom, different cards.
+          Come back tomorrow for a fresh reading. {user ? "Synced to your account." : ""}
         </p>
       )}
     </PageShell>

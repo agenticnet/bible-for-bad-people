@@ -4,8 +4,8 @@ import { useState } from "react";
 import { PlusCircle } from "lucide-react";
 import type { SinCategory } from "@/lib/sinTypes";
 import { CATEGORY_LABELS } from "@/lib/sinTypes";
-import { translatePettySin, generateSinId } from "@/lib/sinTranslationEngine";
-import { saveCommunitySin } from "@/lib/sinStorage";
+import { translatePettySin } from "@/lib/sinTranslationEngine";
+import { contributeSin } from "@/lib/data/sin";
 import {
   Button,
   Callout,
@@ -34,17 +34,17 @@ export default function ContributeSinForm({ onContributed }: ContributeSinFormPr
     setPreview(translatePettySin(petty.trim()));
   }
 
-  function handleSubmit() {
+  async function handleSubmit() {
     if (!petty.trim() || !preview) return;
 
-    saveCommunitySin({
-      id: generateSinId(),
+    const result = await contributeSin({
       petty: petty.trim(),
       translation: preview,
       category,
       difficulty: "mild",
-      submittedAt: new Date().toISOString(),
     });
+
+    if (result.error) return;
 
     setSubmitted(true);
     setPetty("");
@@ -59,14 +59,13 @@ export default function ContributeSinForm({ onContributed }: ContributeSinFormPr
       <SectionHeader
         kicker="Community Depravity"
         title="Contribute a New Sin"
-        description="Invent a petty sin for the library. We'll auto-translate it to scripture and add it to the community pool on your device. When Grok API arrives, daily lists get AI-generated — your contributions feed the chaos."
+        description="Invent a petty sin for the library. We'll auto-translate it to scripture and add it to the community pool."
         accent="terra"
       />
 
       {submitted && (
         <Callout tone="success" className="mb-4 text-sm">
-          Sin submitted to the community pool. The archive grows. Thank you for your
-          service.
+          Sin submitted to the community pool. The archive grows.
         </Callout>
       )}
 
@@ -114,7 +113,7 @@ export default function ContributeSinForm({ onContributed }: ContributeSinFormPr
           <p className="scripture-block mb-4 text-sm italic text-ink">
             &ldquo;{preview}&rdquo;
           </p>
-          <Button accent="wine" onClick={handleSubmit}>
+          <Button accent="wine" onClick={() => void handleSubmit()}>
             <PlusCircle className="h-4 w-4" />
             Add to Community Pool
           </Button>
