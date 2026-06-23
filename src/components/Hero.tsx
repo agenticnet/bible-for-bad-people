@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { LinkButton } from "@/components/ui";
 
 export default function Hero() {
   return (
@@ -24,19 +24,13 @@ export default function Hero() {
         </p>
 
         <div className="flex w-full max-w-md flex-col items-stretch gap-3 sm:mx-auto sm:max-w-none sm:flex-row sm:items-center sm:justify-center sm:gap-4">
-          <Link
-            href="/chat"
-            className="group inline-flex items-center justify-center gap-2 rounded-md bg-wine px-6 py-3.5 text-sm font-medium text-ivory transition-colors hover:bg-wine-deep sm:px-8 sm:py-4 sm:text-base"
-          >
+          <LinkButton href="/chat" className="group">
             Speak with GOD
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </Link>
-          <Link
-            href="/#chambers"
-            className="rounded-md border border-rule bg-page px-6 py-3.5 text-center text-sm text-ink-soft transition-colors hover:border-ink-soft/30 hover:text-ink sm:px-8 sm:py-4 sm:text-base"
-          >
+          </LinkButton>
+          <LinkButton href="/#chambers" variant="secondary">
             Explore the Chambers
-          </Link>
+          </LinkButton>
         </div>
       </div>
     </section>

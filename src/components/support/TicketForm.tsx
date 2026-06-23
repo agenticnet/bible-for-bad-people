@@ -4,6 +4,7 @@ import { FormEvent, useState } from "react";
 import { Send } from "lucide-react";
 import type { TicketCategory, TicketPriority } from "@/lib/supportTypes";
 import { CATEGORY_LABELS, PRIORITY_LABELS } from "@/lib/supportTypes";
+import { Button, Input, Label, Select, Textarea } from "@/components/ui";
 
 interface TicketFormProps {
   onSubmit: (data: {
@@ -32,89 +33,74 @@ export default function TicketForm({ onSubmit, disabled }: TicketFormProps) {
     setPriority("medium");
   }
 
-  const inputClass =
-    "w-full rounded-lg border border-rule bg-page px-3 py-2.5 text-sm text-ink placeholder:text-ink-soft focus:border-neon-cyan/50 focus:outline-none focus:ring-1 focus:ring-neon-cyan/30 disabled:opacity-50";
-
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
-        <label htmlFor="subject" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
-          Subject
-        </label>
-        <input
+        <Label htmlFor="subject">Subject</Label>
+        <Input
           id="subject"
+          accent="slate"
           type="text"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
           placeholder="e.g. Smite my landlord"
           disabled={disabled}
-          className={inputClass}
           maxLength={120}
         />
       </div>
 
       <div>
-        <label htmlFor="category" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
-          Category
-        </label>
-        <select
+        <Label htmlFor="category">Category</Label>
+        <Select
           id="category"
+          accent="slate"
           value={category}
           onChange={(e) => setCategory(e.target.value as TicketCategory)}
           disabled={disabled}
-          className={inputClass}
         >
           {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
             <option key={value} value={value}>
               {label}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
 
       <div>
-        <label htmlFor="priority" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
-          Priority
-        </label>
-        <select
+        <Label htmlFor="priority">Priority</Label>
+        <Select
           id="priority"
+          accent="slate"
           value={priority}
           onChange={(e) => setPriority(e.target.value as TicketPriority)}
           disabled={disabled}
-          className={inputClass}
         >
           {Object.entries(PRIORITY_LABELS).map(([value, label]) => (
             <option key={value} value={value}>
               {label}
             </option>
           ))}
-        </select>
+        </Select>
       </div>
 
       <div>
-        <label htmlFor="description" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
-          Prayer Details
-        </label>
-        <textarea
+        <Label htmlFor="description">Prayer Details</Label>
+        <Textarea
           id="description"
+          accent="slate"
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Describe your request in detail. The more dramatic, the better..."
           disabled={disabled}
           rows={5}
-          className={`${inputClass} resize-none`}
           maxLength={1000}
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={!subject.trim() || !description.trim() || disabled}
-        className="flex items-center justify-center gap-2 rounded-lg border border-neon-cyan/50 bg-neon-cyan/10 px-4 py-3 text-sm font-semibold text-neon-cyan transition-all hover:border-neon-cyan hover:bg-neon-cyan/20 hover:shadow-[0_0_20px_rgba(34,211,238,0.3)] disabled:cursor-not-allowed disabled:opacity-40"
-      >
+      <Button type="submit" accent="slate" className="w-full py-3" disabled={!subject.trim() || !description.trim() || disabled}>
         <Send className="h-4 w-4" />
         {disabled ? "Processing..." : "Submit Ticket"}
-      </button>
+      </Button>
     </form>
   );
 }

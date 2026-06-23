@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { LinkButton } from "@/components/ui";
 
 export default function CTASection() {
   return (
@@ -12,13 +12,10 @@ export default function CTASection() {
           The confessional is open 24/7. GOD is listening — probably.
           Responses may vary in divine indifference.
         </p>
-        <Link
-          href="/chat"
-          className="inline-flex items-center gap-2 rounded-md bg-wine px-8 py-4 text-base font-medium text-ivory transition-colors hover:bg-wine-deep"
-        >
+        <LinkButton href="/chat" className="gap-2">
           Open the Confessional
           <ArrowRight className="h-5 w-5" />
-        </Link>
+        </LinkButton>
       </div>
     </section>
   );

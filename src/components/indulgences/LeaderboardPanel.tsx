@@ -1,6 +1,8 @@
 "use client";
 
 import type { LeaderboardEntry } from "@/lib/indulgenceTypes";
+import { SectionHeader, Surface } from "@/components/ui";
+import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
 interface LeaderboardPanelProps {
@@ -14,32 +16,24 @@ export default function LeaderboardPanel({
 }: LeaderboardPanelProps) {
   return (
     <div>
-      <div className="mb-6">
-        <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-gold">
-          Salvation Rankings
-        </p>
-        <h2
-          className="text-xl font-bold text-ink"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          Least Likely to Go to Hell
-        </h2>
-        <p className="mt-2 text-sm text-ink-soft">
-          Higher Salvation Score = better odds. Buy indulgences to climb. Log sins
-          in the Sin Engine to fall. Capitalism meets eschatology.
-        </p>
-        {userRank && (
-          <p className="mt-2 text-sm text-neon-gold">
-            Your rank: <span className="font-bold">#{userRank}</span>
-          </p>
-        )}
-      </div>
+      <SectionHeader
+        kicker="Salvation Rankings"
+        title="Least Likely to Go to Hell"
+        description="Higher Salvation Score = better odds. Buy indulgences to climb. Log sins in the Sin Engine to fall. Capitalism meets eschatology."
+        accent="wine"
+      />
 
-      <div className="overflow-hidden rounded-xl border border-rule">
-        <div className="grid grid-cols-[3rem_1fr_5rem] gap-2 border-b border-rule bg-smoke px-4 py-2 text-[10px] uppercase tracking-wider text-ink-soft">
-          <span>Rank</span>
-          <span>Sinner</span>
-          <span className="text-right">Score</span>
+      {userRank && (
+        <p className={cn("mb-6 text-sm", accentStyles.wine.text)}>
+          Your rank: <span className="font-bold">#{userRank}</span>
+        </p>
+      )}
+
+      <Surface padding="none" className="overflow-hidden">
+        <div className="grid grid-cols-[3rem_1fr_5rem] gap-2 border-b border-rule bg-smoke px-4 py-2">
+          <span className="verse-ref text-ink-soft">Rank</span>
+          <span className="verse-ref text-ink-soft">Sinner</span>
+          <span className="verse-ref text-right text-ink-soft">Score</span>
         </div>
         <ul>
           {entries.map((entry, index) => {
@@ -47,16 +41,25 @@ export default function LeaderboardPanel({
             return (
               <li
                 key={entry.id}
-                className={cn( "grid grid-cols-[3rem_1fr_5rem] gap-2 border-b border-rule px-4 py-3 last:border-0", entry.isUser ? "bg-neon-gold/10 border-l-2 border-l-neon-gold" : "bg-page" )}
+                className={cn(
+                  "grid grid-cols-[3rem_1fr_5rem] gap-2 border-b border-rule px-4 py-3 last:border-0",
+                  entry.isUser ? "bg-wine/10" : "bg-page"
+                )}
               >
                 <span
-                  className={cn( "font-mono text-sm font-bold", rank <= 3 ? "text-neon-gold" : "text-ink-soft" )}
+                  className={cn(
+                    "font-mono text-sm font-bold",
+                    rank <= 3 ? accentStyles.wine.text : "text-ink-soft"
+                  )}
                 >
                   {rank <= 3 ? ["🥇", "🥈", "🥉"][rank - 1] : `#${rank}`}
                 </span>
                 <div className="min-w-0">
                   <p
-                    className={cn( "truncate text-sm font-medium", entry.isUser ? "text-neon-gold" : "text-ink" )}
+                    className={cn(
+                      "truncate text-sm font-medium",
+                      entry.isUser ? accentStyles.wine.text : "text-ink"
+                    )}
                   >
                     {entry.displayName}
                     {entry.isUser && " (You)"}
@@ -66,7 +69,14 @@ export default function LeaderboardPanel({
                   )}
                 </div>
                 <span
-                  className={cn( "text-right font-mono text-sm font-bold", entry.salvationScore >= 80 ? "text-green-400" : entry.salvationScore >= 50 ? "text-neon-gold" : "text-neon-red" )}
+                  className={cn(
+                    "text-right font-mono text-sm font-bold",
+                    entry.salvationScore >= 80
+                      ? "text-green-400"
+                      : entry.salvationScore >= 50
+                        ? accentStyles.wine.text
+                        : accentStyles.ember.text
+                  )}
                 >
                   {entry.salvationScore}
                 </span>
@@ -74,7 +84,7 @@ export default function LeaderboardPanel({
             );
           })}
         </ul>
-      </div>
+      </Surface>
     </div>
   );
 }

@@ -11,6 +11,8 @@ import {
   addToSinLog,
 } from "@/lib/sinStorage";
 import { generateSinId } from "@/lib/sinTranslationEngine";
+import { Callout, SectionHeader } from "@/components/ui";
+import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
 interface DailySinChecklistProps {
@@ -60,27 +62,22 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
 
   return (
     <div>
-      <div className="mb-6">
-        <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-pink">
-          Today&apos;s Suggested Sins
-        </p>
-        <h2 className="text-xl font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
-          Daily Petty Sin Checklist
-        </h2>
-        <p className="mt-1 text-sm text-ink-soft">{formattedDate}</p>
-        <p className="mt-2 max-w-xl text-sm text-ink-soft">
-          Seven morally flexible todos for your day. Check them off when completed
-          — or aspirational, we don&apos;t judge. Fresh list tomorrow; Grok API later.
-        </p>
-      </div>
+      <SectionHeader
+        kicker="Today's Suggested Sins"
+        title="Daily Petty Sin Checklist"
+        description={`${formattedDate}. Seven morally flexible todos for your day. Check them off when completed — or aspirational, we don't judge.`}
+        accent="terra"
+      />
 
-      <div className="mb-4 flex items-center gap-3 rounded-lg border border-neon-pink/20 bg-neon-pink/5 px-4 py-3">
-        <Sparkles className="h-4 w-4 shrink-0 text-neon-pink" />
+      <Callout tone="terra" className="mb-4 flex items-center gap-3">
+        <Sparkles className="h-4 w-4 shrink-0" />
         <p className="text-sm text-ink-soft">
-          <span className="font-semibold text-neon-pink">{doneCount}/7</span> sins
-          logged today. Complete the set for absolutely no reward.
+          <span className={cn("font-semibold", accentStyles.terra.text)}>
+            {doneCount}/7
+          </span>{" "}
+          sins logged today. Complete the set for absolutely no reward.
         </p>
-      </div>
+      </Callout>
 
       <ul className="flex flex-col gap-3">
         {dailySins.map((sin, index) => {
@@ -90,10 +87,20 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
               <button
                 type="button"
                 onClick={() => toggleSin(sin)}
-                className={cn( "flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-all", isDone ? "border-neon-pink/30 bg-neon-pink/5 opacity-80" : "border-rule bg-page hover:border-neon-pink/30 hover:bg-smoke" )}
+                className={cn(
+                  "flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-colors",
+                  isDone
+                    ? "border-terra/30 bg-terra/5 opacity-80"
+                    : "surface hover:border-terra/30 hover:bg-smoke"
+                )}
               >
                 <div
-                  className={cn( "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border", isDone ? "border-neon-pink bg-neon-pink/20 text-neon-pink" : "border-rule text-ink-soft" )}
+                  className={cn(
+                    "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border",
+                    isDone
+                      ? "border-terra bg-terra/20 text-terra"
+                      : "border-rule text-ink-soft"
+                  )}
                 >
                   {isDone ? (
                     <Check className="h-3.5 w-3.5" />
@@ -101,17 +108,20 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
                     <Circle className="h-3.5 w-3.5" />
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="mb-1 text-[10px] uppercase tracking-wider text-ink-soft">
+                <div className="min-w-0 flex-1">
+                  <p className="verse-ref mb-1 text-ink-soft">
                     Sin #{index + 1} · {sin.difficulty}
                   </p>
                   <p
-                    className={cn( "text-sm font-medium text-ink", isDone && "line-through decoration-neon-pink/50" )}
+                    className={cn(
+                      "text-sm font-medium text-ink",
+                      isDone && "line-through decoration-terra/50"
+                    )}
                   >
                     {sin.petty}
                   </p>
                   {isDone && (
-                    <p className="mt-2 text-xs italic leading-relaxed text-neon-pink">
+                    <p className={cn("mt-2 text-xs italic leading-relaxed", accentStyles.terra.text)}>
                       {sin.translation}
                     </p>
                   )}

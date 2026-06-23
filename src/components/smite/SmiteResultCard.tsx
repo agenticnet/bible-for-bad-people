@@ -1,5 +1,8 @@
 import type { SmiteRecord } from "@/lib/smiteTypes";
 import { PLAGUE_ICONS, PLAGUE_LABELS, TARGET_ICONS } from "@/lib/smiteTypes";
+import { Badge, Callout, Surface } from "@/components/ui";
+import { accentStyles } from "@/components/ui/tokens";
+import { cn } from "@/lib/utils";
 
 interface SmiteResultCardProps {
   record: SmiteRecord;
@@ -7,13 +10,15 @@ interface SmiteResultCardProps {
 
 export default function SmiteResultCard({ record }: SmiteResultCardProps) {
   return (
-    <article className="rounded-xl border border-neon-red/30 bg-neon-red/5 p-5">
+    <Surface as="article" accent="ember" accentTint>
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className="font-mono text-xs text-neon-red">{record.id}</span>
+        <span className={cn("font-mono text-xs", accentStyles.ember.text)}>
+          {record.id}
+        </span>
         {record.tier === "premium" && (
-          <span className="rounded-full border border-neon-gold/40 bg-neon-gold/10 px-2 py-0.5 text-[9px] uppercase tracking-wider text-neon-gold">
+          <Badge tone="wine" size="sm">
             Premium Visual
-          </span>
+          </Badge>
         )}
         <span className="text-[10px] text-ink-soft">
           {new Date(record.smoteAt).toLocaleString([], {
@@ -34,23 +39,20 @@ export default function SmiteResultCard({ record }: SmiteResultCardProps) {
         </span>
       </div>
 
-      <p
-        className="mb-3 text-sm leading-relaxed text-ink-soft italic"
-        style={{ fontFamily: "var(--font-display)" }}
-      >
+      <p className="scripture-block mb-3 text-sm italic text-ink-soft">
         {record.result}
       </p>
 
       {record.visualDescription && (
-        <div className="rounded-lg border border-neon-gold/25 bg-neon-gold/5 p-3">
-          <p className="mb-1 text-[10px] uppercase tracking-wider text-neon-gold">
+        <Callout tone="wine" className="p-3">
+          <p className={cn("verse-ref mb-1", accentStyles.wine.text)}>
             Premium AI Visual (Mock)
           </p>
           <p className="text-xs leading-relaxed text-ink-soft">
             {record.visualDescription}
           </p>
-        </div>
+        </Callout>
       )}
-    </article>
+    </Surface>
   );
 }

@@ -1,4 +1,5 @@
 import type { Confession } from "@/lib/confessionalTypes";
+import { Surface } from "@/components/ui";
 
 interface LeaderboardSidebarProps {
   mostAbsolved: Confession[];
@@ -42,10 +43,10 @@ function LeaderboardList({
   metric: "absolve" | "condemn";
   accent: "green" | "red";
 }) {
-  const accentClass = accent === "green" ? "text-green-400" : "text-neon-red";
+  const accentClass = accent === "green" ? "text-green-400" : "text-ember";
 
   return (
-    <div className="rounded-xl border border-rule bg-page p-4">
+    <Surface padding="sm">
       <h3 className="mb-0.5 text-sm font-semibold text-ink">{title}</h3>
       <p className="mb-3 text-[10px] text-ink-soft">{subtitle}</p>
       <ol className="flex flex-col gap-2">
@@ -65,6 +66,6 @@ function LeaderboardList({
           </li>
         ))}
       </ol>
-    </div>
+    </Surface>
   );
 }

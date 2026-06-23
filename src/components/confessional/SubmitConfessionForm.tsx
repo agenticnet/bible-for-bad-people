@@ -5,6 +5,9 @@ import { Send } from "lucide-react";
 import type { Confession } from "@/lib/confessionalTypes";
 import { generateAnonymousLabel, generateConfessionId } from "@/lib/confessionalPosts";
 import { addUserPost } from "@/lib/confessionalStorage";
+import { Button, Surface, Textarea } from "@/components/ui";
+import { accentStyles } from "@/components/ui/tokens";
+import { cn } from "@/lib/utils";
 
 interface SubmitConfessionFormProps {
   onSubmitted: (post: Confession) => void;
@@ -38,33 +41,27 @@ export default function SubmitConfessionForm({ onSubmitted }: SubmitConfessionFo
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="rounded-xl border border-neon-purple/30 bg-neon-purple/5 p-5"
-    >
-      <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-purple">
+    <Surface as="form" accent="plum" accentTint onSubmit={handleSubmit}>
+      <p className={cn("verse-ref mb-1", accentStyles.plum.text)}>
         Anonymous Confession
       </p>
-      <h2 className="mb-3 text-lg font-semibold text-ink">Unburden Thyself</h2>
-      <textarea
+      <h2 className="mb-3 font-serif text-lg font-semibold text-ink">Unburden Thyself</h2>
+      <Textarea
+        accent="plum"
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Confess a sin, grievance, or petty crime. You’ll get a random anonymous username. Judgment from strangers included."
+        placeholder="Confess a sin, grievance, or petty crime. You'll get a random anonymous username. Judgment from strangers included."
         rows={4}
         maxLength={500}
-        className="mb-3 w-full resize-none rounded-lg border border-rule bg-page px-4 py-3 text-sm text-ink placeholder:text-ink-soft focus:border-neon-purple/50 focus:outline-none focus:ring-1 focus:ring-neon-purple/30"
+        className="mb-3"
       />
       <div className="flex items-center justify-between gap-3">
         <span className="text-[10px] text-ink-soft">{content.length}/500</span>
-        <button
-          type="submit"
-          disabled={!content.trim() || submitting}
-          className="flex items-center gap-2 rounded-lg border border-neon-purple/50 bg-neon-purple/15 px-5 py-2.5 text-sm font-semibold text-neon-purple transition-all hover:bg-neon-purple/25 disabled:opacity-40"
-        >
+        <Button type="submit" accent="plum" disabled={!content.trim() || submitting}>
           <Send className="h-4 w-4" />
           Post to the Confessional
-        </button>
+        </Button>
       </div>
-    </form>
+    </Surface>
   );
 }

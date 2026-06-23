@@ -62,6 +62,36 @@
   }
 }
 
+@layer components {
+  .surface {
+    @apply rounded-xl border border-rule bg-page transition-colors;
+  }
+
+  .surface-accent-plum {
+    @apply border-plum/30 bg-plum/5;
+  }
+
+  .surface-accent-wine {
+    @apply border-wine/30 bg-wine/5;
+  }
+
+  .surface-accent-slate {
+    @apply border-slate/30 bg-slate/5;
+  }
+
+  .surface-accent-terra {
+    @apply border-terra/30 bg-terra/5;
+  }
+
+  .surface-accent-ember {
+    @apply border-ember/30 bg-ember/5;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-rule bg-page px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft focus:outline-none disabled:opacity-50;
+  }
+}
+
 @layer utilities {
   .font-serif {
     font-family: var(--font-display);

@@ -5,6 +5,15 @@ import { ScrollText } from "lucide-react";
 import { translatePettySin, generateSinId } from "@/lib/sinTranslationEngine";
 import { addToSinLog } from "@/lib/sinStorage";
 import { SIN_LIBRARY } from "@/lib/sinLibrary";
+import {
+  Button,
+  Chip,
+  SectionHeader,
+  Surface,
+  Textarea,
+} from "@/components/ui";
+import { accentStyles } from "@/components/ui/tokens";
+import { cn } from "@/lib/utils";
 
 interface SinTranslatorFormProps {
   onLogUpdate: () => void;
@@ -24,8 +33,7 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
     setTranslation(null);
 
     setTimeout(() => {
-      const result = translatePettySin(trimmed);
-      setTranslation(result);
+      setTranslation(translatePettySin(trimmed));
       setIsTranslating(false);
     }, 800);
   }
@@ -53,72 +61,57 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
 
   return (
     <div>
-      <div className="mb-6">
-        <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-pink">
-          Confession Booth
-        </p>
-        <h2 className="text-xl font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
-          Translate Your Sin
-        </h2>
-        <p className="mt-2 max-w-xl text-sm text-ink-soft">
-          Type a petty thing you did. Our engine converts it to dramatic King James-style
-          prose. Grok API coming soon — for now, template sorcery.
-        </p>
-      </div>
+      <SectionHeader
+        kicker="Confession Booth"
+        title="Translate Your Sin"
+        description="Type a petty thing you did. Our engine converts it to dramatic King James-style prose. Grok API coming soon — for now, template sorcery."
+        accent="terra"
+      />
 
       <form onSubmit={handleTranslate} className="mb-4">
-        <textarea
+        <Textarea
+          accent="terra"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="e.g. I stole my coworker's lunch from the fridge..."
           rows={3}
-          className="mb-3 w-full resize-none rounded-xl border border-rule bg-page px-4 py-3 text-sm text-ink placeholder:text-ink-soft focus:border-neon-pink/50 focus:outline-none focus:ring-1 focus:ring-neon-pink/30"
+          className="mb-3 rounded-xl"
         />
-        <button
-          type="submit"
-          disabled={!input.trim() || isTranslating}
-          className="flex items-center gap-2 rounded-lg border border-neon-pink/50 bg-neon-pink/10 px-5 py-2.5 text-sm font-semibold text-neon-pink transition-all hover:border-neon-pink hover:bg-neon-pink/20 disabled:opacity-40"
-        >
+        <Button type="submit" accent="terra" disabled={!input.trim() || isTranslating}>
           <ScrollText className="h-4 w-4" />
           {isTranslating ? "Translating..." : "Translate to Scripture"}
-        </button>
+        </Button>
       </form>
 
       {translation && (
-        <div className="mb-6 rounded-xl border border-neon-pink/30 bg-neon-pink/5 p-5">
-          <p className="mb-2 text-[10px] uppercase tracking-wider text-neon-pink">
+        <Surface accent="terra" accentTint className="mb-6">
+          <p className={cn("verse-ref mb-2", accentStyles.terra.text)}>
             King James-ish Translation
           </p>
-          <p
-            className="mb-4 text-base leading-relaxed text-ink italic"
-            style={{ fontFamily: "var(--font-display)" }}
-          >
+          <p className="scripture-block mb-4 text-base italic text-ink">
             &ldquo;{translation}&rdquo;
           </p>
           <button
             type="button"
             onClick={logTranslation}
-            className="text-sm text-neon-pink hover:underline"
+            className={cn("text-sm hover:underline", accentStyles.terra.text)}
           >
             Log this sin to my confession record →
           </button>
-        </div>
+        </Surface>
       )}
 
       <div>
-        <p className="mb-2 text-[10px] uppercase tracking-wider text-ink-soft">
-          Quick suggestions — tap to fill
-        </p>
+        <p className="verse-ref mb-2 text-ink-soft">Quick suggestions — tap to fill</p>
         <div className="flex flex-wrap gap-2">
           {suggestions.map((sin) => (
-            <button
+            <Chip
               key={sin.id}
-              type="button"
+              accent="terra"
               onClick={() => fillSuggestion(sin.petty)}
-              className="rounded-full border border-rule bg-smoke px-3 py-1.5 text-xs text-ink-soft transition-colors hover:border-neon-pink/40 hover:text-ink"
             >
               {sin.petty.length > 45 ? `${sin.petty.slice(0, 45)}…` : sin.petty}
-            </button>
+            </Chip>
           ))}
         </div>
       </div>

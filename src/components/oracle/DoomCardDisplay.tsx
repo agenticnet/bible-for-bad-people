@@ -3,6 +3,8 @@
 import { cn } from "@/lib/utils";
 import type { DoomCard } from "@/lib/oracleTypes";
 import { OMEN_LABELS } from "@/lib/oracleTypes";
+import { Badge } from "@/components/ui";
+import type { Accent } from "@/components/ui/tokens";
 
 interface DoomCardDisplayProps {
   card: DoomCard;
@@ -11,12 +13,12 @@ interface DoomCardDisplayProps {
   delay?: number;
 }
 
-const OMEN_STYLES = {
-  cursed: "border-neon-purple/40 text-neon-purple",
-  doomed: "border-neon-red/40 text-neon-red",
-  chaotic: "border-neon-pink/40 text-neon-pink",
-  bleak: "border-rule text-ink-soft",
-  "cursed-blessing": "border-neon-gold/40 text-neon-gold",
+const OMEN_TONES: Record<DoomCard["omen"], Accent | "neutral"> = {
+  cursed: "plum",
+  doomed: "ember",
+  chaotic: "terra",
+  bleak: "neutral",
+  "cursed-blessing": "wine",
 };
 
 export default function DoomCardDisplay({
@@ -25,11 +27,11 @@ export default function DoomCardDisplay({
   revealed,
   delay = 0,
 }: DoomCardDisplayProps) {
+  const omenTone = OMEN_TONES[card.omen];
+
   return (
     <div className="flex flex-col items-center gap-3">
-      <p className="text-[10px] uppercase tracking-[0.25em] text-ink-soft">
-        {label}
-      </p>
+      <p className="verse-ref text-ink-soft">{label}</p>
       <div
         className="perspective-[800px] w-full max-w-[180px]"
         style={{ animationDelay: `${delay}ms` }}
@@ -40,33 +42,21 @@ export default function DoomCardDisplay({
             revealed && "[transform:rotateY(180deg)]"
           )}
         >
-          {/* Card back */}
-          <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl border-2 border-neon-purple/30 bg-gradient-to-br from-page via-parchment to-page [backface-visibility:hidden]">
-            <div className="absolute inset-2 rounded-lg border border-neon-purple/20" />
+          <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl border-2 border-plum/30 bg-page [backface-visibility:hidden]">
+            <div className="absolute inset-2 rounded-lg border border-plum/20" />
             <span className="text-3xl opacity-60">🔮</span>
-            <p
-              className="mt-3 text-[10px] uppercase tracking-[0.3em] text-neon-purple"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              Oracle of Doom
-            </p>
+            <p className="verse-ref mt-3 text-plum">Oracle of Doom</p>
           </div>
 
-          {/* Card front */}
-          <div className="absolute inset-0 flex flex-col rounded-xl border-2 border-neon-purple/40 bg-page p-4 [backface-visibility:hidden] [transform:rotateY(180deg)]">
+          <div className="absolute inset-0 flex flex-col rounded-xl border-2 border-plum/40 bg-page p-4 [backface-visibility:hidden] [transform:rotateY(180deg)]">
             <div className="flex flex-1 flex-col items-center justify-center text-center">
               <span className="mb-3 text-4xl">{card.symbol}</span>
-              <h3
-                className="mb-2 text-sm font-bold leading-tight text-ink"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
+              <h3 className="mb-2 font-serif text-sm font-bold leading-tight text-ink">
                 {card.name}
               </h3>
-              <span
-                className={cn( "rounded-full border px-2 py-0.5 text-[9px] uppercase tracking-wider", OMEN_STYLES[card.omen] )}
-              >
+              <Badge tone={omenTone === "neutral" ? "active" : omenTone} size="sm">
                 {OMEN_LABELS[card.omen]}
-              </span>
+              </Badge>
             </div>
             <p className="mt-2 border-t border-rule pt-2 text-center text-[11px] italic text-ink-soft">
               {card.tagline}

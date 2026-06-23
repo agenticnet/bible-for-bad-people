@@ -4,6 +4,13 @@ import { useState, useEffect } from "react";
 import { Trash2 } from "lucide-react";
 import type { SinLogItem } from "@/lib/sinTypes";
 import { loadSinLog, saveSinLog } from "@/lib/sinStorage";
+import {
+  Badge,
+  Button,
+  EmptyState,
+  SectionHeader,
+  Surface,
+} from "@/components/ui";
 
 export default function SinLogPanel() {
   const [log, setLog] = useState<SinLogItem[]>([]);
@@ -18,7 +25,6 @@ export default function SinLogPanel() {
     setLog(loadSinLog());
   }
 
-  // Expose refresh via custom event from parent
   useEffect(() => {
     const handler = () => refresh();
     window.addEventListener("sin-log-updated", handler);
@@ -35,48 +41,33 @@ export default function SinLogPanel() {
   return (
     <div>
       <div className="mb-6 flex items-start justify-between gap-4">
-        <div>
-          <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-pink">
-            Confession Record
-          </p>
-          <h2 className="text-xl font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
-            My Sin Log
-          </h2>
-          <p className="mt-2 text-sm text-ink-soft">
-            Every petty sin you&apos;ve checked off, translated, or confessed — stored locally
-            on thy device.
-          </p>
-        </div>
+        <SectionHeader
+          kicker="Confession Record"
+          title="My Sin Log"
+          description="Every petty sin you've checked off, translated, or confessed — stored locally on thy device."
+          accent="terra"
+        />
         {log.length > 0 && (
-          <button
-            type="button"
-            onClick={clearLog}
-            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-rule px-3 py-1.5 text-xs text-ink-soft hover:border-neon-red/40 hover:text-neon-red"
-          >
+          <Button variant="ghost" accent="ember" size="sm" onClick={clearLog}>
             <Trash2 className="h-3.5 w-3.5" />
             Clear all
-          </button>
+          </Button>
         )}
       </div>
 
       {log.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-rule bg-page/80 px-6 py-16 text-center">
-          <p className="text-ink-soft">No sins logged yet.</p>
-          <p className="mt-1 text-sm text-ink-soft">
-            Complete today&apos;s checklist or translate a custom sin to start your record.
-          </p>
-        </div>
+        <EmptyState
+          title="No sins logged yet."
+          description="Complete today's checklist or translate a custom sin to start your record."
+        />
       ) : (
         <div className="flex flex-col gap-3">
           {log.map((item) => (
-            <article
-              key={item.id}
-              className="rounded-xl border border-rule bg-page p-4"
-            >
+            <Surface key={item.id} as="article" padding="sm">
               <div className="mb-2 flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-neon-pink/30 bg-neon-pink/10 px-2 py-0.5 text-[9px] uppercase tracking-wider text-neon-pink">
+                <Badge tone="terra" size="sm">
                   {item.source}
-                </span>
+                </Badge>
                 <span className="text-[10px] text-ink-soft">
                   {new Date(item.completedAt).toLocaleString([], {
                     month: "short",
@@ -87,13 +78,10 @@ export default function SinLogPanel() {
                 </span>
               </div>
               <p className="mb-2 text-sm font-medium text-ink">{item.petty}</p>
-              <p
-                className="text-xs italic leading-relaxed text-ink-soft"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
+              <p className="scripture-block text-xs italic text-ink-soft">
                 {item.translation}
               </p>
-            </article>
+            </Surface>
           ))}
         </div>
       )}

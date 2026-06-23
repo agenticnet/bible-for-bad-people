@@ -46,10 +46,10 @@ export default function SmiteAnimation({
   const mainIcon = PLAGUE_ICONS[plague];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-neon-red/20 animate-pulse-glow">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-ember/20 animate-pulse-glow">
       <div className="relative flex flex-col items-center">
         <div className="mb-4 text-8xl animate-float">{mainIcon}</div>
-        <p className="text-2xl font-bold uppercase tracking-[0.3em] text-neon-red">
+        <p className="text-2xl font-bold uppercase tracking-[0.3em] text-ember">
           SMITTEN
         </p>
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
@@ -69,7 +69,6 @@ export default function SmiteAnimation({
           ))}
         </div>
       </div>
-      <div className="pointer-events-none absolute inset-0 scanlines opacity-40" />
     </div>
   );
 }
