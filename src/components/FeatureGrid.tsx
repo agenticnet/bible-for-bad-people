@@ -54,7 +54,7 @@ export default function FeatureGrid() {
                   {feature.description}
                 </p>
                 {isLive && (
-                  <div className="mt-4 flex items-center gap-1 text-sm text-neon-gold opacity-0 transition-opacity group-hover:opacity-100">
+                  <div className="mt-4 flex items-center gap-1 text-sm text-neon-gold opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
                     Try it now
                     <ArrowUpRight className="h-4 w-4" />
                   </div>

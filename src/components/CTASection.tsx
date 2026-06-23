@@ -6,13 +6,13 @@ export default function CTASection() {
     <section className="px-4 py-20 sm:px-6">
       <div className="mx-auto max-w-4xl">
         <div className="gradient-border relative overflow-hidden p-px">
-          <div className="relative rounded-[calc(0.75rem-1px)] bg-shadow px-8 py-16 text-center sm:px-16">
+          <div className="relative rounded-[calc(0.75rem-1px)] bg-shadow px-5 py-10 text-center sm:px-16 sm:py-16">
             <div className="pointer-events-none absolute inset-0 scanlines opacity-30" />
             <p className="relative mb-3 text-xs uppercase tracking-[0.3em] text-neon-pink">
               No Kneeling Required
             </p>
             <h2
-              className="relative mb-4 text-3xl font-bold text-bone sm:text-4xl"
+              className="relative mb-4 text-2xl font-bold text-bone sm:text-3xl lg:text-4xl"
               style={{ fontFamily: "var(--font-display)" }}
             >
               Ready to unload your sins?
