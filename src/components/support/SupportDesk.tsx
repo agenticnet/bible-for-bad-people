@@ -9,7 +9,7 @@ import {
   generateTicketNumber,
   getMockSupportResponse,
 } from "@/lib/mockSupportResponses";
-import { fetchSupportTickets, createSupportTicket } from "@/lib/data/chat-support";
+import { fetchSupportTickets, createSupportTicket, updateSupportTicket } from "@/lib/data/chat-support";
 import { useAuth } from "@/components/auth/AuthProvider";
 import AuthGate from "@/components/auth/AuthGate";
 import {
@@ -64,38 +64,52 @@ export default function SupportDesk() {
       priority: data.priority,
       description: data.description,
       status: "processing",
+    }).then((result) => {
+      if (result.error || !result.ticket) {
+        setTickets((prev) => prev.filter((t) => t.ticketNumber !== ticketNumber));
+        setIsSubmitting(false);
+        return;
+      }
+
+      const saved = result.ticket;
+
+      setTickets((prev) =>
+        prev.map((t) => (t.ticketNumber === ticketNumber ? saved : t))
+      );
+
+      setTimeout(() => {
+        void updateSupportTicket(saved.id, { status: "queued" }).then((queued) => {
+          if (queued.ticket) {
+            setTickets((prev) =>
+              prev.map((t) => (t.id === saved.id ? queued.ticket! : t))
+            );
+          }
+        });
+      }, 800);
+
+      setTimeout(() => {
+        const response = getMockSupportResponse(
+          data.category,
+          data.priority,
+          ticketNumber,
+          data.subject
+        );
+        const resolvedAt = new Date();
+
+        void updateSupportTicket(saved.id, {
+          status: "resolved",
+          response,
+          resolvedAt,
+        }).then((resolved) => {
+          if (resolved.ticket) {
+            setTickets((prev) =>
+              prev.map((t) => (t.id === saved.id ? resolved.ticket! : t))
+            );
+          }
+          setIsSubmitting(false);
+        });
+      }, 2500);
     });
-
-    setTimeout(() => {
-      setTickets((prev) =>
-        prev.map((t) =>
-          t.ticketNumber === ticketNumber ? { ...t, status: "queued" as const } : t
-        )
-      );
-    }, 800);
-
-    setTimeout(() => {
-      const response = getMockSupportResponse(
-        data.category,
-        data.priority,
-        ticketNumber,
-        data.subject
-      );
-
-      setTickets((prev) =>
-        prev.map((t) =>
-          t.ticketNumber === ticketNumber
-            ? {
-                ...t,
-                status: "resolved" as const,
-                response,
-                resolvedAt: new Date(),
-              }
-            : t
-        )
-      );
-      setIsSubmitting(false);
-    }, 2500);
   }
 
   const openCount = tickets.filter((t) => t.status !== "resolved").length;

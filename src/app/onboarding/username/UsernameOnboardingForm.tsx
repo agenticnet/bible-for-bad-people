@@ -3,14 +3,17 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createProfile, checkUsernameAvailable } from "@/lib/auth/actions";
+import { safeRedirectPath } from "@/lib/auth/redirect";
 import { isValidUsername, normalizeUsername } from "@/lib/auth/types";
 import AuthFormShell from "@/components/auth/AuthFormShell";
 import { Button, Input, Label } from "@/components/ui";
+import { useAuth } from "@/components/auth/AuthProvider";
 
 export default function UsernameOnboardingForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") ?? "/";
+  const { refreshProfile } = useAuth();
+  const next = safeRedirectPath(searchParams.get("next"));
   const [username, setUsername] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -41,6 +44,7 @@ export default function UsernameOnboardingForm() {
       return;
     }
 
+    await refreshProfile();
     router.push(next);
     router.refresh();
   }

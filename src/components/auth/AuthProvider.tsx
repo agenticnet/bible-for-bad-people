@@ -23,7 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const supabase = useMemo(() => createClient(), []);
 
   const fetchProfile = useCallback(
-    async (userId: string) => {
+    async (userId: string): Promise<Profile | null> => {
       const { data, error } = await supabase
         .from("profiles")
         .select("*")
@@ -33,10 +33,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (error) {
         console.error("Failed to load profile:", error.message);
         setProfile(null);
-        return;
+        return null;
       }
 
       setProfile(data);
+      return data;
     },
     [supabase]
   );
@@ -46,7 +47,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setProfile(null);
       return;
     }
-    await fetchProfile(user.id);
+    const loaded = await fetchProfile(user.id);
+    if (loaded) {
+      await migrateLocalData(user.id);
+      await fetchProfile(user.id);
+    }
   }, [fetchProfile, user]);
 
   useEffect(() => {
@@ -63,8 +68,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (sessionUser) {
         await fetchProfile(sessionUser.id);
-        await migrateLocalData(sessionUser.id);
-        await fetchProfile(sessionUser.id);
       }
 
       setIsLoading(false);
@@ -80,8 +83,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
       if (nextUser) {
         await fetchProfile(nextUser.id);
-        await migrateLocalData(nextUser.id);
-        await fetchProfile(nextUser.id);
       } else {
         setProfile(null);
       }
@@ -94,6 +95,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       subscription.unsubscribe();
     };
   }, [supabase, fetchProfile]);
+
+  useEffect(() => {
+    if (!user?.id || !profile?.id) return;
+
+    let active = true;
+
+    void (async () => {
+      await migrateLocalData(user.id);
+      if (active) await fetchProfile(user.id);
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [user?.id, profile?.id, fetchProfile]);
 
   const value = useMemo(
     () => ({

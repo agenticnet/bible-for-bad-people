@@ -104,25 +104,74 @@ export async function createSupportTicket(
       description: ticket.description,
       status: ticket.status,
       response: ticket.response ?? null,
-      resolved_at: new Date().toISOString(),
     })
     .select("*")
     .single();
 
   if (error || !data) return { error: error?.message ?? "Failed to create ticket." };
 
+  return { ticket: mapSupportTicketRow(data) };
+}
+
+function mapSupportTicketRow(row: {
+  id: string;
+  ticket_number: string;
+  subject: string;
+  category: string;
+  priority: string;
+  description: string;
+  status: string;
+  response: string | null;
+  submitted_at: string;
+  resolved_at: string | null;
+}): PrayerTicket {
   return {
-    ticket: {
-      id: data.id,
-      ticketNumber: data.ticket_number,
-      subject: data.subject,
-      category: data.category as PrayerTicket["category"],
-      priority: data.priority as PrayerTicket["priority"],
-      description: data.description,
-      status: data.status as PrayerTicket["status"],
-      response: data.response ?? undefined,
-      submittedAt: new Date(data.submitted_at),
-      resolvedAt: data.resolved_at ? new Date(data.resolved_at) : undefined,
-    },
+    id: row.id,
+    ticketNumber: row.ticket_number,
+    subject: row.subject,
+    category: row.category as PrayerTicket["category"],
+    priority: row.priority as PrayerTicket["priority"],
+    description: row.description,
+    status: row.status as PrayerTicket["status"],
+    response: row.response ?? undefined,
+    submittedAt: new Date(row.submitted_at),
+    resolvedAt: row.resolved_at ? new Date(row.resolved_at) : undefined,
   };
+}
+
+export async function updateSupportTicket(
+  ticketId: string,
+  updates: {
+    status?: PrayerTicket["status"];
+    response?: string;
+    resolvedAt?: Date;
+  }
+): Promise<{ ticket?: PrayerTicket; error?: string }> {
+  const userId = await requireUserId();
+  if (!userId) return { error: "Sign in to update tickets." };
+
+  const supabase = await createClient();
+  const payload: {
+    status?: string;
+    response?: string;
+    resolved_at?: string | null;
+  } = {};
+
+  if (updates.status !== undefined) payload.status = updates.status;
+  if (updates.response !== undefined) payload.response = updates.response;
+  if (updates.resolvedAt !== undefined) {
+    payload.resolved_at = updates.resolvedAt.toISOString();
+  }
+
+  const { data, error } = await supabase
+    .from("support_tickets")
+    .update(payload)
+    .eq("id", ticketId)
+    .eq("user_id", userId)
+    .select("*")
+    .single();
+
+  if (error || !data) return { error: error?.message ?? "Failed to update ticket." };
+
+  return { ticket: mapSupportTicketRow(data) };
 }

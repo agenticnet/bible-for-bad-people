@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { createProfile } from "@/lib/auth/actions";
+import { safeRedirectPath } from "@/lib/auth/redirect";
 import { isValidUsername, normalizeUsername } from "@/lib/auth/types";
 import AuthFormShell from "@/components/auth/AuthFormShell";
 import { Button, Input, Label } from "@/components/ui";
@@ -12,16 +13,18 @@ import { Button, Input, Label } from "@/components/ui";
 export default function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") ?? "/";
+  const next = safeRedirectPath(searchParams.get("next"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    setSuccess(null);
 
     const normalized = normalizeUsername(username);
     if (!isValidUsername(normalized)) {
@@ -35,6 +38,9 @@ export default function SignupForm() {
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
       password,
+      options: {
+        data: { pending_username: normalized },
+      },
     });
 
     if (signUpError) {
@@ -45,6 +51,14 @@ export default function SignupForm() {
 
     if (!data.user) {
       setError("Sign up failed. Check your email for a confirmation link.");
+      setLoading(false);
+      return;
+    }
+
+    if (!data.session) {
+      setSuccess(
+        "Account created. Confirm your email, then log in — your username will be saved automatically."
+      );
       setLoading(false);
       return;
     }
@@ -119,7 +133,8 @@ export default function SignupForm() {
           />
         </div>
         {error && <p className="text-sm text-ember">{error}</p>}
-        <Button type="submit" accent="wine" disabled={loading}>
+        {success && <p className="text-sm text-wine">{success}</p>}
+        <Button type="submit" accent="wine" disabled={loading || !!success}>
           {loading ? "Creating account..." : "Sign Up"}
         </Button>
         <Button type="button" variant="ghost" accent="wine" onClick={handleGoogle}>

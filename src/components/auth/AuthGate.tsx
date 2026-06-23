@@ -18,7 +18,7 @@ export default function AuthGate({
   description = "Log in to save your progress and participate. Browsing is free — salvation costs extra.",
   tone = "wine",
 }: AuthGateProps) {
-  const { user, isLoading } = useAuth();
+  const { user, profile, isLoading } = useAuth();
   const pathname = usePathname();
 
   if (isLoading) {
@@ -50,6 +50,24 @@ export default function AuthGate({
             Sign Up
           </Link>
         </div>
+      </Callout>
+    );
+  }
+
+  if (!profile) {
+    const next = encodeURIComponent(pathname);
+    return (
+      <Callout tone={tone}>
+        <p className="font-medium text-ink">Choose a username first</p>
+        <p className="mb-3 mt-1 text-sm text-ink-soft">
+          Finish onboarding before saving chamber data. The ledger needs to know who you are.
+        </p>
+        <Link
+          href={`/onboarding/username?next=${next}`}
+          className="inline-block rounded-lg border border-wine/40 bg-wine/10 px-4 py-2 text-sm font-medium text-wine transition-colors hover:bg-wine/20"
+        >
+          Set Username
+        </Link>
       </Callout>
     );
   }

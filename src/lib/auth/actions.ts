@@ -18,6 +18,28 @@ export async function checkUsernameAvailable(username: string): Promise<boolean>
   return !data;
 }
 
+export async function ensureProfileFromMetadata(): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return {};
+
+  const { data: existing } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (existing) return {};
+
+  const pending = user.user_metadata?.pending_username;
+  if (typeof pending !== "string") return {};
+
+  return createProfile(pending);
+}
+
 export async function createProfile(username: string): Promise<{ error?: string }> {
   const normalized = normalizeUsername(username);
   if (!isValidUsername(normalized)) {

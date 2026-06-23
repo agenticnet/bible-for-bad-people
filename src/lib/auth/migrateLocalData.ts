@@ -36,6 +36,8 @@ export async function migrateLocalData(userId: string): Promise<void> {
 
   if (!profile) return;
 
+  let hadErrors = false;
+
   const { count: existingSins } = await supabase
     .from("sin_log_items")
     .select("*", { count: "exact", head: true })
@@ -44,7 +46,7 @@ export async function migrateLocalData(userId: string): Promise<void> {
   if ((existingSins ?? 0) === 0) {
     const sinLog = loadSinLog();
     for (const item of sinLog) {
-      await supabase.from("sin_log_items").insert({
+      const { error } = await supabase.from("sin_log_items").insert({
         user_id: userId,
         sin_id: item.sinId ?? null,
         petty: item.petty,
@@ -52,6 +54,7 @@ export async function migrateLocalData(userId: string): Promise<void> {
         source: item.source,
         completed_at: item.completedAt,
       });
+      if (error) hadErrors = true;
     }
   }
 
@@ -63,7 +66,7 @@ export async function migrateLocalData(userId: string): Promise<void> {
       .eq("user_id", userId);
     if ((count ?? 0) === 0) {
       for (const sin of community) {
-        await supabase.from("sin_community_items").insert({
+        const { error } = await supabase.from("sin_community_items").insert({
           user_id: userId,
           petty: sin.petty,
           translation: sin.translation,
@@ -71,6 +74,7 @@ export async function migrateLocalData(userId: string): Promise<void> {
           difficulty: sin.difficulty,
           submitted_at: sin.submittedAt,
         });
+        if (error) hadErrors = true;
       }
     }
   }
@@ -83,7 +87,7 @@ export async function migrateLocalData(userId: string): Promise<void> {
       .eq("user_id", userId);
     if ((count ?? 0) === 0) {
       for (const purchase of localProfile.purchases) {
-        await supabase.from("indulgence_purchases").insert({
+        const { error } = await supabase.from("indulgence_purchases").insert({
           user_id: userId,
           product_id: purchase.productId,
           product_name: purchase.productName,
@@ -91,11 +95,13 @@ export async function migrateLocalData(userId: string): Promise<void> {
           price_paid: purchase.pricePaid,
           purchased_at: purchase.purchasedAt,
         });
+        if (error) hadErrors = true;
       }
-      await supabase
+      const { error } = await supabase
         .from("profiles")
         .update({ total_spent: localProfile.totalSpent })
         .eq("id", userId);
+      if (error) hadErrors = true;
     }
   }
 
@@ -107,11 +113,12 @@ export async function migrateLocalData(userId: string): Promise<void> {
       .eq("user_id", userId);
     if ((count ?? 0) === 0) {
       for (const post of posts) {
-        await supabase.from("confessions").insert({
+        const { error } = await supabase.from("confessions").insert({
           user_id: userId,
           content: post.content,
           created_at: post.createdAt,
         });
+        if (error) hadErrors = true;
       }
     }
   }
@@ -124,7 +131,7 @@ export async function migrateLocalData(userId: string): Promise<void> {
       .eq("user_id", userId);
     if ((count ?? 0) === 0) {
       for (const record of smiteHistory) {
-        await supabase.from("smite_history").insert({
+        const { error } = await supabase.from("smite_history").insert({
           user_id: userId,
           target: record.target,
           target_label: record.targetLabel,
@@ -136,6 +143,7 @@ export async function migrateLocalData(userId: string): Promise<void> {
           smote_at: record.smoteAt,
           price_paid: record.pricePaid,
         });
+        if (error) hadErrors = true;
       }
     }
   }
@@ -153,7 +161,7 @@ export async function migrateLocalData(userId: string): Promise<void> {
             .eq("user_id", userId)
             .eq("date_key", dateKey);
           if ((count ?? 0) === 0) {
-            await supabase.from("oracle_readings").insert({
+            const { error } = await supabase.from("oracle_readings").insert({
               user_id: userId,
               date_key: reading.dateKey,
               cards: reading.cards as unknown as Json,
@@ -161,13 +169,16 @@ export async function migrateLocalData(userId: string): Promise<void> {
               summary: reading.summary,
               revealed: reading.revealed,
             });
+            if (error) hadErrors = true;
           }
         }
       }
     }
   }
 
-  markMigrated(userId);
+  if (!hadErrors) {
+    markMigrated(userId);
+  }
 }
 
 export { migrationKey, isMigrated, markMigrated };

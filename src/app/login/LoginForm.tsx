@@ -4,13 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { ensureProfileFromMetadata } from "@/lib/auth/actions";
+import { safeRedirectPath } from "@/lib/auth/redirect";
 import AuthFormShell from "@/components/auth/AuthFormShell";
 import { Button, Input, Label } from "@/components/ui";
 
 export default function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const next = searchParams.get("next") ?? "/";
+  const next = safeRedirectPath(searchParams.get("next"));
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -34,6 +36,10 @@ export default function LoginForm() {
     }
 
     const userId = signInData.user?.id;
+    if (userId) {
+      await ensureProfileFromMetadata();
+    }
+
     const { data: profile } = userId
       ? await supabase.from("profiles").select("username").eq("id", userId).maybeSingle()
       : { data: null };
