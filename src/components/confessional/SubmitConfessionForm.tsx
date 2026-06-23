@@ -45,17 +45,17 @@ export default function SubmitConfessionForm({ onSubmitted }: SubmitConfessionFo
       <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-purple">
         Anonymous Confession
       </p>
-      <h2 className="mb-3 text-lg font-semibold text-bone">Unburden Thyself</h2>
+      <h2 className="mb-3 text-lg font-semibold text-ink">Unburden Thyself</h2>
       <textarea
         value={content}
         onChange={(e) => setContent(e.target.value)}
         placeholder="Confess a sin, grievance, or petty crime. You’ll get a random anonymous username. Judgment from strangers included."
         rows={4}
         maxLength={500}
-        className="mb-3 w-full resize-none rounded-lg border border-ash bg-shadow px-4 py-3 text-sm text-bone placeholder:text-muted/50 focus:border-neon-purple/50 focus:outline-none focus:ring-1 focus:ring-neon-purple/30"
+        className="mb-3 w-full resize-none rounded-lg border border-rule bg-page px-4 py-3 text-sm text-ink placeholder:text-ink-soft focus:border-neon-purple/50 focus:outline-none focus:ring-1 focus:ring-neon-purple/30"
       />
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[10px] text-muted/60">{content.length}/500</span>
+        <span className="text-[10px] text-ink-soft">{content.length}/500</span>
         <button
           type="submit"
           disabled={!content.trim() || submitting}

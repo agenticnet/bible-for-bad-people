@@ -62,13 +62,13 @@ export default function LuciferChatInterface() {
   return (
     <div className="flex h-full flex-col">
       {/* Header */}
-      <div className="border-b border-ash/50 bg-shadow/80 px-4 py-4 backdrop-blur-sm sm:px-6">
+      <div className="border-b border-rule bg-page px-4 py-4 sm:px-6">
         <div className="flex items-center gap-3">
           <div className="relative">
             <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-neon-red/50 bg-neon-red/10">
               <Flame className="h-6 w-6 text-neon-red" />
             </div>
-            <span className="absolute -right-0.5 -bottom-0.5 h-3.5 w-3.5 rounded-full border-2 border-shadow bg-neon-red animate-pulse-glow" />
+            <span className="absolute -right-0.5 -bottom-0.5 h-3.5 w-3.5 rounded-full border-2 border-parchment bg-neon-red animate-pulse-glow" />
           </div>
           <div>
             <h1
@@ -81,7 +81,7 @@ export default function LuciferChatInterface() {
             >
               Devil&apos;s Advocate Mode
             </h1>
-            <p className="text-xs text-muted">
+            <p className="text-xs text-ink-soft">
               Lucifer — Online &amp; enabling poor choices
             </p>
           </div>
@@ -96,7 +96,7 @@ export default function LuciferChatInterface() {
 
       {/* Disclaimer banner */}
       <div className="border-b border-neon-red/10 bg-neon-red/5 px-4 py-2 sm:px-6">
-        <p className="mx-auto max-w-3xl text-center text-[11px] text-neon-red/70">
+        <p className="mx-auto max-w-3xl text-center text-[11px] text-neon-red">
           GOD is currently unavailable. You are now chatting with the competition.
           Lucifer does not offer salvation, refunds, or good advice.
         </p>
@@ -114,7 +114,7 @@ export default function LuciferChatInterface() {
       </div>
 
       {/* Input */}
-      <div className="border-t border-ash/50 bg-abyss/90 px-4 py-4 backdrop-blur-sm sm:px-6">
+      <div className="border-t border-rule bg-page px-4 py-4 sm:px-6">
         <form
           onSubmit={handleSubmit}
           className="mx-auto flex max-w-3xl items-end gap-3"
@@ -126,7 +126,7 @@ export default function LuciferChatInterface() {
             placeholder="Confess your worst impulse. Lucifer is listening..."
             rows={1}
             disabled={isTyping}
-            className="w-full resize-none rounded-xl border border-ash bg-shadow px-4 py-3 text-sm text-bone placeholder:text-muted/50 focus:border-neon-red/50 focus:outline-none focus:ring-1 focus:ring-neon-red/30 disabled:opacity-50 sm:text-base"
+            className="w-full resize-none rounded-xl border border-rule bg-page px-4 py-3 text-sm text-ink placeholder:text-ink-soft focus:border-neon-red/50 focus:outline-none focus:ring-1 focus:ring-neon-red/30 disabled:opacity-50 sm:text-base"
             style={{ minHeight: "48px", maxHeight: "120px" }}
           />
           <button
@@ -138,7 +138,7 @@ export default function LuciferChatInterface() {
             <Send className="h-5 w-5" />
           </button>
         </form>
-        <p className="mx-auto mt-2 max-w-3xl text-center text-[10px] text-muted/40">
+        <p className="mx-auto mt-2 max-w-3xl text-center text-[10px] text-ink-soft">
           Mock responses only — for entertainment, not actual life decisions.
           Enter to send, Shift+Enter for new line.
         </p>

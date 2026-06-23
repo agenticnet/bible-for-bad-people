@@ -17,7 +17,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-3.5">
         <Link href="/" className="group flex min-w-0 shrink items-center gap-2.5 sm:gap-3">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border border-ivory/20 bg-binding-raised transition-colors group-hover:border-ivory/35 sm:h-9 sm:w-9">
-            <Cross className="h-3.5 w-3.5 rotate-45 text-ivory/90 sm:h-4 sm:w-4" />
+            <Cross className="h-3.5 w-3.5 rotate-45 text-ivory sm:h-4 sm:w-4" />
           </div>
           <div className="flex min-w-0 flex-col leading-tight">
             <span className="truncate font-serif text-sm text-binding-ivory sm:text-base">

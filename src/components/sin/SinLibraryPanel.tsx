@@ -45,10 +45,10 @@ export default function SinLibraryPanel({ refreshKey }: SinLibraryPanelProps) {
         <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-pink">
           Inspiration Archive
         </p>
-        <h2 className="text-xl font-bold text-bone" style={{ fontFamily: "var(--font-display)" }}>
+        <h2 className="text-xl font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
           Sin Library
         </h2>
-        <p className="mt-2 text-sm text-muted">
+        <p className="mt-2 text-sm text-ink-soft">
           {SIN_LIBRARY.length} curated sins + {community.length} community contributions.
           Browse for ideas, copy to translate, or just feel seen.
         </p>
@@ -60,12 +60,12 @@ export default function SinLibraryPanel({ refreshKey }: SinLibraryPanelProps) {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Search sins..."
-          className="flex-1 rounded-lg border border-ash bg-shadow px-4 py-2.5 text-sm text-bone placeholder:text-muted/50 focus:border-neon-pink/50 focus:outline-none"
+          className="flex-1 rounded-lg border border-rule bg-page px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft focus:border-neon-pink/50 focus:outline-none"
         />
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="rounded-lg border border-ash bg-shadow px-3 py-2.5 text-sm text-bone focus:border-neon-pink/50 focus:outline-none"
+          className="rounded-lg border border-rule bg-page px-3 py-2.5 text-sm text-ink focus:border-neon-pink/50 focus:outline-none"
         >
           <option value="">All categories</option>
           {Object.entries(CATEGORY_LABELS).map(([value, label]) => (
@@ -90,7 +90,7 @@ export default function SinLibraryPanel({ refreshKey }: SinLibraryPanelProps) {
       )}
 
       <section>
-        <h3 className="mb-3 text-sm font-semibold text-bone">
+        <h3 className="mb-3 text-sm font-semibold text-ink">
           Curated Library ({libraryResults.length})
         </h3>
         <div className="flex flex-col gap-3">
@@ -123,28 +123,26 @@ function SinLibraryCard({
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <article className="rounded-xl border border-ash bg-shadow p-4">
+    <article className="rounded-xl border border-rule bg-page p-4">
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
         className="w-full text-left"
       >
         <div className="mb-2 flex flex-wrap gap-2">
-          <span className="rounded-full border border-ash bg-smoke px-2 py-0.5 text-[9px] uppercase text-muted">
+          <span className="rounded-full border border-rule bg-smoke px-2 py-0.5 text-[9px] uppercase text-ink-soft">
             {CATEGORY_LABELS[category]}
           </span>
           <span className="rounded-full border border-neon-pink/30 bg-neon-pink/10 px-2 py-0.5 text-[9px] uppercase text-neon-pink">
             {badge}
           </span>
         </div>
-        <p className="text-sm font-medium text-bone">{petty}</p>
-        <p className="mt-1 text-xs text-muted">{expanded ? "Hide translation" : "Tap for scripture →"}</p>
+        <p className="text-sm font-medium text-ink">{petty}</p>
+        <p className="mt-1 text-xs text-ink-soft">{expanded ? "Hide translation" : "Tap for scripture →"}</p>
       </button>
       {expanded && (
         <p
-          className={cn(
-            "mt-3 border-t border-ash pt-3 text-xs italic leading-relaxed text-muted"
-          )}
+          className={cn( "mt-3 border-t border-rule pt-3 text-xs italic leading-relaxed text-ink-soft" )}
           style={{ fontFamily: "var(--font-display)" }}
         >
           {translation}

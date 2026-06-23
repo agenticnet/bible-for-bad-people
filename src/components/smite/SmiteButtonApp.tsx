@@ -109,14 +109,14 @@ export default function SmiteButtonApp() {
 
   if (!mounted) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-void">
-        <p className="text-muted">Charging the smite cannon...</p>
+      <div className="flex min-h-dvh items-center justify-center bg-parchment">
+        <p className="text-ink-soft">Charging the smite cannon...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-dvh bg-void">
+    <div className="min-h-dvh bg-parchment">
       {showAnimation && (
         <SmiteAnimation
           plague={plague}
@@ -125,10 +125,10 @@ export default function SmiteButtonApp() {
         />
       )}
 
-      <div className="border-b border-ash/50 bg-void/80 px-4 py-3 backdrop-blur-xl sm:px-6">
+      <div className="border-b border-ivory/10 bg-binding px-4 py-3 sm:px-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-lg border border-ash px-3 py-1.5 text-sm text-muted transition-colors hover:border-neon-red/50 hover:text-bone"
+          className="inline-flex items-center gap-2 rounded-sm border border-ivory/15 px-3 py-1.5 text-sm text-binding-muted transition-colors hover:border-ivory/30 hover:text-binding-ivory"
         >
           <ArrowLeft className="h-4 w-4" />
           <span className="hidden sm:inline">Back to Home</span>
@@ -153,7 +153,7 @@ export default function SmiteButtonApp() {
           >
             Smite Button
           </h1>
-          <p className="mx-auto max-w-lg text-sm text-muted">
+          <p className="mx-auto max-w-lg text-sm text-ink-soft">
             Digitally smite minor inconveniences with classic biblical plagues.
             Free smites daily. Premium tier includes mock AI smiting visuals.
           </p>
@@ -165,7 +165,7 @@ export default function SmiteButtonApp() {
 
         {/* Target selection */}
         <section className="mb-8">
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-ink-soft">
             Select Target
           </h2>
           <div className="grid grid-cols-3 gap-2 sm:grid-cols-3">
@@ -174,12 +174,7 @@ export default function SmiteButtonApp() {
                 key={t}
                 type="button"
                 onClick={() => setTarget(t)}
-                className={cn(
-                  "flex flex-col items-center gap-1 rounded-xl border p-3 text-center transition-all",
-                  target === t
-                    ? "border-neon-red/50 bg-neon-red/10 text-neon-red"
-                    : "border-ash bg-shadow text-muted hover:border-neon-red/30 hover:text-bone"
-                )}
+                className={cn( "flex flex-col items-center gap-1 rounded-xl border p-3 text-center transition-all", target === t ? "border-neon-red/50 bg-neon-red/10 text-neon-red" : "border-rule bg-page text-ink-soft hover:border-neon-red/30 hover:text-ink" )}
               >
                 <span className="text-2xl">{TARGET_ICONS[t]}</span>
                 <span className="text-[10px] leading-tight sm:text-xs">
@@ -191,12 +186,7 @@ export default function SmiteButtonApp() {
           <button
             type="button"
             onClick={() => setTarget("custom")}
-            className={cn(
-              "mt-2 w-full rounded-xl border p-3 text-sm transition-all",
-              target === "custom"
-                ? "border-neon-red/50 bg-neon-red/10 text-neon-red"
-                : "border-ash bg-shadow text-muted hover:text-bone"
-            )}
+            className={cn( "mt-2 w-full rounded-xl border p-3 text-sm transition-all", target === "custom" ? "border-neon-red/50 bg-neon-red/10 text-neon-red" : "border-rule bg-page text-ink-soft hover:text-ink" )}
           >
             🎯 Custom Target
           </button>
@@ -206,7 +196,7 @@ export default function SmiteButtonApp() {
               value={customName}
               onChange={(e) => setCustomName(e.target.value)}
               placeholder="Name thy enemy..."
-              className="mt-2 w-full rounded-lg border border-ash bg-shadow px-4 py-2.5 text-sm text-bone placeholder:text-muted/50 focus:border-neon-red/50 focus:outline-none"
+              className="mt-2 w-full rounded-lg border border-rule bg-page px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft focus:border-neon-red/50 focus:outline-none"
               maxLength={60}
             />
           )}
@@ -214,7 +204,7 @@ export default function SmiteButtonApp() {
 
         {/* Plague selection */}
         <section className="mb-8">
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-muted">
+          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wider text-ink-soft">
             Choose Plague
           </h2>
           <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -223,15 +213,10 @@ export default function SmiteButtonApp() {
                 key={p}
                 type="button"
                 onClick={() => setPlague(p)}
-                className={cn(
-                  "flex items-center gap-2 rounded-xl border p-3 text-left transition-all",
-                  plague === p
-                    ? "border-neon-red/50 bg-neon-red/10"
-                    : "border-ash bg-shadow hover:border-neon-red/30"
-                )}
+                className={cn( "flex items-center gap-2 rounded-xl border p-3 text-left transition-all", plague === p ? "border-neon-red/50 bg-neon-red/10" : "border-rule bg-page hover:border-neon-red/30" )}
               >
                 <span className="text-xl">{PLAGUE_ICONS[p]}</span>
-                <span className="text-xs text-bone">{PLAGUE_LABELS[p]}</span>
+                <span className="text-xs text-ink">{PLAGUE_LABELS[p]}</span>
               </button>
             ))}
           </div>
@@ -252,7 +237,7 @@ export default function SmiteButtonApp() {
                 <Crown className="h-4 w-4" />
                 Premium Smite (+ AI Visual Mock) — ${PREMIUM_PRICE.toFixed(2)}
               </p>
-              <p className="mt-1 text-xs text-muted">
+              <p className="mt-1 text-xs text-ink-soft">
                 {needsPremium
                   ? "Free smites exhausted. Premium required for more smiting today."
                   : "Optional cinematic smite description. Real AI video when Grok API arrives."}
@@ -279,7 +264,7 @@ export default function SmiteButtonApp() {
         {/* Last result */}
         {lastResult && !smiteing && (
           <section className="mb-8">
-            <h2 className="mb-3 text-sm font-semibold text-bone">Latest Smite Report</h2>
+            <h2 className="mb-3 text-sm font-semibold text-ink">Latest Smite Report</h2>
             <SmiteResultCard record={lastResult} />
           </section>
         )}
@@ -289,7 +274,7 @@ export default function SmiteButtonApp() {
           <button
             type="button"
             onClick={() => setShowHistory(!showHistory)}
-            className="mb-4 flex items-center gap-2 text-sm text-muted hover:text-bone"
+            className="mb-4 flex items-center gap-2 text-sm text-ink-soft hover:text-ink"
           >
             <History className="h-4 w-4" />
             Smite History ({history.length})
@@ -302,11 +287,11 @@ export default function SmiteButtonApp() {
             </div>
           )}
           {showHistory && history.length === 0 && (
-            <p className="text-sm text-muted">No smites yet. The world remains unscathed.</p>
+            <p className="text-sm text-ink-soft">No smites yet. The world remains unscathed.</p>
           )}
         </section>
 
-        <p className="mt-10 text-center text-xs text-muted/40">
+        <p className="mt-10 text-center text-xs text-ink-soft">
           Smite effectiveness not guaranteed. Side effects may include karma, guilt, and
           divine support tickets. File at /support-desk.
         </p>

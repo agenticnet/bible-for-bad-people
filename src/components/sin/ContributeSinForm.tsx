@@ -44,7 +44,7 @@ export default function ContributeSinForm({ onContributed }: ContributeSinFormPr
   }
 
   const inputClass =
-    "w-full rounded-lg border border-ash bg-shadow px-3 py-2.5 text-sm text-bone focus:border-neon-pink/50 focus:outline-none focus:ring-1 focus:ring-neon-pink/30";
+    "w-full rounded-lg border border-rule bg-page px-3 py-2.5 text-sm text-ink focus:border-neon-pink/50 focus:outline-none focus:ring-1 focus:ring-neon-pink/30";
 
   return (
     <div>
@@ -52,10 +52,10 @@ export default function ContributeSinForm({ onContributed }: ContributeSinFormPr
         <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-pink">
           Community Depravity
         </p>
-        <h2 className="text-xl font-bold text-bone" style={{ fontFamily: "var(--font-display)" }}>
+        <h2 className="text-xl font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
           Contribute a New Sin
         </h2>
-        <p className="mt-2 max-w-xl text-sm text-muted">
+        <p className="mt-2 max-w-xl text-sm text-ink-soft">
           Invent a petty sin for the library. We&apos;ll auto-translate it to scripture
           and add it to the community pool on your device. When Grok API arrives,
           daily lists get AI-generated — your contributions feed the chaos.
@@ -63,14 +63,14 @@ export default function ContributeSinForm({ onContributed }: ContributeSinFormPr
       </div>
 
       {submitted && (
-        <div className="mb-4 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-400">
+        <div className="mb-4 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-success">
           Sin submitted to the community pool. The archive grows. Thank you for your service.
         </div>
       )}
 
       <form onSubmit={handlePreview} className="flex flex-col gap-4">
         <div>
-          <label htmlFor="petty-sin" className="mb-1.5 block text-xs uppercase tracking-wider text-muted">
+          <label htmlFor="petty-sin" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
             Petty sin (plain English)
           </label>
           <textarea
@@ -88,7 +88,7 @@ export default function ContributeSinForm({ onContributed }: ContributeSinFormPr
         </div>
 
         <div>
-          <label htmlFor="sin-category" className="mb-1.5 block text-xs uppercase tracking-wider text-muted">
+          <label htmlFor="sin-category" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
             Category
           </label>
           <select
@@ -120,7 +120,7 @@ export default function ContributeSinForm({ onContributed }: ContributeSinFormPr
             Preview
           </p>
           <p
-            className="mb-4 text-sm italic leading-relaxed text-bone"
+            className="mb-4 text-sm italic leading-relaxed text-ink"
             style={{ fontFamily: "var(--font-display)" }}
           >
             &ldquo;{preview}&rdquo;

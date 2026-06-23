@@ -50,7 +50,7 @@ export default function ProductCard({
   }
 
   const tierStyles = {
-    basic: "border-ash hover:border-neon-gold/30",
+    basic: "border-rule hover:border-neon-gold/30",
     premium: "border-neon-gold/20 hover:border-neon-gold/40",
     ultimate: "border-neon-purple/30 hover:border-neon-purple/50",
     subscription: "border-neon-cyan/20 hover:border-neon-cyan/40",
@@ -59,10 +59,7 @@ export default function ProductCard({
   return (
     <>
       <article
-        className={cn(
-          "flex flex-col rounded-xl border bg-shadow p-5 transition-all",
-          tierStyles[product.tier]
-        )}
+        className={cn( "flex flex-col rounded-xl border bg-page p-5 transition-all", tierStyles[product.tier] )}
       >
         <div className="mb-3 flex items-start justify-between">
           <span className="text-3xl">{product.icon}</span>
@@ -72,9 +69,9 @@ export default function ProductCard({
             </span>
           )}
         </div>
-        <h3 className="mb-1 font-semibold text-bone">{product.name}</h3>
-        <p className="mb-3 text-xs text-neon-gold/80">{product.tagline}</p>
-        <p className="mb-4 flex-1 text-sm leading-relaxed text-muted">
+        <h3 className="mb-1 font-semibold text-ink">{product.name}</h3>
+        <p className="mb-3 text-xs text-neon-gold">{product.tagline}</p>
+        <p className="mb-4 flex-1 text-sm leading-relaxed text-ink-soft">
           {product.description}
         </p>
         {product.leaderboardBoost && (
@@ -98,12 +95,12 @@ export default function ProductCard({
       </article>
 
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-void/80 p-4 backdrop-blur-sm">
-          <div className="relative w-full max-w-md rounded-xl border border-neon-gold/30 bg-shadow p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-parchment p-4">
+          <div className="relative w-full max-w-md rounded-xl border border-neon-gold/30 bg-page p-6">
             <button
               type="button"
               onClick={() => !processing && setShowModal(false)}
-              className="absolute top-4 right-4 text-muted hover:text-bone"
+              className="absolute top-4 right-4 text-ink-soft hover:text-ink"
               aria-label="Close"
             >
               <X className="h-5 w-5" />
@@ -114,11 +111,11 @@ export default function ProductCard({
                 <p className="mb-2 text-[10px] uppercase tracking-wider text-neon-gold">
                   Mock Checkout
                 </p>
-                <h3 className="mb-4 text-lg font-bold text-bone">{product.name}</h3>
+                <h3 className="mb-4 text-lg font-bold text-ink">{product.name}</h3>
                 <p className="mb-6 text-2xl font-bold text-neon-gold">
                   {formatPrice(product.price, product.priceLabel)}
                 </p>
-                <p className="mb-6 text-sm text-muted">
+                <p className="mb-6 text-sm text-ink-soft">
                   No real payment processed. This is satire. Your soul remains
                   your own problem. Stripe integration coming never (maybe).
                 </p>
@@ -137,7 +134,7 @@ export default function ProductCard({
               <div className="py-6 text-center">
                 <span className="mb-4 block text-5xl">{product.icon}</span>
                 <p className="mb-2 text-lg font-bold text-neon-gold">Purchase Complete!</p>
-                <p className="text-sm text-muted">
+                <p className="text-sm text-ink-soft">
                   Certificate added to your vault. Salvation score updated.
                   The LORD&apos;s accounting department has been notified (not really).
                 </p>

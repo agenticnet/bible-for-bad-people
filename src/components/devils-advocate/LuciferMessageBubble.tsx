@@ -10,10 +10,7 @@ export default function LuciferMessageBubble({ message }: LuciferMessageBubblePr
 
   return (
     <div
-      className={cn(
-        "flex gap-3",
-        isLucifer ? "justify-start" : "justify-end"
-      )}
+      className={cn( "flex gap-3", isLucifer ? "justify-start" : "justify-end" )}
     >
       {isLucifer && (
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-neon-red/40 bg-neon-red/10">
@@ -24,22 +21,17 @@ export default function LuciferMessageBubble({ message }: LuciferMessageBubblePr
       )}
 
       <div
-        className={cn(
-          "max-w-[85%] rounded-2xl px-4 py-3 sm:max-w-[75%]",
-          isLucifer
-            ? "rounded-tl-sm border border-neon-red/25 bg-shadow"
-            : "rounded-tr-sm border border-neon-pink/30 bg-neon-pink/10"
-        )}
+        className={cn( "max-w-[85%] rounded-2xl px-4 py-3 sm:max-w-[75%]", isLucifer ? "rounded-tl-sm border border-neon-red/25 bg-page" : "rounded-tr-sm border border-neon-pink/30 bg-neon-pink/10" )}
       >
         {isLucifer && (
-          <p className="mb-1 text-[10px] uppercase tracking-[0.2em] text-neon-red/80">
+          <p className="mb-1 text-[10px] uppercase tracking-[0.2em] text-neon-red">
             Lucifer
           </p>
         )}
-        <p className="text-sm leading-relaxed text-bone sm:text-base">
+        <p className="text-sm leading-relaxed text-ink sm:text-base">
           {message.content}
         </p>
-        <p className="mt-2 text-[10px] text-muted/50">
+        <p className="mt-2 text-[10px] text-ink-soft">
           {message.timestamp.toLocaleTimeString([], {
             hour: "2-digit",
             minute: "2-digit",

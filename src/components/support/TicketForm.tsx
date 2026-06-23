@@ -33,12 +33,12 @@ export default function TicketForm({ onSubmit, disabled }: TicketFormProps) {
   }
 
   const inputClass =
-    "w-full rounded-lg border border-ash bg-abyss px-3 py-2.5 text-sm text-bone placeholder:text-muted/50 focus:border-neon-cyan/50 focus:outline-none focus:ring-1 focus:ring-neon-cyan/30 disabled:opacity-50";
+    "w-full rounded-lg border border-rule bg-page px-3 py-2.5 text-sm text-ink placeholder:text-ink-soft focus:border-neon-cyan/50 focus:outline-none focus:ring-1 focus:ring-neon-cyan/30 disabled:opacity-50";
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
       <div>
-        <label htmlFor="subject" className="mb-1.5 block text-xs uppercase tracking-wider text-muted">
+        <label htmlFor="subject" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
           Subject
         </label>
         <input
@@ -54,7 +54,7 @@ export default function TicketForm({ onSubmit, disabled }: TicketFormProps) {
       </div>
 
       <div>
-        <label htmlFor="category" className="mb-1.5 block text-xs uppercase tracking-wider text-muted">
+        <label htmlFor="category" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
           Category
         </label>
         <select
@@ -73,7 +73,7 @@ export default function TicketForm({ onSubmit, disabled }: TicketFormProps) {
       </div>
 
       <div>
-        <label htmlFor="priority" className="mb-1.5 block text-xs uppercase tracking-wider text-muted">
+        <label htmlFor="priority" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
           Priority
         </label>
         <select
@@ -92,7 +92,7 @@ export default function TicketForm({ onSubmit, disabled }: TicketFormProps) {
       </div>
 
       <div>
-        <label htmlFor="description" className="mb-1.5 block text-xs uppercase tracking-wider text-muted">
+        <label htmlFor="description" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
           Prayer Details
         </label>
         <textarea

@@ -20,7 +20,7 @@ export default function ConfessionCard({
   const score = getScore(confession.absolveVotes, confession.condemnVotes);
 
   const verdictStyles = {
-    absolved: "border-green-500/30 text-green-400",
+    absolved: "border-green-500/30 text-success",
     condemned: "border-neon-red/30 text-neon-red",
     split: "border-neon-purple/30 text-neon-purple",
   };
@@ -32,7 +32,7 @@ export default function ConfessionCard({
   };
 
   return (
-    <article className="rounded-xl border border-ash bg-shadow p-5 transition-all hover:border-ash/80">
+    <article className="rounded-xl border border-rule bg-page p-5 transition-all hover:border-rule">
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <span className="rounded-full border border-neon-purple/30 bg-neon-purple/10 px-2.5 py-0.5 font-mono text-[10px] text-neon-purple">
@@ -45,28 +45,20 @@ export default function ConfessionCard({
           )}
         </div>
         <span
-          className={cn(
-            "rounded-full border px-2 py-0.5 text-[9px] uppercase tracking-wider",
-            verdictStyles[verdict]
-          )}
+          className={cn( "rounded-full border px-2 py-0.5 text-[9px] uppercase tracking-wider", verdictStyles[verdict] )}
         >
           {verdictLabels[verdict]}
         </span>
       </div>
 
-      <p className="mb-4 text-sm leading-relaxed text-bone">{confession.content}</p>
+      <p className="mb-4 text-sm leading-relaxed text-ink">{confession.content}</p>
 
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => onVote(confession.id, "absolve")}
-            className={cn(
-              "flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-all",
-              userVote === "absolve"
-                ? "border-green-500/50 bg-green-500/15 text-green-400"
-                : "border-ash text-muted hover:border-green-500/40 hover:text-green-400"
-            )}
+            className={cn( "flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-all", userVote === "absolve" ? "border-green-500/50 bg-green-500/15 text-success" : "border-rule text-ink-soft hover:border-green-500/40 hover:text-success" )}
           >
             <ThumbsUp className="h-4 w-4" />
             Absolve
@@ -75,12 +67,7 @@ export default function ConfessionCard({
           <button
             type="button"
             onClick={() => onVote(confession.id, "condemn")}
-            className={cn(
-              "flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-all",
-              userVote === "condemn"
-                ? "border-neon-red/50 bg-neon-red/15 text-neon-red"
-                : "border-ash text-muted hover:border-neon-red/40 hover:text-neon-red"
-            )}
+            className={cn( "flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-all", userVote === "condemn" ? "border-neon-red/50 bg-neon-red/15 text-neon-red" : "border-rule text-ink-soft hover:border-neon-red/40 hover:text-neon-red" )}
           >
             <ThumbsDown className="h-4 w-4" />
             Condemn
@@ -92,11 +79,11 @@ export default function ConfessionCard({
             {score > 0 ? "+" : ""}
             {score}
           </p>
-          <p className="text-[10px] text-muted/60">salvation pts</p>
+          <p className="text-[10px] text-ink-soft">salvation pts</p>
         </div>
       </div>
 
-      <p className="mt-3 text-[10px] text-muted/40">
+      <p className="mt-3 text-[10px] text-ink-soft">
         {new Date(confession.createdAt).toLocaleString([], {
           month: "short",
           day: "numeric",

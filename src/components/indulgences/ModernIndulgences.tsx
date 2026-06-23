@@ -57,8 +57,8 @@ export default function ModernIndulgences() {
 
   if (!mounted || !profile) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-void">
-        <p className="text-muted">Opening the treasury...</p>
+      <div className="flex min-h-dvh items-center justify-center bg-parchment">
+        <p className="text-ink-soft">Opening the treasury...</p>
       </div>
     );
   }
@@ -73,11 +73,11 @@ export default function ModernIndulgences() {
     : null;
 
   return (
-    <div className="min-h-dvh bg-void">
-      <div className="border-b border-ash/50 bg-void/80 px-4 py-3 backdrop-blur-xl sm:px-6">
+    <div className="min-h-dvh bg-parchment">
+      <div className="border-b border-ivory/10 bg-binding px-4 py-3 sm:px-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-lg border border-ash px-3 py-1.5 text-sm text-muted transition-colors hover:border-neon-gold/50 hover:text-bone"
+          className="inline-flex items-center gap-2 rounded-sm border border-ivory/15 px-3 py-1.5 text-sm text-binding-muted transition-colors hover:border-ivory/30 hover:text-binding-ivory"
         >
           <ArrowLeft className="h-4 w-4" />
           <span className="hidden sm:inline">Back to Home</span>
@@ -93,12 +93,12 @@ export default function ModernIndulgences() {
             </div>
             <div>
               <h1
-                className="text-2xl font-bold text-neon-gold text-glow-gold sm:text-3xl"
+                className="text-2xl font-bold text-neon-gold sm:text-3xl"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 Modern Indulgences
               </h1>
-              <p className="text-sm text-muted">
+              <p className="text-sm text-ink-soft">
                 Salvation as a Service™ · Mock payments only
               </p>
             </div>
@@ -114,36 +114,36 @@ export default function ModernIndulgences() {
         {/* Salvation score card */}
         <div className="mb-8 grid gap-4 sm:grid-cols-3">
           <div className="rounded-xl border border-neon-gold/30 bg-neon-gold/5 p-4 sm:col-span-1">
-            <p className="mb-1 text-[10px] uppercase tracking-wider text-neon-gold/70">
+            <p className="mb-1 text-[10px] uppercase tracking-wider text-neon-gold">
               Your Salvation Score
             </p>
             <p className="text-4xl font-bold text-neon-gold">
               {profile.salvationScore}
-              <span className="text-lg text-muted/50">/99</span>
+              <span className="text-lg text-ink-soft">/99</span>
             </p>
           </div>
-          <div className="rounded-xl border border-ash bg-shadow p-4">
-            <p className="mb-1 text-[10px] uppercase tracking-wider text-muted">
+          <div className="rounded-xl border border-rule bg-page p-4">
+            <p className="mb-1 text-[10px] uppercase tracking-wider text-ink-soft">
               Sins Logged
             </p>
-            <p className="text-2xl font-bold text-bone">{sinCount}</p>
-            <p className="text-xs text-muted">−2 each from Sin Engine</p>
+            <p className="text-2xl font-bold text-ink">{sinCount}</p>
+            <p className="text-xs text-ink-soft">−2 each from Sin Engine</p>
           </div>
-          <div className="rounded-xl border border-ash bg-shadow p-4">
-            <p className="mb-1 text-[10px] uppercase tracking-wider text-muted">
+          <div className="rounded-xl border border-rule bg-page p-4">
+            <p className="mb-1 text-[10px] uppercase tracking-wider text-ink-soft">
               Total Spent (Mock)
             </p>
-            <p className="text-2xl font-bold text-bone">
+            <p className="text-2xl font-bold text-ink">
               ${profile.totalSpent.toFixed(2)}
             </p>
-            <p className="text-xs text-muted">{profile.purchases.length} purchases</p>
+            <p className="text-xs text-ink-soft">{profile.purchases.length} purchases</p>
           </div>
         </div>
 
         {/* Display name for leaderboard */}
         <div className="mb-8 flex flex-col gap-2 sm:flex-row sm:items-end">
           <div className="flex-1">
-            <label htmlFor="display-name" className="mb-1.5 block text-xs uppercase tracking-wider text-muted">
+            <label htmlFor="display-name" className="mb-1.5 block text-xs uppercase tracking-wider text-ink-soft">
               Leaderboard Display Name
             </label>
             <input
@@ -152,7 +152,7 @@ export default function ModernIndulgences() {
               value={nameInput}
               onChange={(e) => setNameInput(e.target.value)}
               placeholder="e.g. ProbablyFineUser42"
-              className="w-full rounded-lg border border-ash bg-shadow px-4 py-2.5 text-sm text-bone placeholder:text-muted/50 focus:border-neon-gold/50 focus:outline-none"
+              className="w-full rounded-lg border border-rule bg-page px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft focus:border-neon-gold/50 focus:outline-none"
               maxLength={24}
             />
           </div>
@@ -167,7 +167,7 @@ export default function ModernIndulgences() {
         </div>
 
         {/* Tabs */}
-        <nav className="mb-8 flex gap-1 overflow-x-auto rounded-xl border border-ash bg-shadow p-1">
+        <nav className="mb-8 flex gap-1 overflow-x-auto rounded-xl border border-rule bg-page p-1">
           {TABS.map((tab) => {
             const Icon = tab.icon;
             return (
@@ -175,12 +175,7 @@ export default function ModernIndulgences() {
                 key={tab.id}
                 type="button"
                 onClick={() => setActiveTab(tab.id)}
-                className={cn(
-                  "flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all",
-                  activeTab === tab.id
-                    ? "bg-neon-gold/15 text-neon-gold"
-                    : "text-muted hover:text-bone"
-                )}
+                className={cn( "flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all", activeTab === tab.id ? "bg-neon-gold/15 text-neon-gold" : "text-ink-soft hover:text-ink" )}
               >
                 <Icon className="h-4 w-4" />
                 {tab.label}
@@ -209,16 +204,16 @@ export default function ModernIndulgences() {
         {activeTab === "vault" && (
           <div>
             <div className="mb-6">
-              <h2 className="text-xl font-bold text-bone">My Vault</h2>
-              <p className="mt-1 text-sm text-muted">
+              <h2 className="text-xl font-bold text-ink">My Vault</h2>
+              <p className="mt-1 text-sm text-ink-soft">
                 Digital certificates of questionable absolution.
               </p>
             </div>
             {profile.purchases.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-ash bg-shadow/50 px-6 py-16 text-center">
-                <Vault className="mx-auto mb-4 h-10 w-10 text-muted/30" />
-                <p className="text-muted">No indulgences purchased yet.</p>
-                <p className="mt-1 text-sm text-muted/60">
+              <div className="rounded-xl border border-dashed border-rule bg-page/80 px-6 py-16 text-center">
+                <Vault className="mx-auto mb-4 h-10 w-10 text-ink-soft" />
+                <p className="text-ink-soft">No indulgences purchased yet.</p>
+                <p className="mt-1 text-sm text-ink-soft">
                   Visit the marketplace to buy your way toward salvation.
                 </p>
               </div>

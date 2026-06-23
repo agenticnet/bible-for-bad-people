@@ -18,7 +18,7 @@ export default function Hero() {
           didn&apos;t deserve — delivered with zero judgment and maximum sarcasm.
         </p>
 
-        <p className="mx-auto mb-10 max-w-lg text-sm leading-relaxed text-ink-soft/80">
+        <p className="mx-auto mb-10 max-w-lg text-sm leading-relaxed text-ink-soft">
           A provocative sanctuary for the spiritually exhausted, morally flexible,
           and delightfully unhinged.
         </p>

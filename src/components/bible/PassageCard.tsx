@@ -36,7 +36,7 @@ export default function PassageCard({ passage }: PassageCardProps) {
         <div className="min-w-0 flex-1">
           <div className="mb-3 flex flex-wrap items-baseline gap-x-3 gap-y-1">
             <span className="verse-ref text-wine">{passage.reference}</span>
-            <span className="verse-ref text-ink-soft/70">{passage.book}</span>
+            <span className="verse-ref text-ink-soft">{passage.book}</span>
           </div>
           <p className="mb-3 font-serif text-lg leading-snug text-ink">
             {passage.tldr}
@@ -75,7 +75,7 @@ export default function PassageCard({ passage }: PassageCardProps) {
             </p>
           </div>
 
-          <p className="verse-ref mt-5 text-ink-soft/60">
+          <p className="verse-ref mt-5 text-ink-soft">
             Satirical education, not theology. Read in context before quoting at Thanksgiving.
           </p>
         </div>

@@ -75,13 +75,13 @@ export default function SupportDesk() {
   const openCount = tickets.filter((t) => t.status !== "resolved").length;
 
   return (
-    <div className="min-h-dvh bg-void">
+    <div className="min-h-dvh bg-parchment">
       {/* Top bar */}
-      <div className="border-b border-ash/50 bg-void/80 px-4 py-3 backdrop-blur-xl sm:px-6">
+      <div className="border-b border-ivory/10 bg-binding px-4 py-3 sm:px-6">
         <div className="mx-auto flex max-w-5xl items-center gap-3">
           <Link
             href="/"
-            className="flex items-center gap-2 rounded-lg border border-ash px-3 py-1.5 text-sm text-muted transition-colors hover:border-neon-cyan/50 hover:text-bone"
+            className="inline-flex items-center gap-2 rounded-sm border border-ivory/15 px-3 py-1.5 text-sm text-binding-muted transition-colors hover:border-ivory/30 hover:text-binding-ivory"
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">Back to Home</span>
@@ -98,12 +98,12 @@ export default function SupportDesk() {
             </div>
             <div>
               <h1
-                className="text-2xl font-bold text-neon-cyan text-glow-cyan sm:text-3xl"
+                className="text-2xl font-bold text-neon-cyan sm:text-3xl"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 The Divine Support Desk
               </h1>
-              <p className="text-sm text-muted">
+              <p className="text-sm text-ink-soft">
                 Heavenly Administration — Prayer Ticket System v4.0.0
               </p>
             </div>
@@ -147,11 +147,11 @@ export default function SupportDesk() {
         <div className="grid gap-8 lg:grid-cols-5">
           {/* Form */}
           <div className="lg:col-span-2">
-            <div className="sticky top-4 rounded-xl border border-ash bg-shadow p-6">
-              <h2 className="mb-1 text-lg font-semibold text-bone">
+            <div className="sticky top-4 rounded-xl border border-rule bg-page p-6">
+              <h2 className="mb-1 text-lg font-semibold text-ink">
                 Submit a Prayer Ticket
               </h2>
-              <p className="mb-6 text-sm text-muted">
+              <p className="mb-6 text-sm text-ink-soft">
                 File your request with Heavenly Administration. Response times
                 may vary by sin level and planetary alignment.
               </p>
@@ -161,20 +161,20 @@ export default function SupportDesk() {
 
           {/* Ticket list */}
           <div className="lg:col-span-3">
-            <h2 className="mb-4 text-lg font-semibold text-bone">
+            <h2 className="mb-4 text-lg font-semibold text-ink">
               Your Tickets
               {tickets.length > 0 && (
-                <span className="ml-2 text-sm font-normal text-muted">
+                <span className="ml-2 text-sm font-normal text-ink-soft">
                   ({tickets.length})
                 </span>
               )}
             </h2>
 
             {tickets.length === 0 ? (
-              <div className="rounded-xl border border-dashed border-ash bg-shadow/50 px-6 py-16 text-center">
-                <Ticket className="mx-auto mb-4 h-10 w-10 text-muted/30" />
-                <p className="text-muted">No tickets yet.</p>
-                <p className="mt-1 text-sm text-muted/60">
+              <div className="rounded-xl border border-dashed border-rule bg-page/80 px-6 py-16 text-center">
+                <Ticket className="mx-auto mb-4 h-10 w-10 text-ink-soft" />
+                <p className="text-ink-soft">No tickets yet.</p>
+                <p className="mt-1 text-sm text-ink-soft">
                   Submit a prayer request to get a corporate-style divine
                   response.
                 </p>

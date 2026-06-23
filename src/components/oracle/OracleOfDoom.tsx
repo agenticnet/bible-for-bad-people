@@ -54,19 +54,19 @@ export default function OracleOfDoom() {
 
   if (!mounted || !reading) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-void">
-        <p className="text-muted">Consulting the void...</p>
+      <div className="flex min-h-dvh items-center justify-center bg-parchment">
+        <p className="text-ink-soft">Consulting the void...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-dvh bg-void">
+    <div className="min-h-dvh bg-parchment">
       {/* Top bar */}
-      <div className="border-b border-ash/50 bg-void/80 px-4 py-3 backdrop-blur-xl sm:px-6">
+      <div className="border-b border-ivory/10 bg-binding px-4 py-3 sm:px-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-lg border border-ash px-3 py-1.5 text-sm text-muted transition-colors hover:border-neon-purple/50 hover:text-bone"
+          className="inline-flex items-center gap-2 rounded-sm border border-ivory/15 px-3 py-1.5 text-sm text-binding-muted transition-colors hover:border-ivory/30 hover:text-binding-ivory"
         >
           <ArrowLeft className="h-4 w-4" />
           <span className="hidden sm:inline">Back to Home</span>
@@ -83,13 +83,13 @@ export default function OracleOfDoom() {
             </span>
           </div>
           <h1
-            className="mb-3 text-3xl font-bold text-neon-purple text-glow-purple sm:text-4xl"
+            className="mb-3 text-3xl font-bold text-neon-purple sm:text-4xl"
             style={{ fontFamily: "var(--font-display)" }}
           >
             Oracle of Doom
           </h1>
-          <p className="text-sm text-muted">{formattedDate}</p>
-          <p className="mx-auto mt-2 max-w-lg text-muted">
+          <p className="text-sm text-ink-soft">{formattedDate}</p>
+          <p className="mx-auto mt-2 max-w-lg text-ink-soft">
             Your daily tarot reading — brutally honest, zero toxic positivity,
             maximum existential dread.
           </p>
@@ -99,12 +99,12 @@ export default function OracleOfDoom() {
         {cardsRevealed && (
           <div className="mb-10 flex justify-center">
             <div className="rounded-xl border border-neon-red/30 bg-neon-red/5 px-8 py-4 text-center">
-              <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-red/70">
+              <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-red">
                 Today&apos;s Doom Score
               </p>
               <p className="text-5xl font-bold text-neon-red">
                 {reading.doomScore}
-                <span className="text-lg text-muted/50">/10</span>
+                <span className="text-lg text-ink-soft">/10</span>
               </p>
             </div>
           </div>
@@ -133,12 +133,12 @@ export default function OracleOfDoom() {
               </p>
             </div>
             <p
-              className="text-lg leading-relaxed text-bone/90"
+              className="text-lg leading-relaxed text-ink-soft"
               style={{ fontFamily: "var(--font-display)" }}
             >
               {reading.summary}
             </p>
-            <p className="mt-4 text-xs text-muted/60">
+            <p className="mt-4 text-xs text-ink-soft">
               This reading is locked until tomorrow. The cards do not do
               refunds, rerolls, or emotional support.
             </p>
@@ -161,7 +161,7 @@ export default function OracleOfDoom() {
         )}
 
         {cardsRevealed && (
-          <p className="text-center text-xs text-muted/40">
+          <p className="text-center text-xs text-ink-soft">
             Come back tomorrow for a fresh reading. Same doom, different cards.
           </p>
         )}

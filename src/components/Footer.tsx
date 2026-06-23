@@ -27,7 +27,7 @@ export default function Footer() {
                           {link.label}
                         </span>
                         {link.description && (
-                          <span className="mt-0.5 block text-[11px] leading-relaxed text-binding-muted/70">
+                          <span className="mt-0.5 block text-[11px] leading-relaxed text-binding-muted">
                             {link.description}
                           </span>
                         )}
@@ -63,7 +63,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <p className="mt-6 text-center text-xs leading-relaxed text-binding-muted/80 sm:text-right">
+        <p className="mt-6 text-center text-xs leading-relaxed text-binding-muted sm:text-right">
           Not affiliated with any deity, denomination, or eternal damnation service.
           For entertainment purposes only. Your soul is your own problem.
         </p>

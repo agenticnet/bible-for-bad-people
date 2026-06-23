@@ -64,11 +64,11 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
         <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-pink">
           Today&apos;s Suggested Sins
         </p>
-        <h2 className="text-xl font-bold text-bone" style={{ fontFamily: "var(--font-display)" }}>
+        <h2 className="text-xl font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
           Daily Petty Sin Checklist
         </h2>
-        <p className="mt-1 text-sm text-muted">{formattedDate}</p>
-        <p className="mt-2 max-w-xl text-sm text-muted/80">
+        <p className="mt-1 text-sm text-ink-soft">{formattedDate}</p>
+        <p className="mt-2 max-w-xl text-sm text-ink-soft">
           Seven morally flexible todos for your day. Check them off when completed
           — or aspirational, we don&apos;t judge. Fresh list tomorrow; Grok API later.
         </p>
@@ -76,7 +76,7 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
 
       <div className="mb-4 flex items-center gap-3 rounded-lg border border-neon-pink/20 bg-neon-pink/5 px-4 py-3">
         <Sparkles className="h-4 w-4 shrink-0 text-neon-pink" />
-        <p className="text-sm text-bone/80">
+        <p className="text-sm text-ink-soft">
           <span className="font-semibold text-neon-pink">{doneCount}/7</span> sins
           logged today. Complete the set for absolutely no reward.
         </p>
@@ -90,20 +90,10 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
               <button
                 type="button"
                 onClick={() => toggleSin(sin)}
-                className={cn(
-                  "flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-all",
-                  isDone
-                    ? "border-neon-pink/30 bg-neon-pink/5 opacity-80"
-                    : "border-ash bg-shadow hover:border-neon-pink/30 hover:bg-smoke"
-                )}
+                className={cn( "flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-all", isDone ? "border-neon-pink/30 bg-neon-pink/5 opacity-80" : "border-rule bg-page hover:border-neon-pink/30 hover:bg-smoke" )}
               >
                 <div
-                  className={cn(
-                    "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border",
-                    isDone
-                      ? "border-neon-pink bg-neon-pink/20 text-neon-pink"
-                      : "border-ash text-muted"
-                  )}
+                  className={cn( "mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border", isDone ? "border-neon-pink bg-neon-pink/20 text-neon-pink" : "border-rule text-ink-soft" )}
                 >
                   {isDone ? (
                     <Check className="h-3.5 w-3.5" />
@@ -112,19 +102,16 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="mb-1 text-[10px] uppercase tracking-wider text-muted">
+                  <p className="mb-1 text-[10px] uppercase tracking-wider text-ink-soft">
                     Sin #{index + 1} · {sin.difficulty}
                   </p>
                   <p
-                    className={cn(
-                      "text-sm font-medium text-bone",
-                      isDone && "line-through decoration-neon-pink/50"
-                    )}
+                    className={cn( "text-sm font-medium text-ink", isDone && "line-through decoration-neon-pink/50" )}
                   >
                     {sin.petty}
                   </p>
                   {isDone && (
-                    <p className="mt-2 text-xs italic leading-relaxed text-neon-pink/80">
+                    <p className="mt-2 text-xs italic leading-relaxed text-neon-pink">
                       {sin.translation}
                     </p>
                   )}

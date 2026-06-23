@@ -15,15 +15,15 @@ interface TicketCardProps {
 }
 
 const STATUS_STYLES = {
-  processing: "border-yellow-500/30 bg-yellow-500/10 text-yellow-400",
+  processing: "border-yellow-500/30 bg-yellow-500/10 text-warning",
   queued: "border-neon-cyan/30 bg-neon-cyan/10 text-neon-cyan",
-  resolved: "border-green-500/30 bg-green-500/10 text-green-400",
+  resolved: "border-green-500/30 bg-green-500/10 text-success",
 };
 
 const PRIORITY_STYLES = {
-  low: "text-muted",
+  low: "text-ink-soft",
   medium: "text-neon-gold",
-  high: "text-orange-400",
+  high: "text-alert",
   urgent: "text-neon-red",
 };
 
@@ -31,7 +31,7 @@ export default function TicketCard({ ticket }: TicketCardProps) {
   const [expanded, setExpanded] = useState(ticket.status === "resolved");
 
   return (
-    <div className="rounded-xl border border-ash bg-shadow overflow-hidden transition-all hover:border-ash/80">
+    <div className="rounded-xl border border-rule bg-page overflow-hidden transition-all hover:border-rule">
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
@@ -43,22 +43,19 @@ export default function TicketCard({ ticket }: TicketCardProps) {
               {ticket.ticketNumber}
             </span>
             <span
-              className={cn(
-                "rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider",
-                STATUS_STYLES[ticket.status]
-              )}
+              className={cn( "rounded-full border px-2 py-0.5 text-[10px] uppercase tracking-wider", STATUS_STYLES[ticket.status] )}
             >
               {ticket.status === "processing" && (
                 <Loader2 className="mr-1 inline h-3 w-3 animate-spin" />
               )}
               {STATUS_LABELS[ticket.status]}
             </span>
-            <span className="rounded-full border border-ash bg-smoke px-2 py-0.5 text-[10px] text-muted">
+            <span className="rounded-full border border-rule bg-smoke px-2 py-0.5 text-[10px] text-ink-soft">
               {CATEGORY_LABELS[ticket.category]}
             </span>
           </div>
-          <h3 className="truncate font-semibold text-bone">{ticket.subject}</h3>
-          <p className="mt-1 text-xs text-muted">
+          <h3 className="truncate font-semibold text-ink">{ticket.subject}</h3>
+          <p className="mt-1 text-xs text-ink-soft">
             Submitted{" "}
             {ticket.submittedAt.toLocaleString([], {
               month: "short",
@@ -73,27 +70,27 @@ export default function TicketCard({ ticket }: TicketCardProps) {
           </p>
         </div>
         {expanded ? (
-          <ChevronUp className="h-5 w-5 shrink-0 text-muted" />
+          <ChevronUp className="h-5 w-5 shrink-0 text-ink-soft" />
         ) : (
-          <ChevronDown className="h-5 w-5 shrink-0 text-muted" />
+          <ChevronDown className="h-5 w-5 shrink-0 text-ink-soft" />
         )}
       </button>
 
       {expanded && (
-        <div className="border-t border-ash px-5 pb-5">
+        <div className="border-t border-rule px-5 pb-5">
           <div className="mt-4">
-            <p className="mb-1 text-[10px] uppercase tracking-wider text-muted">
+            <p className="mb-1 text-[10px] uppercase tracking-wider text-ink-soft">
               Your Request
             </p>
-            <p className="text-sm leading-relaxed text-bone/90">
+            <p className="text-sm leading-relaxed text-ink-soft">
               {ticket.description}
             </p>
           </div>
 
           {ticket.status === "processing" && (
             <div className="mt-4 flex items-center gap-2 rounded-lg border border-yellow-500/20 bg-yellow-500/5 px-4 py-3">
-              <Loader2 className="h-4 w-4 animate-spin text-yellow-400" />
-              <p className="text-sm text-yellow-400/80">
+              <Loader2 className="h-4 w-4 animate-spin text-warning" />
+              <p className="text-sm text-warning">
                 Routing to Heavenly Administration...
               </p>
             </div>
@@ -101,7 +98,7 @@ export default function TicketCard({ ticket }: TicketCardProps) {
 
           {ticket.status === "queued" && (
             <div className="mt-4 rounded-lg border border-neon-cyan/20 bg-neon-cyan/5 px-4 py-3">
-              <p className="text-sm text-neon-cyan/80">
+              <p className="text-sm text-neon-cyan">
                 Your ticket is in the Divine Queue. Position:{" "}
                 {ticket.ticketNumber.replace(/\D/g, "").slice(0, 6) || "847291"}.
                 Estimated wait: 400 years.
@@ -114,11 +111,11 @@ export default function TicketCard({ ticket }: TicketCardProps) {
               <p className="mb-2 flex items-center gap-2 text-[10px] uppercase tracking-wider text-neon-cyan">
                 <span>Response from Heavenly Administration</span>
               </p>
-              <p className="whitespace-pre-wrap text-sm leading-relaxed text-bone/90">
+              <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">
                 {ticket.response}
               </p>
               {ticket.resolvedAt && (
-                <p className="mt-3 text-[10px] text-muted/50">
+                <p className="mt-3 text-[10px] text-ink-soft">
                   Resolved{" "}
                   {ticket.resolvedAt.toLocaleString([], {
                     month: "short",

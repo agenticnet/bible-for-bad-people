@@ -42,12 +42,12 @@ function LeaderboardList({
   metric: "absolve" | "condemn";
   accent: "green" | "red";
 }) {
-  const accentClass = accent === "green" ? "text-green-400" : "text-neon-red";
+  const accentClass = accent === "green" ? "text-success" : "text-neon-red";
 
   return (
-    <div className="rounded-xl border border-ash bg-shadow p-4">
-      <h3 className="mb-0.5 text-sm font-semibold text-bone">{title}</h3>
-      <p className="mb-3 text-[10px] text-muted">{subtitle}</p>
+    <div className="rounded-xl border border-rule bg-page p-4">
+      <h3 className="mb-0.5 text-sm font-semibold text-ink">{title}</h3>
+      <p className="mb-3 text-[10px] text-ink-soft">{subtitle}</p>
       <ol className="flex flex-col gap-2">
         {items.map((item, i) => (
           <li key={item.id} className="flex gap-2 text-xs">
@@ -55,8 +55,8 @@ function LeaderboardList({
               {i + 1}.
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-muted">u/{item.authorLabel}</p>
-              <p className="line-clamp-2 text-bone/80">{item.content}</p>
+              <p className="truncate text-ink-soft">u/{item.authorLabel}</p>
+              <p className="line-clamp-2 text-ink-soft">{item.content}</p>
               <p className={`mt-0.5 font-mono ${accentClass}`}>
                 {metric === "absolve" ? item.absolveVotes : item.condemnVotes}{" "}
                 {metric === "absolve" ? "absolutions" : "condemnations"}

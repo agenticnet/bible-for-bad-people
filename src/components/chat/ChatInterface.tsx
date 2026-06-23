@@ -61,7 +61,7 @@ export default function ChatInterface() {
   return (
     <div className="flex h-full flex-col">
       {/* Chat header */}
-      <div className="border-b border-ash/50 bg-shadow/80 px-4 py-4 backdrop-blur-sm sm:px-6">
+      <div className="border-b border-rule bg-page px-4 py-4 sm:px-6">
         <div className="flex items-center gap-3">
           <div className="relative">
             <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-neon-gold/50 bg-neon-gold/10">
@@ -69,16 +69,16 @@ export default function ChatInterface() {
                 ✝
               </span>
             </div>
-            <span className="absolute -right-0.5 -bottom-0.5 h-3.5 w-3.5 rounded-full border-2 border-shadow bg-green-500" />
+            <span className="absolute -right-0.5 -bottom-0.5 h-3.5 w-3.5 rounded-full border-2 border-parchment bg-green-500" />
           </div>
           <div>
             <h1
-              className="text-lg font-bold text-neon-gold text-glow-gold"
+              className="text-lg font-bold text-neon-gold"
               style={{ fontFamily: "var(--font-display)" }}
             >
               Speak with GOD
             </h1>
-            <p className="text-xs text-muted">
+            <p className="text-xs text-ink-soft">
               Online — Judging silently
             </p>
           </div>
@@ -103,7 +103,7 @@ export default function ChatInterface() {
       </div>
 
       {/* Input */}
-      <div className="border-t border-ash/50 bg-abyss/90 px-4 py-4 backdrop-blur-sm sm:px-6">
+      <div className="border-t border-rule bg-page px-4 py-4 sm:px-6">
         <form
           onSubmit={handleSubmit}
           className="mx-auto flex max-w-3xl items-end gap-3"
@@ -117,7 +117,7 @@ export default function ChatInterface() {
               placeholder="Confess, vent, or demand a miracle..."
               rows={1}
               disabled={isTyping}
-              className="w-full resize-none rounded-xl border border-ash bg-shadow px-4 py-3 pr-4 text-sm text-bone placeholder:text-muted/50 focus:border-neon-purple/50 focus:outline-none focus:ring-1 focus:ring-neon-purple/30 disabled:opacity-50 sm:text-base"
+              className="w-full resize-none rounded-xl border border-rule bg-page px-4 py-3 pr-4 text-sm text-ink placeholder:text-ink-soft focus:border-neon-purple/50 focus:outline-none focus:ring-1 focus:ring-neon-purple/30 disabled:opacity-50 sm:text-base"
               style={{ minHeight: "48px", maxHeight: "120px" }}
             />
           </div>
@@ -130,7 +130,7 @@ export default function ChatInterface() {
             <Send className="h-5 w-5" />
           </button>
         </form>
-        <p className="mx-auto mt-2 max-w-3xl text-center text-[10px] text-muted/40">
+        <p className="mx-auto mt-2 max-w-3xl text-center text-[10px] text-ink-soft">
           Mock responses only — real divine API coming soon. Enter to send, Shift+Enter for new line.
         </p>
       </div>

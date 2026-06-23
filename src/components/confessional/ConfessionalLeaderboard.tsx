@@ -47,8 +47,8 @@ export default function ConfessionalLeaderboard() {
 
   if (!mounted) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-void">
-        <p className="text-muted">Opening the confessional...</p>
+      <div className="flex min-h-dvh items-center justify-center bg-parchment">
+        <p className="text-ink-soft">Opening the confessional...</p>
       </div>
     );
   }
@@ -58,11 +58,11 @@ export default function ConfessionalLeaderboard() {
   const mostCondemned = getLeaderboardTop(confessions, "condemned");
 
   return (
-    <div className="min-h-dvh bg-void">
-      <div className="border-b border-ash/50 bg-void/80 px-4 py-3 backdrop-blur-xl sm:px-6">
+    <div className="min-h-dvh bg-parchment">
+      <div className="border-b border-ivory/10 bg-binding px-4 py-3 sm:px-6">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 rounded-lg border border-ash px-3 py-1.5 text-sm text-muted transition-colors hover:border-neon-purple/50 hover:text-bone"
+          className="inline-flex items-center gap-2 rounded-sm border border-ivory/15 px-3 py-1.5 text-sm text-binding-muted transition-colors hover:border-ivory/30 hover:text-binding-ivory"
         >
           <ArrowLeft className="h-4 w-4" />
           <span className="hidden sm:inline">Back to Home</span>
@@ -78,12 +78,12 @@ export default function ConfessionalLeaderboard() {
             </div>
             <div>
               <h1
-                className="text-2xl font-bold text-neon-purple text-glow-purple sm:text-3xl"
+                className="text-2xl font-bold text-neon-purple sm:text-3xl"
                 style={{ fontFamily: "var(--font-display)" }}
               >
                 The Confessional Leaderboard
               </h1>
-              <p className="text-sm text-muted">
+              <p className="text-sm text-ink-soft">
                 Anonymous sins · Absolve or Condemn · Democracy, but unhinged
               </p>
             </div>
@@ -102,18 +102,13 @@ export default function ConfessionalLeaderboard() {
             <SubmitConfessionForm onSubmitted={handleSubmitted} />
 
             {/* Sort tabs */}
-            <div className="my-6 flex gap-1 overflow-x-auto rounded-xl border border-ash bg-shadow p-1">
+            <div className="my-6 flex gap-1 overflow-x-auto rounded-xl border border-rule bg-page p-1">
               {SORTS.map((s) => (
                 <button
                   key={s}
                   type="button"
                   onClick={() => setSort(s)}
-                  className={cn(
-                    "shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-all",
-                    sort === s
-                      ? "bg-neon-purple/15 text-neon-purple"
-                      : "text-muted hover:text-bone"
-                  )}
+                  className={cn( "shrink-0 rounded-lg px-4 py-2 text-sm font-medium transition-all", sort === s ? "bg-neon-purple/15 text-neon-purple" : "text-ink-soft hover:text-ink" )}
                 >
                   {SORT_LABELS[s]}
                 </button>
@@ -143,7 +138,7 @@ export default function ConfessionalLeaderboard() {
           </div>
         </div>
 
-        <p className="mt-10 text-center text-xs text-muted/40">
+        <p className="mt-10 text-center text-xs text-ink-soft">
           {confessions.length} confessions in feed · Votes stored locally · Real
           backend sync when API arrives
         </p>

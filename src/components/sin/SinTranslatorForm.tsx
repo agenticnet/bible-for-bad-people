@@ -57,10 +57,10 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
         <p className="mb-1 text-[10px] uppercase tracking-[0.3em] text-neon-pink">
           Confession Booth
         </p>
-        <h2 className="text-xl font-bold text-bone" style={{ fontFamily: "var(--font-display)" }}>
+        <h2 className="text-xl font-bold text-ink" style={{ fontFamily: "var(--font-display)" }}>
           Translate Your Sin
         </h2>
-        <p className="mt-2 max-w-xl text-sm text-muted">
+        <p className="mt-2 max-w-xl text-sm text-ink-soft">
           Type a petty thing you did. Our engine converts it to dramatic King James-style
           prose. Grok API coming soon — for now, template sorcery.
         </p>
@@ -72,7 +72,7 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
           onChange={(e) => setInput(e.target.value)}
           placeholder="e.g. I stole my coworker's lunch from the fridge..."
           rows={3}
-          className="mb-3 w-full resize-none rounded-xl border border-ash bg-shadow px-4 py-3 text-sm text-bone placeholder:text-muted/50 focus:border-neon-pink/50 focus:outline-none focus:ring-1 focus:ring-neon-pink/30"
+          className="mb-3 w-full resize-none rounded-xl border border-rule bg-page px-4 py-3 text-sm text-ink placeholder:text-ink-soft focus:border-neon-pink/50 focus:outline-none focus:ring-1 focus:ring-neon-pink/30"
         />
         <button
           type="submit"
@@ -90,7 +90,7 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
             King James-ish Translation
           </p>
           <p
-            className="mb-4 text-base leading-relaxed text-bone italic"
+            className="mb-4 text-base leading-relaxed text-ink italic"
             style={{ fontFamily: "var(--font-display)" }}
           >
             &ldquo;{translation}&rdquo;
@@ -106,7 +106,7 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
       )}
 
       <div>
-        <p className="mb-2 text-[10px] uppercase tracking-wider text-muted">
+        <p className="mb-2 text-[10px] uppercase tracking-wider text-ink-soft">
           Quick suggestions — tap to fill
         </p>
         <div className="flex flex-wrap gap-2">
@@ -115,7 +115,7 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
               key={sin.id}
               type="button"
               onClick={() => fillSuggestion(sin.petty)}
-              className="rounded-full border border-ash bg-smoke px-3 py-1.5 text-xs text-muted transition-colors hover:border-neon-pink/40 hover:text-bone"
+              className="rounded-full border border-rule bg-smoke px-3 py-1.5 text-xs text-ink-soft transition-colors hover:border-neon-pink/40 hover:text-ink"
             >
               {sin.petty.length > 45 ? `${sin.petty.slice(0, 45)}…` : sin.petty}
             </button>

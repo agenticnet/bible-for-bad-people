@@ -74,7 +74,7 @@ export default function CynicsBible() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Book, verse, topic, or vibe (e.g. bears, slavery, shrimp)…"
-              className="w-full rounded-sm border border-rule bg-page py-3 pr-4 pl-10 text-sm text-ink placeholder:text-ink-soft/50 focus:border-wine/40 focus:outline-none focus:ring-1 focus:ring-wine/20"
+              className="w-full rounded-sm border border-rule bg-page py-3 pr-4 pl-10 text-sm text-ink placeholder:text-ink-soft focus:border-wine/40 focus:outline-none focus:ring-1 focus:ring-wine/20"
             />
           </div>
         </div>
@@ -117,9 +117,9 @@ export default function CynicsBible() {
 
         {results.length === 0 ? (
           <div className="border border-dashed border-rule px-6 py-16 text-center">
-            <BookOpen className="mx-auto mb-4 h-8 w-8 text-ink-soft/30" strokeWidth={1.25} />
+            <BookOpen className="mx-auto mb-4 h-8 w-8 text-ink-soft" strokeWidth={1.25} />
             <p className="text-ink-soft">No passages match that search.</p>
-            <p className="mt-1 text-sm text-ink-soft/70">
+            <p className="mt-1 text-sm text-ink-soft">
               Try &ldquo;violent,&rdquo; &ldquo;Lot,&rdquo; or &ldquo;contradictory.&rdquo;
             </p>
           </div>
@@ -131,7 +131,7 @@ export default function CynicsBible() {
           </div>
         )}
 
-        <p className="verse-ref mt-10 text-center text-ink-soft/70">
+        <p className="verse-ref mt-10 text-center text-ink-soft">
           {results.length} curated passages — full searchable API coming later.
         </p>
       </div>
