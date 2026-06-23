@@ -42,7 +42,7 @@ function LeaderboardList({
   metric: "absolve" | "condemn";
   accent: "green" | "red";
 }) {
-  const accentClass = accent === "green" ? "text-success" : "text-neon-red";
+  const accentClass = accent === "green" ? "text-green-400" : "text-neon-red";
 
   return (
     <div className="rounded-xl border border-rule bg-page p-4">

@@ -15,15 +15,15 @@ interface TicketCardProps {
 }
 
 const STATUS_STYLES = {
-  processing: "border-yellow-500/30 bg-yellow-500/10 text-warning",
+  processing: "border-yellow-500/30 bg-yellow-500/10 text-yellow-400",
   queued: "border-neon-cyan/30 bg-neon-cyan/10 text-neon-cyan",
-  resolved: "border-green-500/30 bg-green-500/10 text-success",
+  resolved: "border-green-500/30 bg-green-500/10 text-green-400",
 };
 
 const PRIORITY_STYLES = {
   low: "text-ink-soft",
   medium: "text-neon-gold",
-  high: "text-alert",
+  high: "text-orange-400",
   urgent: "text-neon-red",
 };
 
@@ -89,8 +89,8 @@ export default function TicketCard({ ticket }: TicketCardProps) {
 
           {ticket.status === "processing" && (
             <div className="mt-4 flex items-center gap-2 rounded-lg border border-yellow-500/20 bg-yellow-500/5 px-4 py-3">
-              <Loader2 className="h-4 w-4 animate-spin text-warning" />
-              <p className="text-sm text-warning">
+              <Loader2 className="h-4 w-4 animate-spin text-yellow-400" />
+              <p className="text-sm text-yellow-400">
                 Routing to Heavenly Administration...
               </p>
             </div>

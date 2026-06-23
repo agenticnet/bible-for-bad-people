@@ -20,7 +20,7 @@ export default function ConfessionCard({
   const score = getScore(confession.absolveVotes, confession.condemnVotes);
 
   const verdictStyles = {
-    absolved: "border-green-500/30 text-success",
+    absolved: "border-green-500/30 text-green-400",
     condemned: "border-neon-red/30 text-neon-red",
     split: "border-neon-purple/30 text-neon-purple",
   };
@@ -58,7 +58,7 @@ export default function ConfessionCard({
           <button
             type="button"
             onClick={() => onVote(confession.id, "absolve")}
-            className={cn( "flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-all", userVote === "absolve" ? "border-green-500/50 bg-green-500/15 text-success" : "border-rule text-ink-soft hover:border-green-500/40 hover:text-success" )}
+            className={cn( "flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm transition-all", userVote === "absolve" ? "border-green-500/50 bg-green-500/15 text-green-400" : "border-rule text-ink-soft hover:border-green-500/40 hover:text-green-400" )}
           >
             <ThumbsUp className="h-4 w-4" />
             Absolve

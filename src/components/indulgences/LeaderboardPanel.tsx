@@ -66,7 +66,7 @@ export default function LeaderboardPanel({
                   )}
                 </div>
                 <span
-                  className={cn( "text-right font-mono text-sm font-bold", entry.salvationScore >= 80 ? "text-success" : entry.salvationScore >= 50 ? "text-neon-gold" : "text-neon-red" )}
+                  className={cn( "text-right font-mono text-sm font-bold", entry.salvationScore >= 80 ? "text-green-400" : entry.salvationScore >= 50 ? "text-neon-gold" : "text-neon-red" )}
                 >
                   {entry.salvationScore}
                 </span>

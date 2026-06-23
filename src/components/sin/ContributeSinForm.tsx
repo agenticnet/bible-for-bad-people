@@ -63,7 +63,7 @@ export default function ContributeSinForm({ onContributed }: ContributeSinFormPr
       </div>
 
       {submitted && (
-        <div className="mb-4 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-success">
+        <div className="mb-4 rounded-lg border border-green-500/30 bg-green-500/10 px-4 py-3 text-sm text-green-400">
           Sin submitted to the community pool. The archive grows. Thank you for your service.
         </div>
       )}
