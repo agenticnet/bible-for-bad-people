@@ -27,10 +27,8 @@ export default function SinLibraryPanel({ refreshKey }: SinLibraryPanelProps) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("");
   const [community, setCommunity] = useState<ContributedSin[]>([]);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
     async function load() {
       const serverSins = await fetchCommunitySins();
       const localSins = user ? [] : loadCommunitySins();
@@ -63,8 +61,6 @@ export default function SinLibraryPanel({ refreshKey }: SinLibraryPanelProps) {
       );
     });
   }, [community, query, category]);
-
-  if (!mounted) return null;
 
   return (
     <div>

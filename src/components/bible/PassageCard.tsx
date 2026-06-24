@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import { ChevronDown } from "lucide-react";
 import type { BiblePassage, PassageTag } from "@/lib/bibleTypes";
 import { TAG_LABELS } from "@/lib/bibleTypes";
 import { cn } from "@/lib/utils";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { resolveTransition, transition } from "@/lib/motion";
 
 interface PassageCardProps {
   passage: BiblePassage;
@@ -27,8 +24,6 @@ const TAG_COLORS: Record<PassageTag, string> = {
 
 export default function PassageCard({ passage }: PassageCardProps) {
   const [expanded, setExpanded] = useState(false);
-  const reducedMotion = useReducedMotion();
-  const expandT = resolveTransition(transition.base, reducedMotion);
 
   return (
     <article className="bg-page transition-colors hover:bg-smoke/60">
@@ -57,46 +52,40 @@ export default function PassageCard({ passage }: PassageCardProps) {
             ))}
           </div>
         </div>
-        <motion.span
-          animate={{ rotate: expanded ? 180 : 0 }}
-          transition={expandT}
-          className="mt-1 shrink-0 text-ink-soft"
+        <span
+          className={cn(
+            "mt-1 shrink-0 text-ink-soft transition-transform duration-200 motion-reduce:transition-none",
+            expanded && "rotate-180"
+          )}
         >
           <ChevronDown className="h-4 w-4" />
-        </motion.span>
+        </span>
       </button>
 
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={expandT}
-            className="overflow-hidden"
-          >
-            <div className="border-t border-rule px-1 pb-6 sm:px-2">
-              <div className="mt-5">
-                <p className="verse-ref mb-3 text-ink-soft">The passage (abridged)</p>
-                <blockquote className="scripture-block border-l border-wine/30 pl-5 text-ink/90 italic">
-                  &ldquo;{passage.excerpt}&rdquo;
-                </blockquote>
-              </div>
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none",
+          expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+        )}
+      >
+        <div className="overflow-hidden">
+          <div className="border-t border-rule px-1 pb-6 sm:px-2">
+            <div className="mt-5">
+              <p className="verse-ref mb-3 text-ink-soft">The passage (abridged)</p>
+              <blockquote className="scripture-block border-l border-wine/30 pl-5 text-ink/90 italic">
+                &ldquo;{passage.excerpt}&rdquo;
+              </blockquote>
+            </div>
 
-              <div className="mt-6 border-t border-rule pt-5">
-                <p className="verse-ref mb-2 text-ink-soft">Modern world connection</p>
-                <p className="text-sm leading-relaxed text-ink-soft">
-                  {passage.modernWorld}
-                </p>
-              </div>
-
-              <p className="verse-ref mt-5 text-ink-soft">
-                Satirical education, not theology. Read in context before quoting at Thanksgiving.
+            <div className="mt-6 border-t border-rule pt-5">
+              <p className="verse-ref mb-2 text-ink-soft">Modern world connection</p>
+              <p className="text-sm leading-relaxed text-ink-soft">
+                {passage.modernWorld}
               </p>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </div>
+        </div>
+      </div>
     </article>
   );
 }

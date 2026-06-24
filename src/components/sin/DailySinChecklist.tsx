@@ -19,9 +19,8 @@ interface DailySinChecklistProps {
 
 export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProps) {
   const dateKey = getDateKey();
-  const [dailySins, setDailySins] = useState<SinEntry[]>([]);
+  const [dailySins] = useState(() => getDailySins(dateKey, 7));
   const [completed, setCompleted] = useState<Set<string>>(new Set());
-  const [mounted, setMounted] = useState(false);
 
   const formattedDate = new Date().toLocaleDateString([], {
     weekday: "long",
@@ -30,8 +29,6 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
   });
 
   useEffect(() => {
-    setMounted(true);
-    setDailySins(getDailySins(dateKey, 7));
     void fetchDailyCompleted(dateKey).then((ids) => setCompleted(new Set(ids)));
   }, [dateKey]);
 
@@ -56,8 +53,6 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
     setCompleted(next);
     await saveDailyCompleted(dateKey, [...next]);
   }
-
-  if (!mounted) return null;
 
   const doneCount = dailySins.filter((s) => completed.has(s.id)).length;
 

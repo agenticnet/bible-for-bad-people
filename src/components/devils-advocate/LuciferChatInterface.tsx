@@ -22,17 +22,23 @@ export default function LuciferChatInterface() {
   const [messages, setMessages] = useState<LuciferMessage[]>([INITIAL_LUCIFER_MESSAGE]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [animatingId, setAnimatingId] = useState<string | null>(null);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+    messagesEndRef.current?.scrollIntoView({
+      behavior: historyLoaded ? "smooth" : "instant",
+    });
+  }, [messages, isTyping, historyLoaded]);
 
   useEffect(() => {
     if (!user) {
       setMessages([INITIAL_LUCIFER_MESSAGE]);
+      setHistoryLoaded(true);
       return;
     }
+    setHistoryLoaded(false);
     void fetchChatMessages("lucifer").then((stored) => {
       const mapped: LuciferMessage[] = stored.map((m) => ({
         id: m.id,
@@ -41,6 +47,7 @@ export default function LuciferChatInterface() {
         timestamp: m.timestamp,
       }));
       setMessages(mapped.length > 0 ? mapped : [INITIAL_LUCIFER_MESSAGE]);
+      setHistoryLoaded(true);
     });
   }, [user]);
 
@@ -56,6 +63,7 @@ export default function LuciferChatInterface() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    setAnimatingId(userMessage.id);
     setInput("");
     setIsTyping(true);
 
@@ -70,6 +78,7 @@ export default function LuciferChatInterface() {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, luciferMessage]);
+      setAnimatingId(luciferMessage.id);
       await saveChatMessage("lucifer", { role: "lucifer", content: response });
       setIsTyping(false);
     }, 1000);
@@ -119,6 +128,7 @@ export default function LuciferChatInterface() {
           label={message.role === "lucifer" ? "LUCIFER" : undefined}
           content={message.content}
           timestamp={message.timestamp}
+          animate={message.id === animatingId}
         />
       ))}
       {isTyping && (

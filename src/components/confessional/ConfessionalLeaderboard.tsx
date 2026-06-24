@@ -26,7 +26,6 @@ export default function ConfessionalLeaderboard() {
   const [confessions, setConfessions] = useState<Confession[]>([]);
   const [sort, setSort] = useState<ConfessionSort>("hot");
   const [votes, setVotes] = useState<Record<string, VoteType>>({});
-  const [mounted, setMounted] = useState(false);
 
   const refresh = useCallback(async () => {
     if (user) {
@@ -44,7 +43,6 @@ export default function ConfessionalLeaderboard() {
   }, [user]);
 
   useEffect(() => {
-    setMounted(true);
     void refresh();
   }, [refresh]);
 
@@ -59,14 +57,6 @@ export default function ConfessionalLeaderboard() {
 
   function handleSubmitted() {
     void refresh();
-  }
-
-  if (!mounted) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-parchment">
-        <p className="text-ink-soft">Opening the confessional...</p>
-      </div>
-    );
   }
 
   const sorted = sortConfessions(confessions, sort);

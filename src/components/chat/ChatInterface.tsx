@@ -20,19 +20,26 @@ export default function ChatInterface() {
   const [messages, setMessages] = useState<Message[]>([INITIAL_GOD_MESSAGE]);
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+  const [animatingId, setAnimatingId] = useState<string | null>(null);
+  const [historyLoaded, setHistoryLoaded] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, isTyping]);
+    messagesEndRef.current?.scrollIntoView({
+      behavior: historyLoaded ? "smooth" : "instant",
+    });
+  }, [messages, isTyping, historyLoaded]);
 
   useEffect(() => {
     if (!user) {
       setMessages([INITIAL_GOD_MESSAGE]);
+      setHistoryLoaded(true);
       return;
     }
+    setHistoryLoaded(false);
     void fetchChatMessages("god").then((stored) => {
       setMessages(stored.length > 0 ? stored : [INITIAL_GOD_MESSAGE]);
+      setHistoryLoaded(true);
     });
   }, [user]);
 
@@ -48,6 +55,7 @@ export default function ChatInterface() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    setAnimatingId(userMessage.id);
     setInput("");
     setIsTyping(true);
 
@@ -62,6 +70,7 @@ export default function ChatInterface() {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, godMessage]);
+      setAnimatingId(godMessage.id);
       await saveChatMessage("god", { role: "god", content: response });
       setIsTyping(false);
     }, 1000);
@@ -107,6 +116,7 @@ export default function ChatInterface() {
           label={message.role === "god" ? "GOD" : undefined}
           content={message.content}
           timestamp={message.timestamp}
+          animate={message.id === animatingId}
         />
       ))}
       {isTyping && (

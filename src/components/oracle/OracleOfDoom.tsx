@@ -28,7 +28,6 @@ export default function OracleOfDoom() {
   const [reading, setReading] = useState<DailyReading | null>(null);
   const [revealing, setRevealing] = useState(false);
   const [cardsRevealed, setCardsRevealed] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   const dateKey = getDateKey();
   const formattedDate = new Date().toLocaleDateString([], {
@@ -38,8 +37,6 @@ export default function OracleOfDoom() {
   });
 
   useEffect(() => {
-    setMounted(true);
-
     async function load() {
       if (user) {
         const stored = await fetchOracleReading(dateKey);
@@ -84,11 +81,11 @@ export default function OracleOfDoom() {
     }, 1200);
   }, [reading, revealing, cardsRevealed, user]);
 
-  if (!mounted || !reading) {
+  if (!reading) {
     return (
-      <div className="flex min-h-dvh items-center justify-center bg-parchment">
-        <p className="text-ink-soft">Consulting the void...</p>
-      </div>
+      <PageShell maxWidth="lg">
+        <p className="text-center text-ink-soft">Consulting the void...</p>
+      </PageShell>
     );
   }
 

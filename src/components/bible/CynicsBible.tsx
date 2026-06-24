@@ -41,7 +41,7 @@ export default function CynicsBible() {
   const hasFilters = query.trim() !== "" || activeTags.size > 0;
 
   return (
-    <PageShell maxWidth="md" className="page-enter">
+    <PageShell maxWidth="md">
       <header className="mb-10 border-b border-rule pb-8">
         <div className="mb-5 flex items-start gap-4">
           <BookOpen className="mt-1 h-6 w-6 shrink-0 text-wine" strokeWidth={1.5} />

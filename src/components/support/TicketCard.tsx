@@ -2,7 +2,6 @@
 
 import { ChevronDown, Loader2 } from "lucide-react";
 import { useState } from "react";
-import { AnimatePresence, motion } from "motion/react";
 import type { PrayerTicket } from "@/lib/supportTypes";
 import {
   CATEGORY_LABELS,
@@ -12,8 +11,6 @@ import {
 import { Badge, Callout, Surface } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { fadeIn, resolveTransition, transition } from "@/lib/motion";
 
 interface TicketCardProps {
   ticket: PrayerTicket;
@@ -34,9 +31,6 @@ const PRIORITY_TEXT = {
 
 export default function TicketCard({ ticket }: TicketCardProps) {
   const [expanded, setExpanded] = useState(ticket.status === "resolved");
-  const reducedMotion = useReducedMotion();
-  const expandT = resolveTransition(transition.base, reducedMotion);
-  const badgeT = resolveTransition(transition.fast, reducedMotion);
 
   return (
     <Surface padding="none" hover className="overflow-hidden">
@@ -48,23 +42,12 @@ export default function TicketCard({ ticket }: TicketCardProps) {
         <div className="min-w-0 flex-1">
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <span className="font-mono text-xs text-slate">{ticket.ticketNumber}</span>
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={ticket.status}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
-                variants={fadeIn}
-                transition={badgeT}
-              >
-                <Badge tone={STATUS_TONES[ticket.status]}>
-                  {ticket.status === "processing" && (
-                    <Loader2 className="mr-1 inline h-3 w-3 animate-spin" />
-                  )}
-                  {STATUS_LABELS[ticket.status]}
-                </Badge>
-              </motion.span>
-            </AnimatePresence>
+            <Badge tone={STATUS_TONES[ticket.status]}>
+              {ticket.status === "processing" && (
+                <Loader2 className="mr-1 inline h-3 w-3 animate-spin" />
+              )}
+              {STATUS_LABELS[ticket.status]}
+            </Badge>
             <Badge tone="active">{CATEGORY_LABELS[ticket.category]}</Badge>
           </div>
           <h3 className="truncate font-semibold text-ink">{ticket.subject}</h3>
@@ -82,74 +65,72 @@ export default function TicketCard({ ticket }: TicketCardProps) {
             </span>
           </p>
         </div>
-        <motion.span
-          animate={{ rotate: expanded ? 180 : 0 }}
-          transition={expandT}
-          className="shrink-0 text-ink-soft"
+        <span
+          className={cn(
+            "shrink-0 text-ink-soft transition-transform duration-200 motion-reduce:transition-none",
+            expanded && "rotate-180"
+          )}
         >
           <ChevronDown className="h-5 w-5" />
-        </motion.span>
+        </span>
       </button>
 
-      <AnimatePresence initial={false}>
-        {expanded && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={expandT}
-            className="overflow-hidden"
-          >
-            <div className="border-t border-rule px-5 pb-5">
-              <div className="mt-4">
-                <p className="verse-ref mb-1 text-ink-soft">Your Request</p>
-                <p className="text-sm leading-relaxed text-ink-soft">
-                  {ticket.description}
-                </p>
-              </div>
-
-              {ticket.status === "processing" && (
-                <Callout tone="warning" className="mt-4 flex items-center gap-2">
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  Routing to Heavenly Administration...
-                </Callout>
-              )}
-
-              {ticket.status === "queued" && (
-                <Callout tone="slate" className="mt-4">
-                  Your ticket is in the Divine Queue. Position:{" "}
-                  {ticket.ticketNumber.replace(/\D/g, "").slice(0, 6) || "847291"}.
-                  Estimated wait: 400 years.
-                </Callout>
-              )}
-
-              {ticket.response && (
-                <Callout tone="slate" className="mt-4 p-4">
-                  <p className={cn("verse-ref mb-2", accentStyles.slate.text)}>
-                    Response from Heavenly Administration
-                  </p>
-                  <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">
-                    {ticket.response}
-                  </p>
-                  {ticket.resolvedAt && (
-                    <p className="mt-3 text-[10px] text-ink-soft">
-                      Resolved{" "}
-                      {ticket.resolvedAt.toLocaleString([], {
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                      {" · "}
-                      Do not reply to this message. GOD does not read follow-ups.
-                    </p>
-                  )}
-                </Callout>
-              )}
-            </div>
-          </motion.div>
+      <div
+        className={cn(
+          "grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none",
+          expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
         )}
-      </AnimatePresence>
+      >
+        <div className="overflow-hidden">
+          <div className="border-t border-rule px-5 pb-5">
+            <div className="mt-4">
+              <p className="verse-ref mb-1 text-ink-soft">Your Request</p>
+              <p className="text-sm leading-relaxed text-ink-soft">
+                {ticket.description}
+              </p>
+            </div>
+
+            {ticket.status === "processing" && (
+              <Callout tone="warning" className="mt-4 flex items-center gap-2">
+                <Loader2 className="h-4 w-4 animate-spin" />
+                Routing to Heavenly Administration...
+              </Callout>
+            )}
+
+            {ticket.status === "queued" && (
+              <Callout tone="slate" className="mt-4">
+                Your ticket is in the Divine Queue. Position:{" "}
+                {ticket.ticketNumber.replace(/\D/g, "").slice(0, 6) || "847291"}.
+                Estimated wait: 400 years.
+              </Callout>
+            )}
+
+            {ticket.response && (
+              <Callout tone="slate" className="mt-4 p-4">
+                <p className={cn("verse-ref mb-2", accentStyles.slate.text)}>
+                  Response from Heavenly Administration
+                </p>
+                <p className="whitespace-pre-wrap text-sm leading-relaxed text-ink-soft">
+                  {ticket.response}
+                </p>
+                {ticket.resolvedAt && (
+                  <p className="mt-3 text-[10px] text-ink-soft">
+                    Resolved{" "}
+                    {ticket.resolvedAt.toLocaleString([], {
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                    {" · "}
+                    Do not reply to this message. GOD does not read follow-ups.
+                  </p>
+                )}
+              </Callout>
+            )}
+          </div>
+        </div>
+      </div>
     </Surface>
   );
 }

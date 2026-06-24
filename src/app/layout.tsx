@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Figtree, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
 import { AuthProvider } from "@/components/auth/AuthProvider";
-import MotionRoot from "@/components/MotionRoot";
+import { MotionProvider } from "@/components/MotionProvider";
 import "./globals.css";
 
 const fontSerif = Source_Serif_4({
@@ -40,7 +40,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen font-sans">
         <AuthProvider>
-          <MotionRoot>{children}</MotionRoot>
+          <MotionProvider>{children}</MotionProvider>
         </AuthProvider>
       </body>
     </html>

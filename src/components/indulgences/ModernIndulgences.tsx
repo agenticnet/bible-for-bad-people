@@ -38,7 +38,6 @@ export default function ModernIndulgences() {
   const [profile, setProfile] = useState<UserSalvationProfile | null>(null);
   const [sinCount, setSinCount] = useState(0);
   const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [mounted, setMounted] = useState(false);
 
   const refreshProfile = useCallback(async () => {
     if (!user) {
@@ -60,17 +59,8 @@ export default function ModernIndulgences() {
   }, [user]);
 
   useEffect(() => {
-    setMounted(true);
     void refreshProfile();
   }, [refreshProfile]);
-
-  if (!mounted) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-parchment">
-        <p className="text-ink-soft">Opening the treasury...</p>
-      </div>
-    );
-  }
 
   const userRank = profile
     ? leaderboard.findIndex((e) => e.isUser) + 1 || null

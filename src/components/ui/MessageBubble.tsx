@@ -15,6 +15,7 @@ interface MessageBubbleProps {
   label?: string;
   content: string;
   timestamp: Date;
+  animate?: boolean;
 }
 
 export default function MessageBubble({
@@ -25,6 +26,7 @@ export default function MessageBubble({
   label,
   content,
   timestamp,
+  animate = false,
 }: MessageBubbleProps) {
   const reducedMotion = useReducedMotion();
   const isStart = align === "start";
@@ -46,8 +48,8 @@ export default function MessageBubble({
   return (
     <motion.div
       className={cn("flex gap-3", isStart ? "justify-start" : "justify-end")}
-      initial="hidden"
-      animate="visible"
+      initial={animate ? "hidden" : false}
+      animate={animate ? "visible" : false}
       variants={variants}
       transition={t}
     >

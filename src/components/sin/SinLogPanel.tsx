@@ -14,7 +14,6 @@ import {
 
 export default function SinLogPanel() {
   const [log, setLog] = useState<SinLogItem[]>([]);
-  const [mounted, setMounted] = useState(false);
 
   async function refresh() {
     const items = await fetchSinLog();
@@ -22,7 +21,6 @@ export default function SinLogPanel() {
   }
 
   useEffect(() => {
-    setMounted(true);
     void refresh();
   }, []);
 
@@ -36,8 +34,6 @@ export default function SinLogPanel() {
     await clearSinLog();
     setLog([]);
   }
-
-  if (!mounted) return null;
 
   return (
     <div>

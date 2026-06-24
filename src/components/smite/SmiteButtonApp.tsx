@@ -48,12 +48,10 @@ export default function SmiteButtonApp() {
   const [history, setHistory] = useState<SmiteRecord[]>([]);
   const [dailyCount, setDailyCount] = useState(0);
   const [showHistory, setShowHistory] = useState(false);
-  const [mounted, setMounted] = useState(false);
 
   const dateKey = getDateKey();
 
   useEffect(() => {
-    setMounted(true);
     if (user) {
       void fetchSmiteHistory().then(setHistory);
       void fetchDailySmiteCount(dateKey).then(setDailyCount);
@@ -113,14 +111,6 @@ export default function SmiteButtonApp() {
         setLastResult(saved.record);
       }
     }, 2200);
-  }
-
-  if (!mounted) {
-    return (
-      <div className="flex min-h-dvh items-center justify-center bg-parchment">
-        <p className="text-ink-soft">Charging the smite cannon...</p>
-      </div>
-    );
   }
 
   return (

@@ -1,14 +1,11 @@
 "use client";
 
 import { ThumbsDown, ThumbsUp } from "lucide-react";
-import { motion } from "motion/react";
 import type { Confession, VoteType } from "@/lib/confessionalTypes";
 import { getVerdict, getScore } from "@/lib/confessionalTypes";
 import { cn } from "@/lib/utils";
 import { Badge, Button, Surface } from "@/components/ui";
 import type { Accent, SemanticStatus } from "@/components/ui/tokens";
-import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { resolveTransition, resolveVariants, spring } from "@/lib/motion";
 
 interface ConfessionCardProps {
   confession: Confession;
@@ -38,27 +35,11 @@ export default function ConfessionCard({
   onVote,
   votingDisabled = false,
 }: ConfessionCardProps) {
-  const reducedMotion = useReducedMotion();
   const verdict = getVerdict(confession.absolveVotes, confession.condemnVotes);
   const score = getScore(confession.absolveVotes, confession.condemnVotes);
-  const variants = resolveVariants(
-    {
-      hidden: { opacity: 0, x: -8, borderLeftWidth: 0 },
-      visible: { opacity: 1, x: 0, borderLeftWidth: 2 },
-    },
-    reducedMotion
-  );
-  const t = resolveTransition(spring.gentle, reducedMotion);
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={variants}
-      transition={t}
-      className="border-l-wine/30"
-      style={{ borderLeftStyle: "solid", borderLeftColor: "oklch(0.45 0.11 25 / 0.3)" }}
-    >
+    <div className="border-l-2 border-l-wine/30">
       <Surface as="article" hover>
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
@@ -71,14 +52,7 @@ export default function ConfessionCard({
               </span>
             )}
           </div>
-          <motion.div
-            key={`${verdict}-${score}`}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={resolveTransition(spring.gentle, reducedMotion)}
-          >
-            <Badge tone={verdictTones[verdict]}>{verdictLabels[verdict]}</Badge>
-          </motion.div>
+          <Badge tone={verdictTones[verdict]}>{verdictLabels[verdict]}</Badge>
         </div>
 
         <p className="mb-4 text-sm leading-relaxed text-ink">{confession.content}</p>
@@ -98,14 +72,7 @@ export default function ConfessionCard({
             >
               <ThumbsUp className="h-4 w-4" />
               Absolve
-              <motion.span
-                key={confession.absolveVotes}
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="font-mono text-xs"
-              >
-                {confession.absolveVotes}
-              </motion.span>
+              <span className="font-mono text-xs">{confession.absolveVotes}</span>
             </Button>
             <Button
               variant={userVote === "condemn" ? "danger" : "ghost"}
@@ -116,27 +83,14 @@ export default function ConfessionCard({
             >
               <ThumbsDown className="h-4 w-4" />
               Condemn
-              <motion.span
-                key={confession.condemnVotes}
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="font-mono text-xs"
-              >
-                {confession.condemnVotes}
-              </motion.span>
+              <span className="font-mono text-xs">{confession.condemnVotes}</span>
             </Button>
           </div>
           <div className="text-right">
-            <motion.p
-              key={score}
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={resolveTransition(spring.gentle, reducedMotion)}
-              className="font-mono text-sm font-bold text-plum"
-            >
+            <p className="font-mono text-sm font-bold text-plum">
               {score > 0 ? "+" : ""}
               {score}
-            </motion.p>
+            </p>
             <p className="text-[10px] text-ink-soft">salvation pts</p>
           </div>
         </div>
@@ -152,6 +106,6 @@ export default function ConfessionCard({
           Tap again to remove vote
         </p>
       </Surface>
-    </motion.div>
+    </div>
   );
 }
