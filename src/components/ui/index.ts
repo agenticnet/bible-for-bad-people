@@ -34,3 +34,4 @@ export {
   type Accent,
   type SemanticStatus,
 } from "./tokens";
+export { Reveal, Stagger, StaggerItem, MotionLink, PageTransition } from "./motion";

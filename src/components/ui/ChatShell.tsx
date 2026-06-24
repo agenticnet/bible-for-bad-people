@@ -1,4 +1,7 @@
-import { FormEvent, KeyboardEvent } from "react";
+"use client";
+
+import { FormEvent, KeyboardEvent, useState } from "react";
+import { motion } from "motion/react";
 import { Send } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { accentStyles, type Accent } from "./tokens";
@@ -25,6 +28,8 @@ export default function ChatComposer({
   placeholder = "Type a message...",
   hint,
 }: ChatComposerProps) {
+  const [focused, setFocused] = useState(false);
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
     if (disabled || !value.trim()) return;
@@ -41,15 +46,19 @@ export default function ChatComposer({
 
   return (
     <div className="border-t border-rule bg-page px-4 py-4 sm:px-6">
-      <form
+      <motion.form
         onSubmit={handleSubmit}
         className="mx-auto flex max-w-3xl items-end gap-3"
+        animate={{ scale: focused ? 1.005 : 1 }}
+        transition={{ duration: 0.2 }}
       >
         <Textarea
           accent={accent}
           value={value}
           onChange={(e) => onChange(e.target.value)}
           onKeyDown={handleKeyDown}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
           placeholder={placeholder}
           rows={1}
           disabled={disabled}
@@ -63,7 +72,7 @@ export default function ChatComposer({
         >
           <Send className="h-5 w-5" />
         </IconButton>
-      </form>
+      </motion.form>
       {hint && (
         <p className="mx-auto mt-2 max-w-3xl text-center text-[10px] text-ink-soft">
           {hint}

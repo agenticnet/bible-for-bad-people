@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence, motion } from "motion/react";
 import { ScrollText } from "lucide-react";
 import { translatePettySin } from "@/lib/sinTranslationEngine";
 import { addSinLogItem } from "@/lib/data/sin";
@@ -14,6 +15,8 @@ import {
 } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { clipReveal, resolveTransition, resolveVariants, transition } from "@/lib/motion";
 
 interface SinTranslatorFormProps {
   onLogUpdate: () => void;
@@ -23,6 +26,9 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
   const [input, setInput] = useState("");
   const [translation, setTranslation] = useState<string | null>(null);
   const [isTranslating, setIsTranslating] = useState(false);
+  const reducedMotion = useReducedMotion();
+  const revealVariants = resolveVariants(clipReveal, reducedMotion);
+  const revealT = resolveTransition(transition.slow, reducedMotion);
 
   function handleTranslate(e: React.FormEvent) {
     e.preventDefault();
@@ -82,23 +88,34 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
         </Button>
       </form>
 
-      {translation && (
-        <Surface accent="terra" accentTint className="mb-6">
-          <p className={cn("verse-ref mb-2", accentStyles.terra.text)}>
-            King James-ish Translation
-          </p>
-          <p className="scripture-block mb-4 text-base italic text-ink">
-            &ldquo;{translation}&rdquo;
-          </p>
-          <button
-            type="button"
-            onClick={() => void logTranslation()}
-            className={cn("text-sm hover:underline", accentStyles.terra.text)}
+      <AnimatePresence>
+        {translation && (
+          <motion.div
+            key={translation}
+            initial="hidden"
+            animate="visible"
+            exit="hidden"
+            variants={revealVariants}
+            transition={revealT}
           >
-            Log this sin to my confession record →
-          </button>
-        </Surface>
-      )}
+            <Surface accent="terra" accentTint className="mb-6">
+              <p className={cn("verse-ref mb-2", accentStyles.terra.text)}>
+                King James-ish Translation
+              </p>
+              <p className="scripture-block mb-4 text-base italic text-ink">
+                &ldquo;{translation}&rdquo;
+              </p>
+              <button
+                type="button"
+                onClick={() => void logTranslation()}
+                className={cn("text-sm hover:underline", accentStyles.terra.text)}
+              >
+                Log this sin to my confession record →
+              </button>
+            </Surface>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div>
         <p className="verse-ref mb-2 text-ink-soft">Quick suggestions — tap to fill</p>

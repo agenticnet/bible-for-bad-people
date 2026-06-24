@@ -1,4 +1,9 @@
+"use client";
+
+import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { resolveTransition, resolveVariants, spring } from "@/lib/motion";
 import { accentStyles, type Accent } from "./tokens";
 import ChatAvatar from "./ChatAvatar";
 
@@ -21,12 +26,31 @@ export default function MessageBubble({
   content,
   timestamp,
 }: MessageBubbleProps) {
+  const reducedMotion = useReducedMotion();
   const isStart = align === "start";
   const bubbleAccent = isStart ? accent : userAccent;
   const a = accentStyles[bubbleAccent];
+  const variants = resolveVariants(
+    {
+      hidden: {
+        opacity: 0,
+        y: 12,
+        x: isStart ? -4 : 4,
+      },
+      visible: { opacity: 1, y: 0, x: 0 },
+    },
+    reducedMotion
+  );
+  const t = resolveTransition(spring.gentle, reducedMotion);
 
   return (
-    <div className={cn("flex gap-3", isStart ? "justify-start" : "justify-end")}>
+    <motion.div
+      className={cn("flex gap-3", isStart ? "justify-start" : "justify-end")}
+      initial="hidden"
+      animate="visible"
+      variants={variants}
+      transition={t}
+    >
       {isStart && <ChatAvatar accent={accent}>{avatar}</ChatAvatar>}
 
       <div
@@ -49,6 +73,6 @@ export default function MessageBubble({
       </div>
 
       {!isStart && <ChatAvatar accent={userAccent}>{avatar}</ChatAvatar>}
-    </div>
+    </motion.div>
   );
 }

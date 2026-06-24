@@ -43,7 +43,16 @@ Scale: modular ~1.25 ratio, `clamp()` for display (max 6rem), body max 65–75ch
 
 ## Motion
 
-Subtle page fade-in; no glow pulse. All motion respects `prefers-reduced-motion`.
+Literary spectacle — motion amplifies the study-Bible metaphor (cover opening, ink settling, chapter turns). Tokens live in [`src/lib/motion.ts`](src/lib/motion.ts); primitives in [`src/components/ui/motion/`](src/components/ui/motion/).
+
+| Allowed | Banned |
+|---------|--------|
+| `transform`, `opacity`, `clip-path` | Glow pulse, bounce/elastic easing |
+| Staggered typography reveals | Identical fade-up on every section |
+| Scroll-triggered chamber entries (once) | Motion that gates content visibility |
+| Spring physics without overshoot | Layout-property animation (`width`, `height`, `top`, `left`) |
+
+All motion respects `prefers-reduced-motion` (instant or opacity-only fallback). Exits run ~75% of enter duration.
 
 ## Banned Patterns
 

@@ -1,10 +1,12 @@
+"use client";
+
 import { ArrowRight } from "lucide-react";
-import { LinkButton } from "@/components/ui";
+import { LinkButton, Reveal } from "@/components/ui";
 
 export default function CTASection() {
   return (
     <section className="border-t border-rule px-4 py-20 sm:px-6">
-      <div className="mx-auto max-w-3xl text-center">
+      <Reveal className="mx-auto max-w-3xl text-center">
         <h2 className="mb-4 font-serif text-[clamp(1.75rem,4vw,2.5rem)] text-ink">
           Ready to unload your sins?
         </h2>
@@ -16,7 +18,7 @@ export default function CTASection() {
           Open the Confessional
           <ArrowRight className="h-5 w-5" />
         </LinkButton>
-      </div>
+      </Reveal>
     </section>
   );
 }

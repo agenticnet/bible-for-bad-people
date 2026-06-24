@@ -1,4 +1,8 @@
+"use client";
+
+import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { accentStyles, statusStyles, type Accent } from "./tokens";
 
 type ButtonVariant = "accent" | "ghost" | "success" | "danger";
@@ -23,6 +27,8 @@ export default function Button({
   type,
   ...props
 }: ButtonProps) {
+  const reducedMotion = useReducedMotion();
+
   const variantClass =
     variant === "accent"
       ? cn(
@@ -53,17 +59,22 @@ export default function Button({
             );
 
   return (
-    <button
-      type={type ?? "button"}
-      className={cn(
-        "inline-flex items-center justify-center gap-2",
-        sizeStyles[size],
-        variantClass,
-        className
-      )}
-      {...props}
+    <motion.div
+      whileTap={reducedMotion ? undefined : { scale: 0.98 }}
+      className="inline-flex"
     >
-      {children}
-    </button>
+      <button
+        type={type ?? "button"}
+        className={cn(
+          "inline-flex items-center justify-center gap-2",
+          sizeStyles[size],
+          variantClass,
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </button>
+    </motion.div>
   );
 }

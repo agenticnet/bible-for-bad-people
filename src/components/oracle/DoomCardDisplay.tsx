@@ -1,10 +1,12 @@
 "use client";
 
-import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
 import type { DoomCard } from "@/lib/oracleTypes";
 import { OMEN_LABELS } from "@/lib/oracleTypes";
 import { Badge } from "@/components/ui";
 import type { Accent } from "@/components/ui/tokens";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { resolveTransition, spring } from "@/lib/motion";
 
 interface DoomCardDisplayProps {
   card: DoomCard;
@@ -27,20 +29,22 @@ export default function DoomCardDisplay({
   revealed,
   delay = 0,
 }: DoomCardDisplayProps) {
+  const reducedMotion = useReducedMotion();
   const omenTone = OMEN_TONES[card.omen];
+  const t = resolveTransition(
+    { ...spring.gentle, delay: reducedMotion ? 0 : delay / 1000 },
+    reducedMotion
+  );
 
   return (
     <div className="flex flex-col items-center gap-3">
       <p className="verse-ref text-ink-soft">{label}</p>
-      <div
-        className="perspective-[800px] w-full max-w-[180px]"
-        style={{ animationDelay: `${delay}ms` }}
-      >
-        <div
-          className={cn(
-            "relative h-64 w-full transition-transform duration-700 [transform-style:preserve-3d]",
-            revealed && "[transform:rotateY(180deg)]"
-          )}
+      <div className="perspective-[800px] w-full max-w-[180px]">
+        <motion.div
+          className="relative h-64 w-full [transform-style:preserve-3d]"
+          initial={false}
+          animate={{ rotateY: revealed ? 180 : 0 }}
+          transition={t}
         >
           <div className="absolute inset-0 flex flex-col items-center justify-center rounded-xl border-2 border-plum/30 bg-page [backface-visibility:hidden]">
             <div className="absolute inset-2 rounded-lg border border-plum/20" />
@@ -62,13 +66,21 @@ export default function DoomCardDisplay({
               {card.tagline}
             </p>
           </div>
-        </div>
+        </motion.div>
       </div>
 
       {revealed && (
-        <p className="max-w-[200px] text-center text-xs leading-relaxed text-ink-soft">
+        <motion.p
+          className="max-w-[200px] text-center text-xs leading-relaxed text-ink-soft"
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={resolveTransition(
+            { ...spring.gentle, delay: reducedMotion ? 0 : delay / 1000 + 0.2 },
+            reducedMotion
+          )}
+        >
           {card.reading}
-        </p>
+        </motion.p>
       )}
     </div>
   );

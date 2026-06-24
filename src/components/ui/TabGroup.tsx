@@ -1,4 +1,7 @@
+"use client";
+
 import type { LucideIcon } from "lucide-react";
+import { motion } from "motion/react";
 import { cn } from "@/lib/utils";
 import { accentStyles, type Accent } from "./tokens";
 
@@ -33,7 +36,7 @@ export default function TabGroup({
   return (
     <nav
       className={cn(
-        "flex gap-1 overflow-x-auto rounded-xl border border-rule bg-page p-1",
+        "relative flex gap-1 overflow-x-auto rounded-xl border border-rule bg-page p-1",
         className
       )}
       role="tablist"
@@ -49,15 +52,25 @@ export default function TabGroup({
             aria-selected={active}
             onClick={() => onChange(tab.id)}
             className={cn(
-              "flex shrink-0 items-center gap-2 rounded-lg font-medium transition-colors",
+              "relative z-10 flex shrink-0 items-center gap-2 rounded-lg font-medium transition-colors",
               sizeStyles[size],
-              active
-                ? cn(accentStyles[accent].bgMuted, accentStyles[accent].text)
-                : "text-ink-soft hover:text-ink"
+              active ? accentStyles[accent].text : "text-ink-soft hover:text-ink"
             )}
           >
-            {Icon && <Icon className="h-4 w-4" />}
-            {tab.label}
+            {active && (
+              <motion.span
+                layoutId="tab-pill"
+                className={cn(
+                  "absolute inset-0 rounded-lg",
+                  accentStyles[accent].bgMuted
+                )}
+                transition={{ type: "spring", stiffness: 380, damping: 32 }}
+              />
+            )}
+            <span className="relative z-10 flex items-center gap-2">
+              {Icon && <Icon className="h-4 w-4" />}
+              {tab.label}
+            </span>
           </button>
         );
       })}
