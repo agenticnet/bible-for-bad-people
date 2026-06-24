@@ -10,6 +10,7 @@ import {
   Zap,
   Users,
 } from "lucide-react";
+import type { Accent } from "@/components/ui/tokens";
 
 export type ChamberStatus = "live" | "coming-soon";
 
@@ -18,7 +19,7 @@ export interface Chamber {
   title: string;
   description: string;
   icon: LucideIcon;
-  accent: "purple" | "cyan" | "pink" | "gold" | "red";
+  accent: Accent;
   status: ChamberStatus;
   href?: string;
 }
@@ -30,7 +31,7 @@ export const chambers: Chamber[] = [
     description:
       "Vent, question, and demand answers without traditional piety. No kneeling required. Freemium donations unlock customizable avatars — starting with Jesus Christ himself.",
     icon: MessageCircle,
-    accent: "gold",
+    accent: "wine",
     status: "live",
     href: "/chat",
   },
@@ -40,7 +41,7 @@ export const chambers: Chamber[] = [
     description:
       "Submit prayers like IT support tickets. Receive automated, corporate-style responses from Heavenly Administration. Current queue time: 400 years.",
     icon: Ticket,
-    accent: "cyan",
+    accent: "slate",
     status: "live",
     href: "/support-desk",
   },
@@ -50,7 +51,7 @@ export const chambers: Chamber[] = [
     description:
       "God busy? Chat with the competition. Lucifer is cynical, charismatic, and will absolutely hype up your worst decisions with terribly fun advice.",
     icon: Flame,
-    accent: "red",
+    accent: "plum",
     status: "live",
     href: "/devils-advocate",
   },
@@ -60,7 +61,7 @@ export const chambers: Chamber[] = [
     description:
       "Daily readings that deliver brutally honest, pessimistic, or sarcastic fortunes. Zero toxic positivity. Maximum existential dread.",
     icon: Sparkles,
-    accent: "purple",
+    accent: "plum",
     status: "live",
     href: "/oracle",
   },
@@ -70,7 +71,7 @@ export const chambers: Chamber[] = [
     description:
       "A searchable database of the weirdest, most violent, contradictory, and absurd passages your Sunday school definitely skipped.",
     icon: BookOpen,
-    accent: "gold",
+    accent: "wine",
     status: "live",
     href: "/cynics-bible",
   },
@@ -80,7 +81,7 @@ export const chambers: Chamber[] = [
     description:
       'Type a petty thing you did. Get it translated into dramatic King James-style biblical prose. "I stole my coworker\'s lunch" → epic saga.',
     icon: ScrollText,
-    accent: "pink",
+    accent: "terra",
     status: "live",
     href: "/sin-translator",
   },
@@ -90,7 +91,7 @@ export const chambers: Chamber[] = [
     description:
       "A satirical digital marketplace. Buy certificates of Total Absolution or purchase your way onto the Least Likely to Go to Hell leaderboard.",
     icon: Crown,
-    accent: "gold",
+    accent: "wine",
     status: "live",
     href: "/indulgences",
   },
@@ -100,7 +101,7 @@ export const chambers: Chamber[] = [
     description:
       "Digitally smite minor inconveniences — traffic, your boss, that one neighbor — with classic plagues. Premium tier includes AI-generated smiting visuals.",
     icon: Zap,
-    accent: "red",
+    accent: "ember",
     status: "live",
     href: "/smite",
   },
@@ -110,41 +111,8 @@ export const chambers: Chamber[] = [
     description:
       "An anonymous, Reddit-style feed for sins and grievances. The community votes to Absolve or Condemn. Democracy, but unhinged.",
     icon: Users,
-    accent: "purple",
+    accent: "plum",
     status: "live",
     href: "/confessional",
   },
 ];
-
-export const accentStyles = {
-  purple: {
-    icon: "text-plum",
-    bg: "bg-plum/8",
-    border: "border-plum/25",
-    glow: "group-hover:border-plum/40",
-  },
-  cyan: {
-    icon: "text-slate",
-    bg: "bg-slate/8",
-    border: "border-slate/25",
-    glow: "group-hover:border-slate/40",
-  },
-  pink: {
-    icon: "text-terra",
-    bg: "bg-terra/8",
-    border: "border-terra/25",
-    glow: "group-hover:border-terra/40",
-  },
-  gold: {
-    icon: "text-wine",
-    bg: "bg-wine/8",
-    border: "border-wine/25",
-    glow: "group-hover:border-wine/40",
-  },
-  red: {
-    icon: "text-ember",
-    bg: "bg-ember/8",
-    border: "border-ember/25",
-    glow: "group-hover:border-ember/40",
-  },
-} as const;

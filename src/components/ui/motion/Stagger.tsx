@@ -32,10 +32,7 @@ export function Stagger({
   ...props
 }: StaggerProps) {
   const reducedMotion = useReducedMotion();
-  const containerVariants = resolveVariants(
-    staggerContainer(staggerDelay, delayChildren),
-    reducedMotion
-  );
+  const containerVariants = staggerContainer(staggerDelay, delayChildren);
   const itemVariants = resolveVariants(childVariant, reducedMotion);
   const t = resolveTransition(transition.base, reducedMotion);
 

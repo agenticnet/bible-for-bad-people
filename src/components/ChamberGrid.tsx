@@ -2,19 +2,13 @@
 
 import { ArrowUpRight, Lock } from "lucide-react";
 import { motion } from "motion/react";
-import {
-  MotionLink,
-  Reveal,
-  Stagger,
-  StaggerItem,
-} from "@/components/ui";
+import { MotionLink, Reveal, Badge, accentStyles } from "@/components/ui";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
-import { chambers, accentStyles } from "@/lib/chambers";
-import { fadeUpScale, duration, resolveVariants, stagger } from "@/lib/motion";
+import { chambers } from "@/lib/chambers";
+import { duration } from "@/lib/motion";
 
 export default function ChamberGrid() {
   const reducedMotion = useReducedMotion();
-  const cardVariants = resolveVariants(fadeUpScale, reducedMotion);
 
   return (
     <section id="chambers" className="px-4 py-20 sm:px-6 sm:py-28">
@@ -29,7 +23,7 @@ export default function ChamberGrid() {
           </p>
         </Reveal>
 
-        <Stagger staggerDelay={stagger.tight} className="grid gap-px border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid gap-px border border-rule bg-rule sm:grid-cols-2 lg:grid-cols-3">
           {chambers.map((chamber) => {
             const styles = accentStyles[chamber.accent];
             const Icon = chamber.icon;
@@ -39,21 +33,21 @@ export default function ChamberGrid() {
               <>
                 <div className="mb-4 flex items-start justify-between gap-3">
                   <motion.div
-                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-sm border ${styles.border} ${styles.bg}`}
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-sm border ${styles.borderMuted} ${styles.bgMuted}`}
                     whileHover={isOpen && !reducedMotion ? { y: -1 } : undefined}
                     transition={{ duration: duration.fast }}
                   >
-                    <Icon className={`h-4 w-4 ${styles.icon}`} />
+                    <Icon className={`h-4 w-4 ${styles.text}`} />
                   </motion.div>
                   {isOpen ? (
-                    <span className="verse-ref rounded-sm border border-wine/25 bg-wine/8 px-2 py-0.5 text-[0.65rem] text-wine">
+                    <Badge tone="wine" size="sm" className="verse-ref rounded-sm normal-case tracking-normal">
                       Open
-                    </span>
+                    </Badge>
                   ) : (
-                    <span className="verse-ref flex items-center gap-1 rounded-sm border border-rule bg-smoke px-2 py-0.5 text-[0.65rem] text-ink-soft">
+                    <Badge tone="active" size="sm" className="verse-ref flex items-center gap-1 rounded-sm normal-case tracking-normal">
                       <Lock className="h-2.5 w-2.5" />
                       Sealed
-                    </span>
+                    </Badge>
                   )}
                 </div>
                 <h3 className="mb-2 font-serif text-lg text-ink">{chamber.title}</h3>
@@ -75,23 +69,22 @@ export default function ChamberGrid() {
               </>
             );
 
-            const surfaceClass = `group relative bg-page p-6 transition-colors duration-200 hover:bg-smoke ${isOpen ? styles.glow : ""}`;
+            const surfaceClass = `group relative border border-transparent bg-page p-6 transition-colors duration-200 hover:bg-smoke ${isOpen ? styles.borderHover : ""}`;
 
-            return (
-              <StaggerItem key={chamber.id} variant={cardVariants}>
-                {isOpen && chamber.href ? (
-                  <MotionLink href={chamber.href} className={surfaceClass}>
-                    {cardContent}
-                  </MotionLink>
-                ) : (
-                  <div className={`${surfaceClass} opacity-75 hover:opacity-100`}>
-                    {cardContent}
-                  </div>
-                )}
-              </StaggerItem>
+            return isOpen && chamber.href ? (
+              <MotionLink key={chamber.id} href={chamber.href} className={surfaceClass}>
+                {cardContent}
+              </MotionLink>
+            ) : (
+              <div
+                key={chamber.id}
+                className={`${surfaceClass} opacity-75 hover:opacity-100`}
+              >
+                {cardContent}
+              </div>
             );
           })}
-        </Stagger>
+        </div>
       </div>
     </section>
   );
