@@ -2,10 +2,15 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-const ReducedMotionContext = createContext(true);
+const ReducedMotionContext = createContext(false);
+
+function readReducedMotionPreference(): boolean {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
 
 export function MotionProvider({ children }: { children: React.ReactNode }) {
-  const [reducedMotion, setReducedMotion] = useState(true);
+  const [reducedMotion, setReducedMotion] = useState(readReducedMotionPreference);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");

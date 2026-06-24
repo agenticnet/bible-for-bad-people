@@ -39,73 +39,69 @@ export default function ConfessionCard({
   const score = getScore(confession.absolveVotes, confession.condemnVotes);
 
   return (
-    <div className="border-l-2 border-l-wine/30">
-      <Surface as="article" hover>
-        <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex items-center gap-2">
-            <Badge tone="plum" size="sm">
-              u/{confession.authorLabel}
-            </Badge>
-            {confession.isUser && (
-              <span className="text-[10px] uppercase tracking-wider text-wine">
-                Your post
-              </span>
+    <Surface as="article" accent="plum" accentTint hover padding="lg">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-b border-rule pb-3">
+        <div className="flex items-center gap-2">
+          <Badge tone="plum" size="sm">
+            u/{confession.authorLabel}
+          </Badge>
+          {confession.isUser && (
+            <span className="verse-ref text-wine">Your post</span>
+          )}
+        </div>
+        <Badge tone={verdictTones[verdict]}>{verdictLabels[verdict]}</Badge>
+      </div>
+
+      <p className="mb-4 text-sm leading-relaxed text-ink">{confession.content}</p>
+
+      <div className="flex items-center justify-between gap-4 border-t border-rule pt-4">
+        <div className="flex items-center gap-2">
+          <Button
+            variant={userVote === "absolve" ? "success" : "ghost"}
+            accent="wine"
+            size="sm"
+            disabled={votingDisabled}
+            onClick={() => onVote(confession.id, "absolve")}
+            className={cn(
+              userVote !== "absolve" &&
+                "hover:border-green-500/40 hover:text-green-400"
             )}
-          </div>
-          <Badge tone={verdictTones[verdict]}>{verdictLabels[verdict]}</Badge>
+          >
+            <ThumbsUp className="h-4 w-4" />
+            Absolve
+            <span className="font-mono text-xs">{confession.absolveVotes}</span>
+          </Button>
+          <Button
+            variant={userVote === "condemn" ? "danger" : "ghost"}
+            accent="ember"
+            size="sm"
+            disabled={votingDisabled}
+            onClick={() => onVote(confession.id, "condemn")}
+          >
+            <ThumbsDown className="h-4 w-4" />
+            Condemn
+            <span className="font-mono text-xs">{confession.condemnVotes}</span>
+          </Button>
         </div>
-
-        <p className="mb-4 text-sm leading-relaxed text-ink">{confession.content}</p>
-
-        <div className="flex items-center justify-between gap-4">
-          <div className="flex items-center gap-2">
-            <Button
-              variant={userVote === "absolve" ? "success" : "ghost"}
-              accent="wine"
-              size="sm"
-              disabled={votingDisabled}
-              onClick={() => onVote(confession.id, "absolve")}
-              className={cn(
-                userVote !== "absolve" &&
-                  "hover:border-green-500/40 hover:text-green-400"
-              )}
-            >
-              <ThumbsUp className="h-4 w-4" />
-              Absolve
-              <span className="font-mono text-xs">{confession.absolveVotes}</span>
-            </Button>
-            <Button
-              variant={userVote === "condemn" ? "danger" : "ghost"}
-              accent="ember"
-              size="sm"
-              disabled={votingDisabled}
-              onClick={() => onVote(confession.id, "condemn")}
-            >
-              <ThumbsDown className="h-4 w-4" />
-              Condemn
-              <span className="font-mono text-xs">{confession.condemnVotes}</span>
-            </Button>
-          </div>
-          <div className="text-right">
-            <p className="font-mono text-sm font-bold text-plum">
-              {score > 0 ? "+" : ""}
-              {score}
-            </p>
-            <p className="text-[10px] text-ink-soft">salvation pts</p>
-          </div>
+        <div className="text-right">
+          <p className="font-mono text-sm font-bold text-plum">
+            {score > 0 ? "+" : ""}
+            {score}
+          </p>
+          <p className="verse-ref text-ink-soft">salvation pts</p>
         </div>
+      </div>
 
-        <p className="mt-3 text-[10px] text-ink-soft">
-          {new Date(confession.createdAt).toLocaleString([], {
-            month: "short",
-            day: "numeric",
-            hour: "2-digit",
-            minute: "2-digit",
-          })}
-          {" · "}
-          Tap again to remove vote
-        </p>
-      </Surface>
-    </div>
+      <p className="verse-ref mt-3 text-ink-soft">
+        {new Date(confession.createdAt).toLocaleString([], {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+        {" · "}
+        Tap again to remove vote
+      </p>
+    </Surface>
   );
 }

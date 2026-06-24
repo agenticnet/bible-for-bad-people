@@ -91,13 +91,14 @@ export default function OracleOfDoom() {
 
   return (
     <PageShell maxWidth="lg">
-      <header className="mb-10 text-center">
-        <VisionsBadge className="mb-4 inline-flex" />
-        <h1 className={cn("mb-3 font-serif text-3xl font-bold sm:text-4xl", accentStyles.plum.text)}>
+      <header className="mb-10 border-b border-rule pb-8 text-center">
+        <VisionsBadge accent="plum" className="mb-4 inline-flex" />
+        <p className="verse-ref mb-2 text-ink-soft">Daily spread</p>
+        <h1 className={cn("mb-3 font-serif text-3xl sm:text-4xl", accentStyles.plum.text)}>
           Oracle of Doom
         </h1>
-        <p className="text-sm text-ink-soft">{formattedDate}</p>
-        <p className="mx-auto mt-2 max-w-lg text-ink-soft">
+        <p className="verse-ref text-ink-soft">{formattedDate}</p>
+        <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-ink-soft">
           Your daily tarot reading — brutally honest, zero toxic positivity,
           maximum existential dread.
         </p>

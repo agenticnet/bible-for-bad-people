@@ -14,6 +14,7 @@ interface RevealProps extends HTMLMotionProps<"div"> {
   variant?: Variants;
   delay?: number;
   once?: boolean;
+  animateOnMount?: boolean;
 }
 
 export default function Reveal({
@@ -22,6 +23,7 @@ export default function Reveal({
   variant = fadeUp,
   delay = 0,
   once = true,
+  animateOnMount = false,
   ...props
 }: RevealProps) {
   const reducedMotion = useReducedMotion();
@@ -31,14 +33,20 @@ export default function Reveal({
     reducedMotion
   );
 
+  const motionProps = animateOnMount
+    ? { initial: "hidden" as const, animate: "visible" as const }
+    : {
+        initial: "hidden" as const,
+        whileInView: "visible" as const,
+        viewport: { once, margin: "-10% 0px" as const },
+      };
+
   return (
     <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once, margin: "-10% 0px" }}
       variants={variants}
       transition={t}
       className={cn(className)}
+      {...motionProps}
       {...props}
     >
       {children}

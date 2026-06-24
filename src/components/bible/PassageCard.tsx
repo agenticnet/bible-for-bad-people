@@ -45,7 +45,7 @@ export default function PassageCard({ passage }: PassageCardProps) {
             {passage.tags.map((tag) => (
               <span
                 key={tag}
-                className={cn("verse-ref text-[0.65rem]", TAG_COLORS[tag])}
+                className={cn("verse-ref", TAG_COLORS[tag])}
               >
                 {TAG_LABELS[tag]}
               </span>
@@ -70,9 +70,9 @@ export default function PassageCard({ passage }: PassageCardProps) {
       >
         <div className="overflow-hidden">
           <div className="border-t border-rule px-1 pb-6 sm:px-2">
-            <div className="mt-5">
+            <div className="mt-5 border-t border-rule pt-5">
               <p className="verse-ref mb-3 text-ink-soft">The passage (abridged)</p>
-              <blockquote className="scripture-block border-l border-wine/30 pl-5 text-ink/90 italic">
+              <blockquote className="scripture-block text-ink/90">
                 &ldquo;{passage.excerpt}&rdquo;
               </blockquote>
             </div>

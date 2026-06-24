@@ -92,7 +92,7 @@ export default function ChatInterface() {
         <AuthGate
           tone="wine"
           title="Sign in to speak with GOD"
-          description="Read the divine welcome message for free. Log in to vent, confess, and save your chat history."
+          description="The welcome message is free. Log in to vent, confess, and keep your chat on the ledger."
         >
           <ChatComposer
             accent="wine"
