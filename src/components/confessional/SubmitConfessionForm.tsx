@@ -57,7 +57,7 @@ function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
       />
       {error && <p className="mb-2 text-sm text-ember">{error}</p>}
       <div className="flex items-center justify-between gap-3">
-        <span className="text-[10px] text-ink-soft">{content.length}/500</span>
+        <span className="verse-ref text-ink-soft">{content.length}/500</span>
         <Button type="submit" accent="plum" disabled={!content.trim() || submitting}>
           <Send className="h-4 w-4" />
           {submitting ? "Posting..." : "Confess"}

@@ -1,3 +1,5 @@
+import { chambers } from "./chambers";
+
 export interface NavLink {
   href: string;
   label: string;
@@ -8,31 +10,62 @@ export const primaryNavLinks: NavLink[] = [
   { href: "/#chambers", label: "The Chambers" },
 ];
 
-export const chamberNavGroups: { title: string; links: NavLink[] }[] = [
+const NAV_LABELS: Record<string, string> = {
+  "speak-with-god": "Speak with GOD",
+  "devils-advocate": "Devil's Advocate",
+  "oracle-of-doom": "Oracle of Doom",
+  "divine-support-desk": "Divine Support Desk",
+  "cynics-bible": "Cynic's TL;DR Bible",
+  "sin-translation": "Sin Translation Engine",
+  "modern-indulgences": "Modern Indulgences",
+  "smite-button": "Smite Button",
+  "confessional-leaderboard": "Confessional Leaderboard",
+};
+
+const CHAMBER_NAV_GROUPS: {
+  title: string;
+  items: { id: string; description: string }[];
+}[] = [
   {
     title: "Confession & Prophecy",
-    links: [
-      { href: "/chat", label: "Speak with GOD", description: "Vent to the divine" },
-      { href: "/devils-advocate", label: "Devil's Advocate", description: "Chat with Lucifer" },
-      { href: "/oracle", label: "Oracle of Doom", description: "Daily tarot readings" },
+    items: [
+      { id: "speak-with-god", description: "Vent to the divine" },
+      { id: "devils-advocate", description: "Chat with Lucifer" },
+      { id: "oracle-of-doom", description: "Daily tarot readings" },
     ],
   },
   {
     title: "Scripture & Translation",
-    links: [
-      { href: "/support-desk", label: "Divine Support Desk", description: "Prayer tickets" },
-      { href: "/cynics-bible", label: "Cynic's TL;DR Bible", description: "Skipped verses" },
-      { href: "/sin-translator", label: "Sin Translation Engine", description: "King James sins" },
+    items: [
+      { id: "divine-support-desk", description: "Prayer tickets" },
+      { id: "cynics-bible", description: "Skipped verses" },
+      { id: "sin-translation", description: "King James sins" },
     ],
   },
   {
     title: "Indulgences & Wrath",
-    links: [
-      { href: "/indulgences", label: "Modern Indulgences", description: "Buy absolution" },
-      { href: "/smite", label: "Smite Button", description: "Deploy plagues" },
-      { href: "/confessional", label: "Confessional Leaderboard", description: "Absolve or condemn" },
+    items: [
+      { id: "modern-indulgences", description: "Buy absolution" },
+      { id: "smite-button", description: "Deploy plagues" },
+      { id: "confessional-leaderboard", description: "Absolve or condemn" },
     ],
   },
 ];
 
-export const allChamberLinks: NavLink[] = chamberNavGroups.flatMap((g) => g.links);
+function chamberLink(id: string, description: string): NavLink {
+  const chamber = chambers.find((c) => c.id === id);
+  if (!chamber?.href) {
+    throw new Error(`Chamber ${id} missing href`);
+  }
+  return {
+    href: chamber.href,
+    label: NAV_LABELS[id] ?? chamber.title,
+    description,
+  };
+}
+
+export const chamberNavGroups: { title: string; links: NavLink[] }[] =
+  CHAMBER_NAV_GROUPS.map((group) => ({
+    title: group.title,
+    links: group.items.map((item) => chamberLink(item.id, item.description)),
+  }));

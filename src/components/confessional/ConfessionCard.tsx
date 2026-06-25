@@ -64,7 +64,7 @@ export default function ConfessionCard({
             onClick={() => onVote(confession.id, "absolve")}
             className={cn(
               userVote !== "absolve" &&
-                "hover:border-green-500/40 hover:text-green-400"
+                "hover:border-green-500/30 hover:text-green-400"
             )}
           >
             <ThumbsUp className="h-4 w-4" />

@@ -4,29 +4,34 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import type { BiblePassage, PassageTag } from "@/lib/bibleTypes";
 import { TAG_LABELS } from "@/lib/bibleTypes";
+import { Badge, Surface } from "@/components/ui";
+import type { Accent } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
 interface PassageCardProps {
   passage: BiblePassage;
 }
 
-const TAG_COLORS: Record<PassageTag, string> = {
-  violent: "text-ember",
-  weird: "text-plum",
-  contradictory: "text-terra",
-  absurd: "text-wine",
-  cruel: "text-ember",
-  "bizarre-laws": "text-slate",
-  "skipped-in-church": "text-ink-soft",
-  sexual: "text-terra",
-  genocide: "text-ember",
+const TAG_ACCENTS: Partial<Record<PassageTag, Accent>> = {
+  violent: "ember",
+  weird: "plum",
+  contradictory: "terra",
+  absurd: "wine",
+  cruel: "ember",
+  "bizarre-laws": "slate",
+  sexual: "terra",
+  genocide: "ember",
 };
 
 export default function PassageCard({ passage }: PassageCardProps) {
   const [expanded, setExpanded] = useState(false);
 
   return (
-    <article className="bg-page transition-colors hover:bg-smoke/60">
+    <Surface
+      as="article"
+      padding="none"
+      className="rounded-none border-0 bg-page hover:bg-smoke/60"
+    >
       <button
         type="button"
         onClick={() => setExpanded(!expanded)}
@@ -41,14 +46,16 @@ export default function PassageCard({ passage }: PassageCardProps) {
           <p className="mb-3 font-serif text-lg leading-snug text-ink">
             {passage.tldr}
           </p>
-          <div className="flex flex-wrap gap-x-3 gap-y-1">
+          <div className="flex flex-wrap gap-2">
             {passage.tags.map((tag) => (
-              <span
+              <Badge
                 key={tag}
-                className={cn("verse-ref", TAG_COLORS[tag])}
+                tone={TAG_ACCENTS[tag] ?? "active"}
+                size="sm"
+                className="normal-case tracking-normal"
               >
                 {TAG_LABELS[tag]}
-              </span>
+              </Badge>
             ))}
           </div>
         </div>
@@ -86,6 +93,6 @@ export default function PassageCard({ passage }: PassageCardProps) {
           </div>
         </div>
       </div>
-    </article>
+    </Surface>
   );
 }

@@ -20,7 +20,7 @@ export default function SmiteResultCard({ record }: SmiteResultCardProps) {
             Premium Visual
           </Badge>
         )}
-        <span className="text-[10px] text-ink-soft">
+        <span className="verse-ref text-ink-soft">
           {new Date(record.smoteAt).toLocaleString([], {
             month: "short",
             day: "numeric",

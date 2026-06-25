@@ -1,5 +1,5 @@
 import type { SmiteRecord } from "./smiteTypes";
-import { getDateKey } from "./sinLibrary";
+import { getDateKey } from "./dateKey";
 
 const HISTORY_KEY = "smite-history";
 const DAILY_COUNT_PREFIX = "smite-daily-count";

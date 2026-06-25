@@ -9,7 +9,7 @@ export { default as Modal } from "./Modal";
 export { default as IconButton } from "./IconButton";
 export { default as BackLink } from "./BackLink";
 export { default as BindingBar } from "./BindingBar";
-export { default as PageShell } from "./PageShell";
+export { default as PageShell, ChatPageShell } from "./PageShell";
 export { default as ChamberHeader } from "./ChamberHeader";
 export { default as SectionHeader } from "./SectionHeader";
 export { default as TabGroup } from "./TabGroup";
@@ -34,4 +34,4 @@ export {
   type Accent,
   type SemanticStatus,
 } from "./tokens";
-export { Reveal, Stagger, StaggerItem, MotionLink, PageTransition } from "./motion";
+export { Reveal, Stagger, MotionLink } from "./motion";

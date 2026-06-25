@@ -215,10 +215,6 @@ function pickCards(dateKey: string, count: number): DoomCard[] {
   return picked;
 }
 
-export function getDateKey(date = new Date()): string {
-  return date.toISOString().slice(0, 10);
-}
-
 export function generateDailyReading(dateKey: string): Omit<DailyReading, "revealed"> {
   const cards = pickCards(dateKey, 3);
   const hash = hashDate(dateKey);

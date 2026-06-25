@@ -65,7 +65,7 @@ export default function SinLogPanel() {
                 <Badge tone="terra" size="sm">
                   {item.source}
                 </Badge>
-                <span className="text-[10px] text-ink-soft">
+                <span className="verse-ref text-ink-soft">
                   {new Date(item.completedAt).toLocaleString([], {
                     month: "short",
                     day: "numeric",

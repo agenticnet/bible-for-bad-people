@@ -114,7 +114,7 @@ export default function TicketCard({ ticket }: TicketCardProps) {
                   {ticket.response}
                 </p>
                 {ticket.resolvedAt && (
-                  <p className="mt-3 text-[10px] text-ink-soft">
+                  <p className="verse-ref mt-3 text-ink-soft">
                     Resolved{" "}
                     {ticket.resolvedAt.toLocaleString([], {
                       month: "short",

@@ -66,7 +66,7 @@ export default function CertificateCard({ purchase }: CertificateCardProps) {
             Paid ${purchase.pricePaid.toFixed(2)} (mock)
           </p>
 
-          <p className="mt-4 text-[10px] italic text-ink-soft">
+          <p className="verse-ref mt-4 italic text-ink-soft">
             This certificate has no legal, spiritual, or cosmic validity. Display at your own risk.
           </p>
         </div>

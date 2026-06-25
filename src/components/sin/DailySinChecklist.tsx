@@ -3,13 +3,14 @@
 import { useState, useEffect } from "react";
 import { Check, Circle, Sparkles } from "lucide-react";
 import type { SinEntry } from "@/lib/sinTypes";
-import { getDailySins, getDateKey } from "@/lib/sinLibrary";
+import { getDateKey } from "@/lib/dateKey";
+import { getDailySins } from "@/lib/sinLibrary";
 import {
   fetchDailyCompleted,
   saveDailyCompleted,
   addSinLogItem,
 } from "@/lib/data/sin";
-import { Callout, SectionHeader } from "@/components/ui";
+import { Callout, OptionTile, SectionHeader } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
@@ -80,15 +81,12 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
           const isDone = completed.has(sin.id);
           return (
             <li key={sin.id}>
-              <button
-                type="button"
+              <OptionTile
+                selected={isDone}
+                accent="terra"
+                layout="row"
                 onClick={() => void toggleSin(sin)}
-                className={cn(
-                  "flex w-full items-start gap-4 rounded-xl border p-4 text-left transition-colors",
-                  isDone
-                    ? "border-terra/30 bg-terra/5 opacity-80"
-                    : "surface hover:border-terra/30 hover:bg-smoke"
-                )}
+                className={cn("w-full items-start gap-4 p-4", isDone && "opacity-80")}
               >
                 <div
                   className={cn(
@@ -122,7 +120,7 @@ export default function DailySinChecklist({ onLogUpdate }: DailySinChecklistProp
                     </p>
                   )}
                 </div>
-              </button>
+              </OptionTile>
             </li>
           );
         })}

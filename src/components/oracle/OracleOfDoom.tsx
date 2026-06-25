@@ -1,24 +1,24 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Eye, Skull } from "lucide-react";
+import { Eye, Skull, Sparkles } from "lucide-react";
 import DoomCardDisplay from "./DoomCardDisplay";
 import type { DailyReading } from "@/lib/oracleTypes";
 import { SPREAD_LABELS } from "@/lib/oracleTypes";
 import {
   generateDailyReading,
-  getDateKey,
   loadReading,
   saveReading,
 } from "@/lib/mockOracleDeck";
+import { getDateKey } from "@/lib/dateKey";
 import { fetchOracleReading, saveOracleReading } from "@/lib/data/smite-oracle";
 import { useAuth } from "@/components/auth/AuthProvider";
 import AuthGate from "@/components/auth/AuthGate";
 import {
   Button,
+  ChamberHeader,
   PageShell,
   Surface,
-  VisionsBadge,
 } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
@@ -91,18 +91,22 @@ export default function OracleOfDoom() {
 
   return (
     <PageShell maxWidth="lg">
-      <header className="mb-10 border-b border-rule pb-8 text-center">
-        <VisionsBadge accent="plum" className="mb-4 inline-flex" />
-        <p className="verse-ref mb-2 text-ink-soft">Daily spread</p>
-        <h1 className={cn("mb-3 font-serif text-3xl sm:text-4xl", accentStyles.plum.text)}>
-          Oracle of Doom
-        </h1>
-        <p className="verse-ref text-ink-soft">{formattedDate}</p>
+      <ChamberHeader
+        icon={Sparkles}
+        accent="plum"
+        align="center"
+        title="Oracle of Doom"
+        badge="Visions Approximate"
+        className="mb-10 border-b border-rule pb-8"
+      >
+        <p className="verse-ref mt-2 text-ink-soft">
+          Daily spread · {formattedDate}
+        </p>
         <p className="mx-auto mt-4 max-w-lg text-sm leading-relaxed text-ink-soft">
           Your daily tarot reading — brutally honest, zero toxic positivity,
           maximum existential dread.
         </p>
-      </header>
+      </ChamberHeader>
 
       {cardsRevealed && (
         <div className="mb-10 flex justify-center">

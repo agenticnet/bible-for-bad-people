@@ -628,10 +628,6 @@ function hashDate(dateKey: string): number {
   return Math.abs(hash);
 }
 
-export function getDateKey(date = new Date()): string {
-  return date.toISOString().slice(0, 10);
-}
-
 export function getDailySins(dateKey: string, count = 7): SinEntry[] {
   const hash = hashDate(dateKey);
   const pool = [...SIN_LIBRARY];

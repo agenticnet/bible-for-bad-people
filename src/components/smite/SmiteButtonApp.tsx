@@ -22,13 +22,13 @@ import {
 } from "@/lib/data/smite-oracle";
 import { useAuth } from "@/components/auth/AuthProvider";
 import AuthGate from "@/components/auth/AuthGate";
-import { getDateKey } from "@/lib/sinLibrary";
+import { getDateKey } from "@/lib/dateKey";
 import {
+  ChamberHeader,
   Input,
   OptionTile,
   PageShell,
   Surface,
-  VisionsBadge,
 } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
@@ -124,20 +124,20 @@ export default function SmiteButtonApp() {
       )}
 
       <PageShell maxWidth="md">
-        <header className="mb-8 text-center">
-          <VisionsBadge className="mb-4 inline-flex" />
-          <h1 className={cn("mb-2 font-serif text-3xl font-bold sm:text-4xl", accentStyles.ember.text)}>
-            Smite Button
-          </h1>
-          <p className="mx-auto max-w-lg text-sm text-ink-soft">
-            Digitally smite minor inconveniences with classic biblical plagues.
-            Free smites daily. Premium tier includes mock AI smiting visuals.
-          </p>
+        <ChamberHeader
+          icon={Zap}
+          accent="ember"
+          align="center"
+          title="Smite Button"
+          badge="Visions Approximate"
+          subtitle="Digitally smite minor inconveniences with classic biblical plagues. Free smites daily. Premium tier includes mock AI smiting visuals."
+          className="mb-8"
+        >
           <p className={cn("mt-3 text-sm", accentStyles.wine.text)}>
             Free smites remaining today:{" "}
             <span className="font-bold">{freeRemaining}</span> / {FREE_DAILY_LIMIT}
           </p>
-        </header>
+        </ChamberHeader>
 
         <section className="mb-8">
           <h2 className="verse-ref mb-3 text-ink-soft">Select Target</h2>
@@ -150,7 +150,7 @@ export default function SmiteButtonApp() {
                 onClick={() => setTarget(t)}
               >
                 <span className="text-2xl">{TARGET_ICONS[t]}</span>
-                <span className="text-[10px] leading-tight sm:text-xs">
+                <span className="verse-ref leading-tight sm:text-xs">
                   {TARGET_LABELS[t]}
                 </span>
               </OptionTile>

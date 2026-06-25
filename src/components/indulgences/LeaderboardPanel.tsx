@@ -2,7 +2,7 @@
 
 import type { LeaderboardEntry } from "@/lib/indulgenceTypes";
 import { SectionHeader, Surface } from "@/components/ui";
-import { accentStyles } from "@/components/ui/tokens";
+import { accentStyles, statusStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
 interface LeaderboardPanelProps {
@@ -65,14 +65,14 @@ export default function LeaderboardPanel({
                     {entry.isUser && " (You)"}
                   </p>
                   {entry.badge && (
-                    <p className="truncate text-[10px] text-ink-soft">{entry.badge}</p>
+                    <p className="verse-ref truncate text-ink-soft">{entry.badge}</p>
                   )}
                 </div>
                 <span
                   className={cn(
                     "text-right font-mono text-sm font-bold",
                     entry.salvationScore >= 80
-                      ? "text-green-400"
+                      ? statusStyles.success.text
                       : entry.salvationScore >= 50
                         ? accentStyles.wine.text
                         : accentStyles.ember.text

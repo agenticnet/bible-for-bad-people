@@ -1,5 +1,6 @@
 import type { Confession } from "@/lib/confessionalTypes";
 import { Surface } from "@/components/ui";
+import { accentStyles, statusStyles } from "@/components/ui/tokens";
 
 interface LeaderboardSidebarProps {
   mostAbsolved: Confession[];
@@ -17,14 +18,14 @@ export default function LeaderboardSidebar({
         subtitle="Community saints (for now)"
         items={mostAbsolved}
         metric="absolve"
-        accent="green"
+        accentClass={statusStyles.success.text}
       />
       <LeaderboardList
         title="Most Condemned"
         subtitle="Hell-bound hall of fame"
         items={mostCondemned}
         metric="condemn"
-        accent="red"
+        accentClass={accentStyles.ember.text}
       />
     </aside>
   );
@@ -35,20 +36,18 @@ function LeaderboardList({
   subtitle,
   items,
   metric,
-  accent,
+  accentClass,
 }: {
   title: string;
   subtitle: string;
   items: Confession[];
   metric: "absolve" | "condemn";
-  accent: "green" | "red";
+  accentClass: string;
 }) {
-  const accentClass = accent === "green" ? "text-green-400" : "text-ember";
-
   return (
     <Surface padding="sm">
       <h3 className="mb-0.5 text-sm font-semibold text-ink">{title}</h3>
-      <p className="mb-3 text-[10px] text-ink-soft">{subtitle}</p>
+      <p className="verse-ref mb-3 text-ink-soft">{subtitle}</p>
       <ol className="flex flex-col gap-2">
         {items.map((item, i) => (
           <li key={item.id} className="flex gap-2 text-xs">

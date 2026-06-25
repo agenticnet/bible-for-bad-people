@@ -38,3 +38,19 @@ export default function PageShell({
     </div>
   );
 }
+
+interface ChatPageShellProps {
+  children: React.ReactNode;
+}
+
+export function ChatPageShell({ children }: ChatPageShellProps) {
+  return (
+    <div className="flex h-dvh flex-col bg-parchment">
+      <BindingBar className="flex items-center gap-3">
+        <BackLink />
+        <span className="text-xs text-binding-muted">Bible for Bad People</span>
+      </BindingBar>
+      <div className="flex-1 overflow-hidden">{children}</div>
+    </div>
+  );
+}

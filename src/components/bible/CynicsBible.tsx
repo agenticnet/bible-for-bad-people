@@ -7,6 +7,7 @@ import { searchPassages } from "@/lib/biblePassages";
 import { ALL_TAGS, TAG_LABELS } from "@/lib/bibleTypes";
 import {
   Chip,
+  ChamberHeader,
   EmptyState,
   Input,
   Label,
@@ -42,21 +43,18 @@ export default function CynicsBible() {
 
   return (
     <PageShell maxWidth="md">
-      <header className="mb-10 border-b border-rule pb-8">
-        <div className="mb-5 flex items-start gap-4">
-          <BookOpen className="mt-1 h-6 w-6 shrink-0 text-wine" strokeWidth={1.5} />
-          <div>
-            <p className="verse-ref mb-2 text-ink-soft">Canon, abridged</p>
-            <h1 className="font-serif text-[clamp(1.75rem,4vw,2.5rem)] leading-tight text-ink">
-              The Cynic&apos;s TL;DR Bible
-            </h1>
-            <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-soft">
-              The verses your Sunday school definitely skipped — with modern
-              receipts. Not theology. Cultural autopsy.
-            </p>
-          </div>
-        </div>
-      </header>
+      <ChamberHeader
+        icon={BookOpen}
+        accent="wine"
+        title="The Cynic's TL;DR Bible"
+        subtitle="Canon, abridged"
+        className="mb-10 border-b border-rule pb-8"
+      >
+        <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-soft">
+          The verses your Sunday school definitely skipped — with modern
+          receipts. Not theology. Cultural autopsy.
+        </p>
+      </ChamberHeader>
 
       <div className="mb-6">
         <Label htmlFor="passage-search">Search</Label>

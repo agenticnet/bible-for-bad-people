@@ -7,10 +7,7 @@ import SubmitConfessionForm from "./SubmitConfessionForm";
 import LeaderboardSidebar from "./LeaderboardSidebar";
 import type { Confession, ConfessionSort, VoteType } from "@/lib/confessionalTypes";
 import { SORT_LABELS } from "@/lib/confessionalTypes";
-import {
-  sortConfessions,
-  getLeaderboardTop,
-} from "@/lib/confessionalStorage";
+import { sortConfessions, getLeaderboardTop } from "@/lib/confessionalUtils";
 import {
   fetchConfessions,
   fetchUserVotes,

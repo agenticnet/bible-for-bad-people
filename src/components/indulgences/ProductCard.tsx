@@ -1,14 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ShoppingCart } from "lucide-react";
 import type { IndulgenceProduct } from "@/lib/indulgenceTypes";
 import { formatPrice, generateCertificateId } from "@/lib/indulgenceProducts";
 import { addIndulgencePurchase } from "@/lib/data/indulgences";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { Badge, Button, Modal, Surface } from "@/components/ui";
+import { Badge, Button, LinkButton, Modal, Surface } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
@@ -83,7 +82,7 @@ export default function ProductCard({
           {product.description}
         </p>
         {product.leaderboardBoost && (
-          <p className="mb-3 text-[10px] text-slate">
+          <p className="verse-ref mb-3 text-slate">
             +{product.leaderboardBoost} Salvation Score
           </p>
         )}
@@ -97,12 +96,13 @@ export default function ProductCard({
               Buy
             </Button>
           ) : (
-            <Link
+            <LinkButton
               href={`/login?next=${encodeURIComponent(pathname)}`}
-              className="inline-flex items-center gap-2 rounded-lg border border-wine/40 bg-wine/10 px-3 py-1.5 text-sm font-semibold text-wine transition-colors hover:bg-wine/20"
+              variant="secondary"
+              className="rounded-lg border-wine/40 bg-wine/10 px-3 py-1.5 text-sm font-semibold text-wine hover:border-wine/40 hover:bg-wine/20 hover:text-wine"
             >
               Log in to buy
-            </Link>
+            </LinkButton>
           )}
         </div>
       </Surface>
