@@ -1,5 +1,7 @@
 export type IndulgenceTier = "basic" | "premium" | "ultimate" | "subscription";
 
+export type PricingTier = "anchor" | "recommended" | "everyday" | "subscription";
+
 export interface IndulgenceProduct {
   id: string;
   name: string;
@@ -8,6 +10,7 @@ export interface IndulgenceProduct {
   price: number;
   priceLabel?: string;
   tier: IndulgenceTier;
+  pricingTier?: PricingTier;
   icon: string;
   leaderboardBoost?: number;
   absolutionLevel?: "partial" | "total" | "weekend";

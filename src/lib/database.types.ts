@@ -16,6 +16,17 @@ export type Database = {
           salvation_score: number;
           total_spent: number;
           created_at: string;
+          display_name: string | null;
+          favorite_chambers: string[];
+          chamber_order: string[];
+          default_accent: string;
+          notification_prefs: {
+            weeklyDigest: boolean;
+            sinReminders: boolean;
+            smiteAlerts: boolean;
+          };
+          starter_pack_id: string | null;
+          onboarding_completed_at: string | null;
         };
         Insert: {
           id: string;
@@ -23,6 +34,17 @@ export type Database = {
           salvation_score?: number;
           total_spent?: number;
           created_at?: string;
+          display_name?: string | null;
+          favorite_chambers?: string[];
+          chamber_order?: string[];
+          default_accent?: string;
+          notification_prefs?: {
+            weeklyDigest: boolean;
+            sinReminders: boolean;
+            smiteAlerts: boolean;
+          };
+          starter_pack_id?: string | null;
+          onboarding_completed_at?: string | null;
         };
         Update: {
           id?: string;
@@ -30,6 +52,17 @@ export type Database = {
           salvation_score?: number;
           total_spent?: number;
           created_at?: string;
+          display_name?: string | null;
+          favorite_chambers?: string[];
+          chamber_order?: string[];
+          default_accent?: string;
+          notification_prefs?: {
+            weeklyDigest: boolean;
+            sinReminders: boolean;
+            smiteAlerts: boolean;
+          };
+          starter_pack_id?: string | null;
+          onboarding_completed_at?: string | null;
         };
         Relationships: [];
       };

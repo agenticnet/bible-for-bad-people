@@ -27,7 +27,7 @@ export async function GET(request: Request) {
 
         if (!profile) {
           return NextResponse.redirect(
-            `${origin}/onboarding/username?next=${encodeURIComponent(next)}`
+            `${origin}/onboarding?step=claim&next=${encodeURIComponent(next)}`
           );
         }
       }

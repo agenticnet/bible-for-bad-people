@@ -85,12 +85,12 @@ export default function UserMenu() {
             </Link>
           ) : (
             <Link
-              href="/onboarding/username"
+              href="/onboarding?step=claim"
               className="flex items-center gap-2 px-3 py-2 text-sm text-binding-muted hover:bg-ivory/5 hover:text-binding-ivory"
               onClick={() => setOpen(false)}
             >
               <User className="h-4 w-4" />
-              Set username
+              Finish your ledger
             </Link>
           )}
           <button

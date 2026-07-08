@@ -1,5 +1,9 @@
 import type { User } from "@supabase/supabase-js";
 import type { Profile } from "@/lib/database.types";
+import type { OnboardingPreferences } from "./onboardingDraft";
+
+export type { OnboardingPreferences, OnboardingDraft, NotificationPrefs } from "./onboardingDraft";
+export type { LossContext } from "./upsellCopy";
 
 export interface AuthContextValue {
   user: User | null;
@@ -17,3 +21,8 @@ export function normalizeUsername(value: string): string {
 export function isValidUsername(value: string): boolean {
   return USERNAME_REGEX.test(normalizeUsername(value));
 }
+
+export type CreateProfileInput = {
+  username: string;
+  preferences?: OnboardingPreferences;
+};

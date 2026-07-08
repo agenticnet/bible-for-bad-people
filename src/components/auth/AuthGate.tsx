@@ -3,23 +3,36 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { Callout } from "@/components/ui";
+import { useAuthModal } from "@/components/auth/AuthModalProvider";
+import { getLossCopy, type LossContext } from "@/lib/auth/upsellCopy";
+import { Callout, Button } from "@/components/ui";
 
 interface AuthGateProps {
   children: React.ReactNode;
   title?: string;
   description?: string;
   tone?: "wine" | "plum" | "slate" | "terra" | "ember";
+  mode?: "block" | "preview";
+  previewFallback?: React.ReactNode;
+  lossContext?: LossContext;
+  saveLabel?: string;
 }
 
 export default function AuthGate({
   children,
   title = "Sign in required",
-  description = "Log in to save your progress and participate. Browsing is free — salvation costs extra.",
+  description,
   tone = "wine",
+  mode = "preview",
+  previewFallback,
+  lossContext = "generic",
+  saveLabel = "Claim your ledger",
 }: AuthGateProps) {
   const { user, profile, isLoading } = useAuth();
+  const { openSignUp } = useAuthModal();
   const pathname = usePathname();
+
+  const resolvedDescription = description ?? getLossCopy(lossContext);
 
   if (isLoading) {
     return (
@@ -31,11 +44,15 @@ export default function AuthGate({
   }
 
   if (!user) {
+    if (mode === "preview") {
+      return <>{children}</>;
+    }
+
     const next = encodeURIComponent(pathname);
     return (
       <Callout tone={tone}>
         <p className="font-medium text-ink">{title}</p>
-        <p className="mb-3 mt-1 text-sm text-ink-soft">{description}</p>
+        <p className="mb-3 mt-1 text-sm text-ink-soft">{resolvedDescription}</p>
         <div className="flex flex-wrap gap-2">
           <Link
             href={`/login?next=${next}`}
@@ -43,13 +60,16 @@ export default function AuthGate({
           >
             Log In
           </Link>
-          <Link
-            href={`/signup?next=${next}`}
-            className="rounded-lg border border-wine/40 bg-wine/10 px-4 py-2 text-sm font-medium text-wine transition-colors hover:bg-wine/20"
+          <Button
+            type="button"
+            accent="wine"
+            size="sm"
+            onClick={() => openSignUp(lossContext, pathname)}
           >
-            Sign Up
-          </Link>
+            {saveLabel}
+          </Button>
         </div>
+        {previewFallback}
       </Callout>
     );
   }
@@ -58,19 +78,46 @@ export default function AuthGate({
     const next = encodeURIComponent(pathname);
     return (
       <Callout tone={tone}>
-        <p className="font-medium text-ink">Choose a username first</p>
+        <p className="font-medium text-ink">Finish building your ledger</p>
         <p className="mb-3 mt-1 text-sm text-ink-soft">
-          Finish onboarding before saving chamber data. The ledger needs to know who you are.
+          Your customization is waiting. Complete onboarding before saving chamber data.
         </p>
         <Link
-          href={`/onboarding/username?next=${next}`}
+          href={`/onboarding?step=claim&next=${next}`}
           className="inline-block rounded-lg border border-wine/40 bg-wine/10 px-4 py-2 text-sm font-medium text-wine transition-colors hover:bg-wine/20"
         >
-          Set Username
+          Continue Building
         </Link>
       </Callout>
     );
   }
 
   return <>{children}</>;
+}
+
+export function AuthSavePrompt({
+  lossContext,
+  label,
+  className,
+}: {
+  lossContext: LossContext;
+  label?: string;
+  className?: string;
+}) {
+  const { openSignUp } = useAuthModal();
+  const pathname = usePathname();
+
+  return (
+    <div className={className}>
+      <p className="mb-3 text-sm text-ink-soft">{getLossCopy(lossContext)}</p>
+      <Button
+        type="button"
+        accent="wine"
+        size="sm"
+        onClick={() => openSignUp(lossContext, pathname)}
+      >
+        {label ?? "Claim your ledger"}
+      </Button>
+    </div>
+  );
 }

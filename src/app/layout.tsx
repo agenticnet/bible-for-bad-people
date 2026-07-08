@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Figtree, JetBrains_Mono, Source_Serif_4 } from "next/font/google";
 import { AuthProvider } from "@/components/auth/AuthProvider";
+import { AuthModalProvider } from "@/components/auth/AuthModalProvider";
+import { OnboardingDraftProvider } from "@/components/auth/OnboardingDraftProvider";
+import AuthModalRoot from "@/components/auth/AuthModalRoot";
 import { MotionProvider } from "@/components/MotionProvider";
 import "./globals.css";
 
@@ -40,7 +43,14 @@ export default function RootLayout({
     >
       <body className="min-h-screen font-sans">
         <AuthProvider>
-          <MotionProvider>{children}</MotionProvider>
+          <AuthModalProvider>
+            <OnboardingDraftProvider>
+              <MotionProvider>
+                {children}
+                <AuthModalRoot />
+              </MotionProvider>
+            </OnboardingDraftProvider>
+          </AuthModalProvider>
         </AuthProvider>
       </body>
     </html>

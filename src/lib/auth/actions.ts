@@ -1,7 +1,15 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
-import { isValidUsername, normalizeUsername } from "@/lib/auth/types";
+import {
+  isValidUsername,
+  normalizeUsername,
+  type OnboardingPreferences,
+} from "@/lib/auth/types";
+import {
+  generateCertificateId,
+  INDULGENCE_PRODUCTS,
+} from "@/lib/indulgenceProducts";
 
 export async function checkUsernameAvailable(username: string): Promise<boolean> {
   const normalized = normalizeUsername(username);
@@ -40,7 +48,48 @@ export async function ensureProfileFromMetadata(): Promise<{ error?: string }> {
   return createProfile(pending);
 }
 
-export async function createProfile(username: string): Promise<{ error?: string }> {
+async function grantStarterPack(
+  userId: string,
+  starterPackId: string
+): Promise<void> {
+  const product = INDULGENCE_PRODUCTS.find((p) => p.id === starterPackId);
+  if (!product) return;
+
+  const supabase = await createClient();
+  const boost = product.leaderboardBoost ?? 0;
+
+  await supabase.from("indulgence_purchases").insert({
+    user_id: userId,
+    product_id: product.id,
+    product_name: product.name,
+    certificate_id: generateCertificateId(),
+    price_paid: product.price,
+    purchased_at: new Date().toISOString(),
+  });
+
+  if (boost > 0) {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("salvation_score, total_spent")
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (profile) {
+      await supabase
+        .from("profiles")
+        .update({
+          salvation_score: profile.salvation_score + boost,
+          total_spent: Number(profile.total_spent) + product.price,
+        })
+        .eq("id", userId);
+    }
+  }
+}
+
+export async function createProfile(
+  username: string,
+  preferences?: OnboardingPreferences
+): Promise<{ error?: string }> {
   const normalized = normalizeUsername(username);
   if (!isValidUsername(normalized)) {
     return { error: "Username must be 3–20 characters: lowercase letters, numbers, underscores." };
@@ -60,13 +109,30 @@ export async function createProfile(username: string): Promise<{ error?: string 
     return { error: "Username is already taken." };
   }
 
-  const { error } = await supabase.from("profiles").insert({
+  const insertData = {
     id: user.id,
     username: normalized,
-  });
+    display_name: preferences?.displayName ?? null,
+    favorite_chambers: preferences?.favoriteChambers ?? [],
+    chamber_order: preferences?.chamberOrder ?? [],
+    default_accent: preferences?.defaultAccent ?? "wine",
+    notification_prefs: preferences?.notificationPrefs ?? {
+      weeklyDigest: true,
+      sinReminders: true,
+      smiteAlerts: false,
+    },
+    starter_pack_id: preferences?.starterPackId ?? null,
+    onboarding_completed_at: new Date().toISOString(),
+  };
+
+  const { error } = await supabase.from("profiles").insert(insertData);
 
   if (error) {
     return { error: error.message };
+  }
+
+  if (preferences?.starterPackId) {
+    await grantStarterPack(user.id, preferences.starterPackId);
   }
 
   return {};
@@ -114,7 +180,7 @@ export async function getLeaderboardProfiles(limit = 20) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, username, salvation_score")
+    .select("id, username, salvation_score, display_name")
     .order("salvation_score", { ascending: false })
     .limit(limit);
 

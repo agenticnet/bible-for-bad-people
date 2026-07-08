@@ -1,10 +1,11 @@
-import { Suspense } from "react";
-import UsernameOnboardingForm from "./UsernameOnboardingForm";
+import { redirect } from "next/navigation";
 
-export default function UsernameOnboardingPage() {
-  return (
-    <Suspense fallback={<p className="p-8 text-center text-ink-soft">Loading...</p>}>
-      <UsernameOnboardingForm />
-    </Suspense>
-  );
+export default async function UsernameOnboardingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ next?: string }>;
+}) {
+  const params = await searchParams;
+  const next = params.next ? `&next=${encodeURIComponent(params.next)}` : "";
+  redirect(`/onboarding?step=claim${next}`);
 }

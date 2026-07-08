@@ -47,7 +47,7 @@ export default function LoginForm() {
     setLoading(false);
 
     if (!profile) {
-      router.push(`/onboarding/username?next=${encodeURIComponent(next)}`);
+      router.push(`/onboarding?step=claim&next=${encodeURIComponent(next)}`);
       return;
     }
 
@@ -74,6 +74,9 @@ export default function LoginForm() {
       subtitle="Salvation optional. Account recommended for sync."
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        <Button type="button" accent="wine" onClick={handleGoogle}>
+          Continue with Google
+        </Button>
         <div>
           <Label htmlFor="email">Email</Label>
           <Input
@@ -99,11 +102,8 @@ export default function LoginForm() {
           />
         </div>
         {error && <p className="text-sm text-ember">{error}</p>}
-        <Button type="submit" accent="wine" disabled={loading}>
-          {loading ? "Signing in..." : "Log In"}
-        </Button>
-        <Button type="button" variant="ghost" accent="wine" onClick={handleGoogle}>
-          Continue with Google
+        <Button type="submit" variant="ghost" accent="wine" disabled={loading}>
+          {loading ? "Signing in..." : "Log in with email"}
         </Button>
         <p className="text-center text-sm text-ink-soft">
           No account?{" "}

@@ -58,22 +58,20 @@ export default function SinTranslationApp() {
       />
 
       {activeTab === "daily" && (
-        <AuthGate tone="terra" title="Sign in to track daily sins">
+        <AuthGate mode="block" tone="terra" lossContext="sin" title="Sign in to track daily sins">
           <DailySinChecklist onLogUpdate={handleLogUpdate} />
         </AuthGate>
       )}
       {activeTab === "translate" && (
-        <AuthGate tone="terra" title="Sign in to translate and log sins">
-          <SinTranslatorForm onLogUpdate={handleLogUpdate} />
-        </AuthGate>
+        <SinTranslatorForm onLogUpdate={handleLogUpdate} />
       )}
       {activeTab === "log" && (
-        <AuthGate tone="terra" title="Sign in to view your sin log">
+        <AuthGate mode="block" tone="terra" lossContext="sin" title="Sign in to view your sin log">
           <SinLogPanel />
         </AuthGate>
       )}
       {activeTab === "contribute" && (
-        <AuthGate tone="terra" title="Sign in to contribute sins">
+        <AuthGate mode="block" tone="terra" lossContext="sin" title="Sign in to contribute sins">
           <ContributeSinForm onContributed={handleContributed} />
         </AuthGate>
       )}

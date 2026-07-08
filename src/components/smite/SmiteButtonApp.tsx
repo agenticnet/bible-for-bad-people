@@ -20,8 +20,15 @@ import {
   fetchDailySmiteCount,
   incrementDailySmiteCount,
 } from "@/lib/data/smite-oracle";
+import {
+  addSmiteRecord as addSmiteRecordLocal,
+  getDailySmiteCount as getLocalDailySmiteCount,
+  incrementDailySmiteCount as incrementLocalDailySmiteCount,
+  loadSmiteHistory,
+} from "@/lib/smiteStorage";
 import { useAuth } from "@/components/auth/AuthProvider";
-import AuthGate from "@/components/auth/AuthGate";
+import AuthGate, { AuthSavePrompt } from "@/components/auth/AuthGate";
+import { smiteLimitCopy } from "@/lib/auth/upsellCopy";
 import { getDateKey } from "@/lib/dateKey";
 import {
   ChamberHeader,
@@ -56,8 +63,8 @@ export default function SmiteButtonApp() {
       void fetchSmiteHistory().then(setHistory);
       void fetchDailySmiteCount(dateKey).then(setDailyCount);
     } else {
-      setHistory([]);
-      setDailyCount(0);
+      setHistory(loadSmiteHistory());
+      setDailyCount(getLocalDailySmiteCount(dateKey));
     }
   }, [dateKey, user]);
 
@@ -70,10 +77,10 @@ export default function SmiteButtonApp() {
   }, []);
 
   function handleSmite() {
-    if (smiteing || !user) return;
+    if (smiteing) return;
     if (target === "custom" && !customName.trim()) return;
 
-    const usePremium = premium || needsPremium;
+    const usePremium = premium || (user ? needsPremium : false);
 
     setSmiteing(true);
     setShowAnimation(true);
@@ -100,15 +107,24 @@ export default function SmiteButtonApp() {
         pricePaid: usePremium ? PREMIUM_PRICE : 0,
       };
 
-      if (!usePremium) {
-        const { count } = await incrementDailySmiteCount(dateKey);
-        setDailyCount(count);
-      }
-
-      const saved = await addSmiteRecordServer(record);
-      if (saved.record) {
-        setHistory((prev) => [saved.record!, ...prev].slice(0, 50));
-        setLastResult(saved.record);
+      if (user) {
+        if (!usePremium) {
+          const { count } = await incrementDailySmiteCount(dateKey);
+          setDailyCount(count);
+        }
+        const saved = await addSmiteRecordServer(record);
+        if (saved.record) {
+          setHistory((prev) => [saved.record!, ...prev].slice(0, 50));
+          setLastResult(saved.record);
+        }
+      } else {
+        if (!usePremium) {
+          const count = incrementLocalDailySmiteCount(dateKey);
+          setDailyCount(count);
+        }
+        const updated = addSmiteRecordLocal(record);
+        setHistory(updated);
+        setLastResult(record);
       }
     }, 2200);
   }
@@ -195,13 +211,19 @@ export default function SmiteButtonApp() {
           </div>
         </section>
 
+        <Surface accent="wine" accentTint className="mb-4" padding="sm">
+          <p className="text-xs text-ink-soft line-through">
+            Unlimited Annual Smite Plan: $99/yr
+          </p>
+        </Surface>
+
         <Surface accent="wine" accentTint className="mb-8" padding="sm">
           <label className="flex cursor-pointer items-start gap-3">
             <input
               type="checkbox"
-              checked={premium || needsPremium}
+              checked={premium || Boolean(user && needsPremium)}
               onChange={(e) => setPremium(e.target.checked)}
-              disabled={needsPremium}
+              disabled={user ? needsPremium : false}
               className="mt-1 accent-wine"
             />
             <div>
@@ -210,8 +232,8 @@ export default function SmiteButtonApp() {
                 Premium Smite (+ AI Visual Mock) — ${PREMIUM_PRICE.toFixed(2)}
               </p>
               <p className="mt-1 text-xs text-ink-soft">
-                {needsPremium
-                  ? "Free smites exhausted. Premium required for more smiting today."
+                {user && needsPremium
+                  ? smiteLimitCopy()
                   : "Optional cinematic smite description. Real AI video when Grok API arrives."}
               </p>
             </div>
@@ -219,15 +241,11 @@ export default function SmiteButtonApp() {
         </Surface>
 
         <div className="mb-8 flex justify-center">
-          <AuthGate
-            tone="ember"
-            title="Sign in to smite"
-            description="Configure your plague for free. Log in to unleash digital wrath and save your smite history."
-          >
+          <AuthGate mode="preview" lossContext="smite">
             <button
               type="button"
               onClick={handleSmite}
-              disabled={smiteing || (target === "custom" && !customName.trim())}
+              disabled={smiteing || (target === "custom" && !customName.trim()) || Boolean(user && needsPremium && !premium)}
               className={cn(
                 "group flex h-32 w-32 flex-col items-center justify-center rounded-full border-4 transition-colors disabled:opacity-50 sm:h-40 sm:w-40",
                 accentStyles.ember.border,
@@ -248,6 +266,13 @@ export default function SmiteButtonApp() {
           <section className="mb-8">
             <h2 className="mb-3 text-sm font-semibold text-ink">Latest Smite Report</h2>
             <SmiteResultCard record={lastResult} />
+            {!user && (
+              <AuthSavePrompt
+                lossContext="smite"
+                label="Save this smite to your ledger"
+                className="mt-4 rounded-xl border border-rule bg-page p-4"
+              />
+            )}
           </section>
         )}
 

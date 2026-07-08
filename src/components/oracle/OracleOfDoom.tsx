@@ -13,7 +13,7 @@ import {
 import { getDateKey } from "@/lib/dateKey";
 import { fetchOracleReading, saveOracleReading } from "@/lib/data/smite-oracle";
 import { useAuth } from "@/components/auth/AuthProvider";
-import AuthGate from "@/components/auth/AuthGate";
+import { AuthSavePrompt } from "@/components/auth/AuthGate";
 import {
   Button,
   ChamberHeader,
@@ -151,23 +151,27 @@ export default function OracleOfDoom() {
       )}
 
       {!cardsRevealed && (
-        <AuthGate
-          tone="plum"
-          title="Sign in to reveal your reading"
-          description="Preview the spread for free. Log in to lock in today's doom and sync across devices."
-        >
-          <div className="flex justify-center">
-            <Button
-              accent="plum"
-              className="rounded-xl px-10 py-4 text-base"
-              onClick={revealReading}
-              disabled={revealing}
-            >
-              <Eye className="h-5 w-5" />
-              {revealing ? "The cards are turning..." : "Reveal Your Daily Doom"}
-            </Button>
-          </div>
-        </AuthGate>
+        <div className="flex justify-center">
+          <Button
+            accent="plum"
+            className="rounded-xl px-10 py-4 text-base"
+            onClick={revealReading}
+            disabled={revealing}
+          >
+            <Eye className="h-5 w-5" />
+            {revealing ? "The cards are turning..." : "Reveal Your Daily Doom"}
+          </Button>
+        </div>
+      )}
+
+      {cardsRevealed && !user && (
+        <div className="mx-auto mb-6 max-w-md">
+          <AuthSavePrompt
+            lossContext="oracle"
+            label="Lock in today's doom"
+            className="rounded-xl border border-rule bg-page p-4 text-center"
+          />
+        </div>
       )}
 
       {cardsRevealed && (

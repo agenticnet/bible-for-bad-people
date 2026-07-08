@@ -21,6 +21,8 @@ export { default as Chip } from "./Chip";
 export { default as OptionTile } from "./OptionTile";
 export { default as VisionsBadge } from "./VisionsBadge";
 export { default as LinkButton } from "./LinkButton";
+export { default as OnboardingProgress, ONBOARDING_STEPS } from "./OnboardingProgress";
+export type { OnboardingStep } from "./OnboardingProgress";
 export { default as ChatAvatar } from "./ChatAvatar";
 export { default as MessageBubble } from "./MessageBubble";
 export { default as TypingIndicator } from "./TypingIndicator";

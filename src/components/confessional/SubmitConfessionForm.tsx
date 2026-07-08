@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Send } from "lucide-react";
+import { Send, Eye } from "lucide-react";
 import type { Confession } from "@/lib/confessionalTypes";
 import { submitConfession } from "@/lib/data/confessional";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useAuthModal } from "@/components/auth/AuthModalProvider";
+import { usePathname } from "next/navigation";
+import { getLossCopy } from "@/lib/auth/upsellCopy";
 import AuthGate from "@/components/auth/AuthGate";
 import { Button, Surface, Textarea } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
@@ -15,8 +18,11 @@ interface SubmitConfessionFormProps {
 }
 
 function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
+  const { openSignUp } = useAuthModal();
+  const pathname = usePathname();
   const [content, setContent] = useState("");
+  const [preview, setPreview] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,6 +30,11 @@ function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
     e.preventDefault();
     const trimmed = content.trim();
     if (!trimmed || submitting) return;
+
+    if (!user) {
+      setPreview(true);
+      return;
+    }
 
     setSubmitting(true);
     setError(null);
@@ -37,7 +48,30 @@ function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
     if (result.confession) onSubmitted(result.confession);
 
     setContent("");
+    setPreview(false);
     setSubmitting(false);
+  }
+
+  if (preview && !user) {
+    return (
+      <Surface accent="plum" accentTint padding="lg">
+        <p className={cn("verse-ref mb-2", accentStyles.plum.text)}>Confession Preview</p>
+        <p className="mb-4 text-sm leading-relaxed text-ink">{content.trim()}</p>
+        <p className="mb-4 text-sm text-ink-soft">{getLossCopy("confessional")}</p>
+        <div className="flex flex-wrap gap-2">
+          <Button
+            type="button"
+            accent="plum"
+            onClick={() => openSignUp("confessional", pathname)}
+          >
+            Post as u/you
+          </Button>
+          <Button type="button" variant="ghost" accent="plum" onClick={() => setPreview(false)}>
+            Edit
+          </Button>
+        </div>
+      </Surface>
+    );
   }
 
   return (
@@ -59,8 +93,17 @@ function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
       <div className="flex items-center justify-between gap-3">
         <span className="verse-ref text-ink-soft">{content.length}/500</span>
         <Button type="submit" accent="plum" disabled={!content.trim() || submitting}>
-          <Send className="h-4 w-4" />
-          {submitting ? "Posting..." : "Confess"}
+          {user ? (
+            <>
+              <Send className="h-4 w-4" />
+              {submitting ? "Posting..." : "Confess"}
+            </>
+          ) : (
+            <>
+              <Eye className="h-4 w-4" />
+              Preview confession
+            </>
+          )}
         </Button>
       </div>
     </Surface>
@@ -69,11 +112,7 @@ function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
 
 export default function SubmitConfessionForm(props: SubmitConfessionFormProps) {
   return (
-    <AuthGate
-      tone="plum"
-      title="Sign in to confess"
-      description="Browse the feed for free. Log in to post confessions as u/yourname and sync votes across devices."
-    >
+    <AuthGate mode="preview" lossContext="confessional">
       <ConfessionForm {...props} />
     </AuthGate>
   );

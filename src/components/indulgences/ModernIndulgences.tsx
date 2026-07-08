@@ -7,10 +7,11 @@ import {
   Trophy,
   Vault,
 } from "lucide-react";
-import ProductCard from "./ProductCard";
 import LeaderboardPanel from "./LeaderboardPanel";
 import CertificateCard from "./CertificateCard";
+import PricingSection, { groupProductsByTier } from "./PricingSection";
 import { INDULGENCE_PRODUCTS } from "@/lib/indulgenceProducts";
+import type { PricedProduct } from "./PricingSection";
 import { fetchSalvationProfile, fetchLeaderboardEntries } from "@/lib/data/indulgences";
 import { fetchSinLog } from "@/lib/data/sin";
 import type { LeaderboardEntry, UserSalvationProfile } from "@/lib/indulgenceTypes";
@@ -31,6 +32,13 @@ const TABS = [
   { id: "leaderboard" as IndulgenceTab, label: "Leaderboard", icon: Trophy },
   { id: "vault" as IndulgenceTab, label: "My Vault", icon: Vault },
 ];
+
+const pricedProducts: PricedProduct[] = INDULGENCE_PRODUCTS.map((p) => ({
+  ...p,
+  pricingTier: p.pricingTier ?? "everyday",
+}));
+
+const grouped = groupProductsByTier(pricedProducts);
 
 export default function ModernIndulgences() {
   const { user } = useAuth();
@@ -65,6 +73,8 @@ export default function ModernIndulgences() {
   const userRank = profile
     ? leaderboard.findIndex((e) => e.isUser) + 1 || null
     : null;
+
+  const displayName = profile?.displayName ?? "";
 
   return (
     <PageShell maxWidth="lg">
@@ -111,15 +121,38 @@ export default function ModernIndulgences() {
       />
 
       {activeTab === "shop" && (
-        <div className="grid gap-4 sm:grid-cols-2">
-          {INDULGENCE_PRODUCTS.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              displayName={profile?.displayName ?? ""}
+        <div>
+          <PricingSection
+            title="Premium Absolution (Anchor Pricing)"
+            products={grouped.anchor}
+            displayName={displayName}
+            onPurchased={refreshProfile}
+            variant="anchor"
+          />
+          <PricingSection
+            title="Recommended for Most Sinners"
+            products={grouped.recommended}
+            displayName={displayName}
+            onPurchased={refreshProfile}
+            variant="recommended"
+          />
+          <div className="grid gap-10 lg:grid-cols-[2fr_1fr]">
+            <PricingSection
+              title="Everyday Absolution"
+              products={grouped.everyday}
+              displayName={displayName}
               onPurchased={refreshProfile}
+              variant="everyday"
             />
-          ))}
+            <PricingSection
+              title="Monthly Peace of Mind"
+              description="Soul Insurance at $14.99/mo makes Indulgence+ at $9.99/mo feel like a steal."
+              products={grouped.subscription}
+              displayName={displayName}
+              onPurchased={refreshProfile}
+              variant="subscription"
+            />
+          </div>
         </div>
       )}
 
@@ -129,9 +162,10 @@ export default function ModernIndulgences() {
 
       {activeTab === "vault" && (
         <AuthGate
+          mode="block"
           tone="wine"
+          lossContext="indulgences"
           title="Sign in to view your vault"
-          description="Browse the marketplace for free. Log in to purchase indulgences and collect certificates."
         >
           <div>
             <h2 className="mb-1 font-serif text-xl font-bold text-ink">My Vault</h2>

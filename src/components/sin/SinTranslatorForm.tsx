@@ -5,6 +5,11 @@ import { AnimatePresence, motion } from "motion/react";
 import { ScrollText } from "lucide-react";
 import { translatePettySin } from "@/lib/sinTranslationEngine";
 import { addSinLogItem } from "@/lib/data/sin";
+import { addToSinLog } from "@/lib/sinStorage";
+import { useAuth } from "@/components/auth/AuthProvider";
+import { useAuthModal } from "@/components/auth/AuthModalProvider";
+import { usePathname } from "next/navigation";
+import { getLossCopy } from "@/lib/auth/upsellCopy";
 import { SIN_LIBRARY } from "@/lib/sinLibrary";
 import {
   Button,
@@ -23,6 +28,9 @@ interface SinTranslatorFormProps {
 }
 
 export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProps) {
+  const { user } = useAuth();
+  const { openSignUp } = useAuthModal();
+  const pathname = usePathname();
   const [input, setInput] = useState("");
   const [translation, setTranslation] = useState<string | null>(null);
   const [isTranslating, setIsTranslating] = useState(false);
@@ -46,12 +54,23 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
 
   async function logTranslation() {
     if (!translation || !input.trim()) return;
-    await addSinLogItem({
-      petty: input.trim(),
-      translation,
-      completedAt: new Date().toISOString(),
-      source: "custom",
-    });
+
+    if (user) {
+      await addSinLogItem({
+        petty: input.trim(),
+        translation,
+        completedAt: new Date().toISOString(),
+        source: "custom",
+      });
+    } else {
+      addToSinLog({
+        id: `sin-${Date.now()}`,
+        petty: input.trim(),
+        translation,
+        completedAt: new Date().toISOString(),
+        source: "custom",
+      });
+    }
     onLogUpdate();
     setInput("");
     setTranslation(null);
@@ -105,13 +124,36 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
               <p className="scripture-block mb-4 text-base italic text-ink">
                 &ldquo;{translation}&rdquo;
               </p>
-              <button
-                type="button"
-                onClick={() => void logTranslation()}
-                className={cn("text-sm hover:underline", accentStyles.terra.text)}
-              >
-                Log this sin to my confession record →
-              </button>
+              {user ? (
+                <button
+                  type="button"
+                  onClick={() => void logTranslation()}
+                  className={cn("text-sm hover:underline", accentStyles.terra.text)}
+                >
+                  Log this sin to my confession record →
+                </button>
+              ) : (
+                <div className="border-t border-rule pt-4">
+                  <p className="mb-3 text-sm text-ink-soft">{getLossCopy("sin")}</p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      addToSinLog({
+                        id: `sin-${Date.now()}`,
+                        petty: input.trim(),
+                        translation,
+                        completedAt: new Date().toISOString(),
+                        source: "custom",
+                      });
+                      onLogUpdate();
+                      openSignUp("sin", pathname);
+                    }}
+                    className={cn("text-sm font-medium hover:underline", accentStyles.terra.text)}
+                  >
+                    Add to sin log →
+                  </button>
+                </div>
+              )}
             </Surface>
           </motion.div>
         )}

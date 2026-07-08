@@ -8,7 +8,7 @@ import {
   TypingIndicator,
 } from "@/components/ui";
 import type { ChamberChatConfig } from "@/lib/chatTypes";
-import AuthGate from "@/components/auth/AuthGate";
+import AuthGate, { AuthSavePrompt } from "@/components/auth/AuthGate";
 import { useChamberChat } from "./useChamberChat";
 
 interface ChamberChatInterfaceProps {
@@ -24,6 +24,8 @@ export default function ChamberChatInterface({ config }: ChamberChatInterfacePro
     animatingId,
     sendMessage,
     messagesEndRef,
+    previewExhausted,
+    isAnonymous,
   } = useChamberChat(config);
 
   const userAccent = config.userAccent ?? "plum";
@@ -41,21 +43,25 @@ export default function ChamberChatInterface({ config }: ChamberChatInterfacePro
         />
       }
       composer={
-        <AuthGate
-          tone={config.accent}
-          title={config.authGate.title}
-          description={config.authGate.description}
-        >
-          <ChatComposer
-            accent={config.accent}
-            value={input}
-            onChange={setInput}
-            onSubmit={sendMessage}
-            disabled={isTyping}
-            placeholder={config.composer.placeholder}
-            hint={config.composer.hint}
+        isAnonymous && previewExhausted ? (
+          <AuthSavePrompt
+            lossContext="chat"
+            label="Save this conversation"
+            className="rounded-xl border border-rule bg-page p-4"
           />
-        </AuthGate>
+        ) : (
+          <AuthGate mode="preview" lossContext="chat">
+            <ChatComposer
+              accent={config.accent}
+              value={input}
+              onChange={setInput}
+              onSubmit={sendMessage}
+              disabled={isTyping || (isAnonymous && previewExhausted)}
+              placeholder={config.composer.placeholder}
+              hint={config.composer.hint}
+            />
+          </AuthGate>
+        )
       }
     >
       {config.preamble}
