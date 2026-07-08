@@ -7,6 +7,9 @@ export { default as Label } from "./Label";
 export { default as Callout } from "./Callout";
 export { default as Modal } from "./Modal";
 export { default as BottomSheet } from "./BottomSheet";
+export { default as ResponsiveOverlay } from "./ResponsiveOverlay";
+export { default as FixedBottomBar } from "./FixedBottomBar";
+export type { FixedBottomBarVariant } from "./FixedBottomBar";
 export { default as StickyActionBar } from "./StickyActionBar";
 export { default as TearSlider } from "./TearSlider";
 export { default as IconButton } from "./IconButton";
@@ -44,7 +47,10 @@ export {
   THUMB_CTA_MIN_HEIGHT,
   BOTTOM_SHEET_HEIGHT,
   SAFE_BOTTOM,
+  CONTENT_PAD_BOTTOM,
+  MOBILE_BREAKPOINT,
   Z_DROP,
+  Z_FULLSCREEN_REVEAL,
   Z_STICKY_ACTION,
   Z_BOTTOM_SHEET,
 } from "@/lib/ux/constraints";

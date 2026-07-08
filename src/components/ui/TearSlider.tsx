@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { motion, type PanInfo } from "motion/react";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
@@ -13,7 +13,6 @@ interface TearSliderProps {
   className?: string;
 }
 
-const TRACK_WIDTH = 280;
 const THUMB_SIZE = 56;
 const COMPLETE_RATIO = 0.9;
 
@@ -25,8 +24,23 @@ export default function TearSlider({
   const reducedMotion = useReducedMotion();
   const [progress, setProgress] = useState(0);
   const [completed, setCompleted] = useState(false);
-  const maxDrag = TRACK_WIDTH - THUMB_SIZE;
+  const [maxDrag, setMaxDrag] = useState(0);
   const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const track = trackRef.current;
+    if (!track) return;
+
+    function measure() {
+      const width = track?.offsetWidth ?? 0;
+      setMaxDrag(Math.max(0, width - THUMB_SIZE));
+    }
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(track);
+    return () => observer.disconnect();
+  }, []);
 
   const handleComplete = useCallback(() => {
     if (completed) return;
@@ -37,7 +51,7 @@ export default function TearSlider({
 
   const handleDrag = useCallback(
     (_: unknown, info: PanInfo) => {
-      if (completed) return;
+      if (completed || maxDrag <= 0) return;
       const offset = Math.max(0, Math.min(info.offset.x, maxDrag));
       const ratio = offset / maxDrag;
       setProgress(ratio);
@@ -50,7 +64,7 @@ export default function TearSlider({
 
   const handleDragEnd = useCallback(
     (_: unknown, info: PanInfo) => {
-      if (completed) return;
+      if (completed || maxDrag <= 0) return;
       const offset = Math.max(0, Math.min(info.offset.x, maxDrag));
       const ratio = offset / maxDrag;
       if (ratio >= COMPLETE_RATIO) {
@@ -84,10 +98,9 @@ export default function TearSlider({
       <div
         ref={trackRef}
         className={cn(
-          "relative rounded-full border border-wine/30 bg-smoke/40",
+          "relative w-full max-w-[280px] rounded-full border border-wine/30 bg-smoke/40",
           THUMB_CTA_MIN_HEIGHT
         )}
-        style={{ width: TRACK_WIDTH }}
       >
         <div
           className="absolute inset-y-0 left-0 rounded-full bg-wine/20 transition-none"

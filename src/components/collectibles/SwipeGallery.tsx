@@ -11,6 +11,7 @@ interface SwipeGalleryProps {
   assets: PreviewAsset[];
   fallbackIcon: string;
   className?: string;
+  bleed?: boolean;
 }
 
 const SWIPE_THRESHOLD = 80;
@@ -19,6 +20,7 @@ export default function SwipeGallery({
   assets,
   fallbackIcon,
   className,
+  bleed = false,
 }: SwipeGalleryProps) {
   const items = assets.length ? assets : [{ type: "emoji" as const, src: fallbackIcon }];
   const [index, setIndex] = useState(0);
@@ -49,7 +51,7 @@ export default function SwipeGallery({
 
   return (
     <div className={cn("space-y-3", className)}>
-      <div className="relative -mx-6 overflow-hidden">
+      <div className={cn("relative overflow-hidden", bleed && "-mx-6")}>
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={index}

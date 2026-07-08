@@ -55,7 +55,7 @@ export default function ChatComposer({
           placeholder={placeholder}
           rows={1}
           disabled={disabled}
-          className="min-h-12 max-h-[120px] rounded-xl py-3 sm:text-base"
+          className="min-h-12 max-h-[120px] min-w-0 flex-1 rounded-xl py-3 sm:text-base"
         />
         <IconButton
           type="submit"
@@ -115,7 +115,7 @@ export function ChatHeader({
   return (
     <div className="border-b border-rule bg-page px-4 py-4 sm:px-6">
       <div className="flex items-center gap-3">
-        <div className="relative">
+        <div className="relative shrink-0">
           <div
             className={cn(
               "flex h-12 w-12 items-center justify-center rounded-full border-2",
@@ -135,8 +135,8 @@ export function ChatHeader({
             />
           )}
         </div>
-        <div>
-          <h1 className={cn("font-serif text-lg", accentStyles[accent].text)}>
+        <div className="min-w-0 flex-1">
+          <h1 className={cn("truncate font-serif text-lg", accentStyles[accent].text)}>
             {title}
           </h1>
           <p className="verse-ref text-ink-soft">{status}</p>

@@ -38,11 +38,13 @@
 @layer base {
   html {
     scroll-behavior: auto;
+    overflow-x: clip;
   }
 
   body {
     @apply bg-parchment text-ink antialiased;
     font-family: var(--font-body);
+    overflow-x: clip;
   }
 
   ::selection {
@@ -125,6 +127,15 @@
     font-size: 0.8125rem;
     font-variant-numeric: tabular-nums;
     letter-spacing: 0.02em;
+  }
+
+  .text-contain {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .mono-contain {
+    overflow-wrap: anywhere;
   }
 }
 

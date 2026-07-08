@@ -129,7 +129,7 @@ export default function ProductCard({
           <p className="text-sm text-ember">{purchaseError}</p>
         )}
 
-        <div className="flex gap-2 lg:hidden">
+        <div className="flex gap-2">
           <Button
             accent="wine"
             variant="ghost"
@@ -143,32 +143,13 @@ export default function ProductCard({
           <Button
             accent="wine"
             size="lg"
-            className={cn("flex-1", THUMB_CTA_MIN_HEIGHT)}
+            className={cn("min-w-0 flex-1", THUMB_CTA_MIN_HEIGHT)}
             onClick={handleBuyClick}
             disabled={cannotBuy}
           >
             <ShoppingCart className="h-4 w-4" />
             {buyLabel}
           </Button>
-        </div>
-
-        <div className="hidden items-end justify-between gap-3 lg:flex">
-          <div className="flex shrink-0 flex-col gap-2">
-            <Button accent="wine" variant="ghost" size="sm" onClick={() => setShowInspect(true)}>
-              <Eye className="h-4 w-4" />
-              Inspect
-            </Button>
-            <Button
-              accent="wine"
-              size="lg"
-              className="w-full min-w-[7rem]"
-              onClick={handleBuyClick}
-              disabled={cannotBuy}
-            >
-              <ShoppingCart className="h-4 w-4" />
-              {buyLabel}
-            </Button>
-          </div>
         </div>
       </div>
     </Surface>

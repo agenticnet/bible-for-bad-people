@@ -20,6 +20,7 @@ import AuthGate from "@/components/auth/AuthGate";
 import { DropTimer } from "@/components/collectibles";
 import {
   ChamberHeader,
+  CONTENT_PAD_BOTTOM,
   EmptyState,
   MetricCard,
   PageShell,
@@ -122,7 +123,7 @@ export default function ModernIndulgences() {
       />
 
       {activeTab === "shop" && (
-        <div className="pb-28">
+        <div className={CONTENT_PAD_BOTTOM}>
           <PricingSection
             title="Premium Absolution (Anchor Pricing)"
             products={grouped.anchor}

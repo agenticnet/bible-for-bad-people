@@ -154,6 +154,6 @@ export const calloutStatusStyles: Record<SemanticStatus, string> = {
 /** Von Restorff — featured / recommended tier isolation */
 export const featuredStyles = {
   base: "border-wine/50 bg-wine/5 shadow-[0_8px_30px_oklch(0.22_0.025_265/0.12)]",
-  hero: "border-wine/60 bg-wine/8 z-10 scale-105 motion-reduce:scale-100",
+  hero: "border-wine/60 bg-wine/8 z-10",
   ribbon: "bg-wine text-parchment",
 } as const;

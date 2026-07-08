@@ -50,7 +50,7 @@ export default function CertificateCard({ purchase }: CertificateCardProps) {
 
           <Surface accent="wine" accentTint className="mx-auto mb-4 max-w-xs" padding="sm">
             <p className="verse-ref text-ink-soft">Certificate ID</p>
-            <p className={cn("font-mono text-sm", accentStyles.wine.text)}>
+            <p className={cn("mono-contain font-mono text-sm", accentStyles.wine.text)}>
               {purchase.certificateId}
             </p>
           </Surface>

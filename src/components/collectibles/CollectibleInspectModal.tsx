@@ -4,8 +4,7 @@ import { useEffect } from "react";
 import type { IndulgenceProduct } from "@/lib/indulgenceTypes";
 import { resolveInspectMode } from "@/lib/collectibles/constants";
 import { useInspectTracking } from "@/lib/collectibles/useServerTime";
-import { useIsMobile } from "@/hooks/useIsMobile";
-import { BottomSheet, Modal } from "@/components/ui";
+import { ResponsiveOverlay } from "@/components/ui";
 import MagnifierGallery from "./MagnifierGallery";
 import ThreeDViewer from "./ThreeDViewer";
 
@@ -38,6 +37,7 @@ function InspectContent({
           fallbackIcon={product.icon}
           onInspectStart={onInspectStart}
           onInspectEnd={onInspectEnd}
+          galleryBleed
         />
       )}
     </>
@@ -49,7 +49,6 @@ export default function CollectibleInspectModal({
   open,
   onClose,
 }: CollectibleInspectModalProps) {
-  const isMobile = useIsMobile();
   const { startInspecting, stopInspecting } = useInspectTracking();
 
   useEffect(() => {
@@ -57,25 +56,18 @@ export default function CollectibleInspectModal({
     else stopInspecting();
   }, [open, startInspecting, stopInspecting]);
 
-  const content = (
-    <InspectContent
-      product={product}
-      onInspectStart={startInspecting}
-      onInspectEnd={stopInspecting}
-    />
-  );
-
-  if (isMobile) {
-    return (
-      <BottomSheet open={open} onClose={onClose} accent="wine" title={product.name}>
-        {content}
-      </BottomSheet>
-    );
-  }
-
   return (
-    <Modal open={open} onClose={onClose} accent="wine">
-      {content}
-    </Modal>
+    <ResponsiveOverlay
+      open={open}
+      onClose={onClose}
+      accent="wine"
+      title={product.name}
+    >
+      <InspectContent
+        product={product}
+        onInspectStart={startInspecting}
+        onInspectEnd={stopInspecting}
+      />
+    </ResponsiveOverlay>
   );
 }

@@ -49,16 +49,16 @@ export default function ChamberPickerStep() {
     const Icon = chamber.icon;
 
     return (
-      <div key={chamber.id} className="flex items-stretch gap-1">
+      <div key={chamber.id} className="flex min-w-0 items-stretch gap-1">
         <OptionTile
           selected={selected}
           accent={chamber.accent}
           layout="row"
-          className="flex-1"
+          className="min-w-0 flex-1"
           onClick={() => toggleFavorite(chamber.id)}
         >
           <Icon className={cn("h-4 w-4 shrink-0", accentStyles[chamber.accent].text)} />
-          <span className="text-xs font-medium">{chamber.title}</span>
+          <span className="min-w-0 truncate text-xs font-medium">{chamber.title}</span>
         </OptionTile>
         <div className="flex flex-col gap-0.5">
           <button

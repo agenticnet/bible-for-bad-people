@@ -31,7 +31,7 @@ export default function PageShell({
         </BindingBar>
       )}
       <div
-        className={`mx-auto px-4 py-8 sm:px-6 sm:py-12 ${maxWidthClass[maxWidth]}${className ? ` ${className}` : ""}`}
+        className={`mx-auto min-w-0 overflow-x-clip px-4 py-8 sm:px-6 sm:py-12 ${maxWidthClass[maxWidth]}${className ? ` ${className}` : ""}`}
       >
         {children}
       </div>

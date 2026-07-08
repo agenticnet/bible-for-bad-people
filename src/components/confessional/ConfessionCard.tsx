@@ -52,10 +52,10 @@ export default function ConfessionCard({
         <Badge tone={verdictTones[verdict]}>{verdictLabels[verdict]}</Badge>
       </div>
 
-      <p className="mb-4 text-sm leading-relaxed text-ink">{confession.content}</p>
+      <p className="text-contain mb-4 text-sm leading-relaxed text-ink">{confession.content}</p>
 
-      <div className="flex items-center justify-between gap-4 border-t border-rule pt-4">
-        <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-y-2 gap-x-4 border-t border-rule pt-4">
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             variant={userVote === "absolve" ? "success" : "ghost"}
             accent="wine"
@@ -83,7 +83,7 @@ export default function ConfessionCard({
             <span className="font-mono text-xs">{confession.condemnVotes}</span>
           </Button>
         </div>
-        <div className="text-right">
+        <div className="w-full text-right sm:w-auto">
           <p className="font-mono text-sm font-bold text-plum">
             {score > 0 ? "+" : ""}
             {score}

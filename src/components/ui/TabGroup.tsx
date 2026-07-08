@@ -36,7 +36,7 @@ export default function TabGroup({
   return (
     <nav
       className={cn(
-        "relative flex gap-1 overflow-x-auto rounded-xl border border-rule bg-page p-1",
+        "relative flex gap-1 overflow-x-auto overscroll-x-contain rounded-xl border border-rule bg-page p-1",
         className
       )}
       role="tablist"
@@ -68,8 +68,10 @@ export default function TabGroup({
               />
             )}
             <span className="relative z-10 flex items-center gap-2">
-              {Icon && <Icon className="h-4 w-4" />}
-              {tab.label}
+              {Icon && <Icon className="h-4 w-4 shrink-0" />}
+              <span className={cn(size === "sm" && tabs.length > 4 && "max-w-[5.5rem] truncate sm:max-w-none")}>
+                {tab.label}
+              </span>
             </span>
           </button>
         );

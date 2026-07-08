@@ -3,7 +3,7 @@
 import { useDropCountdown } from "@/lib/collectibles/useServerTime";
 import { useCollectiblesOptional } from "./CollectiblesProvider";
 import { INDULGENCE_PRODUCTS } from "@/lib/indulgenceProducts";
-import { Badge } from "@/components/ui";
+import { Badge, FixedBottomBar } from "@/components/ui";
 import { Z_DROP } from "@/lib/ux/constraints";
 import { cn } from "@/lib/utils";
 
@@ -34,39 +34,36 @@ export default function DropTimer({ className }: DropTimerProps) {
   const product = INDULGENCE_PRODUCTS.find((p) => p.id === activeDrop.productId);
 
   return (
-    <div
-      className={cn(
-        "fixed inset-x-0 bottom-0 border-t border-rule bg-binding/95 px-4 py-3 backdrop-blur-sm",
-        Z_DROP,
-        className
-      )}
+    <FixedBottomBar
+      variant="binding"
+      zIndex={Z_DROP}
+      className={className}
+      innerClassName="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
     >
-      <div className="mx-auto flex max-w-4xl flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Badge tone={countdown.isEndingSoon ? "warning" : "wine"} size="sm">
-            Timed Drop
-          </Badge>
-          <span className="text-sm font-medium text-ivory">
-            {product?.name ?? activeDrop.productId}
-          </span>
-        </div>
-        <div className="flex items-center gap-3">
-          <span
-            className={cn(
-              "verse-ref text-ink-soft",
-              countdown.phase === "upcoming" && "text-ink-soft",
-              countdown.isEndingSoon && "text-warning"
-            )}
-          >
-            {countdown.label}
-          </span>
-          <span className="verse-ref font-mono text-lg tabular-nums text-ivory">
-            {pad(countdown.days)}:{pad(countdown.hours)}:{pad(countdown.minutes)}:
-            {pad(countdown.seconds)}
-          </span>
-        </div>
+      <div className="flex min-w-0 items-center gap-2">
+        <Badge tone={countdown.isEndingSoon ? "warning" : "wine"} size="sm">
+          Timed Drop
+        </Badge>
+        <span className="truncate text-sm font-medium text-ivory">
+          {product?.name ?? activeDrop.productId}
+        </span>
       </div>
-    </div>
+      <div className="flex shrink-0 items-center gap-3">
+        <span
+          className={cn(
+            "verse-ref text-ink-soft",
+            countdown.phase === "upcoming" && "text-ink-soft",
+            countdown.isEndingSoon && "text-warning"
+          )}
+        >
+          {countdown.label}
+        </span>
+        <span className="verse-ref font-mono text-base tabular-nums text-ivory sm:text-lg">
+          {pad(countdown.days)}:{pad(countdown.hours)}:{pad(countdown.minutes)}:
+          {pad(countdown.seconds)}
+        </span>
+      </div>
+    </FixedBottomBar>
   );
 }
 

@@ -157,7 +157,7 @@ export default function SmiteButtonApp() {
 
         <section className="mb-8">
           <h2 className="verse-ref mb-3 text-ink-soft">Select Target</h2>
-          <div className="grid grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
             {TARGETS.filter((t) => t !== "custom").map((t) => (
               <OptionTile
                 key={t}
@@ -166,7 +166,7 @@ export default function SmiteButtonApp() {
                 onClick={() => setTarget(t)}
               >
                 <span className="text-2xl">{TARGET_ICONS[t]}</span>
-                <span className="verse-ref leading-tight sm:text-xs">
+                <span className="verse-ref min-w-0 text-center leading-tight sm:text-xs">
                   {TARGET_LABELS[t]}
                 </span>
               </OptionTile>

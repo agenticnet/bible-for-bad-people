@@ -65,7 +65,7 @@ export default function MessageBubble({
         {label && (
           <p className={cn("verse-ref mb-1", accentStyles[accent].text)}>{label}</p>
         )}
-        <p className="text-sm leading-relaxed text-ink sm:text-base">{content}</p>
+        <p className="text-contain text-sm leading-relaxed text-ink sm:text-base">{content}</p>
         <p className="mt-2 text-[10px] text-ink-soft">
           {timestamp.toLocaleTimeString([], {
             hour: "2-digit",

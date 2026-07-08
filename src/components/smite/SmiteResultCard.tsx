@@ -12,7 +12,7 @@ export default function SmiteResultCard({ record }: SmiteResultCardProps) {
   return (
     <Surface as="article" accent="ember" accentTint>
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className={cn("font-mono text-xs", accentStyles.ember.text)}>
+        <span className={cn("mono-contain font-mono text-xs", accentStyles.ember.text)}>
           {record.id}
         </span>
         {record.tier === "premium" && (
@@ -30,11 +30,11 @@ export default function SmiteResultCard({ record }: SmiteResultCardProps) {
         </span>
       </div>
 
-      <div className="mb-3 flex items-center gap-3">
+      <div className="mb-3 flex flex-wrap items-center gap-3">
         <span className="text-2xl">{TARGET_ICONS[record.target]}</span>
         <span className="text-ink-soft">→</span>
         <span className="text-2xl">{PLAGUE_ICONS[record.plague]}</span>
-        <span className="text-sm text-ink">
+        <span className="text-contain min-w-0 text-sm text-ink">
           {record.targetLabel} · {PLAGUE_LABELS[record.plague]}
         </span>
       </div>

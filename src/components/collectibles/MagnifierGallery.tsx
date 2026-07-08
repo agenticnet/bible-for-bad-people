@@ -12,6 +12,7 @@ interface MagnifierGalleryProps {
   fallbackIcon: string;
   onInspectStart?: () => void;
   onInspectEnd?: () => void;
+  galleryBleed?: boolean;
 }
 
 export default function MagnifierGallery({
@@ -19,6 +20,7 @@ export default function MagnifierGallery({
   fallbackIcon,
   onInspectStart,
   onInspectEnd,
+  galleryBleed = false,
 }: MagnifierGalleryProps) {
   const isMobile = useIsMobile();
 
@@ -27,6 +29,7 @@ export default function MagnifierGallery({
       <SwipeGallery
         assets={assets}
         fallbackIcon={fallbackIcon}
+        bleed={galleryBleed}
       />
     );
   }
