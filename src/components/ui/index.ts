@@ -23,6 +23,14 @@ export { default as VisionsBadge } from "./VisionsBadge";
 export { default as LinkButton } from "./LinkButton";
 export { default as OnboardingProgress, ONBOARDING_STEPS } from "./OnboardingProgress";
 export type { OnboardingStep } from "./OnboardingProgress";
+export { default as Wizard } from "./Wizard";
+export type { WizardStep } from "./Wizard";
+export { default as Disclosure } from "./Disclosure";
+export { default as FormActions } from "./FormActions";
+export { default as ProgressBar } from "./ProgressBar";
+export { default as FeaturedCard } from "./FeaturedCard";
+export { default as PendingTasks } from "./PendingTasks";
+export { default as SuccessMoment } from "./SuccessMoment";
 export { default as ChatAvatar } from "./ChatAvatar";
 export { default as MessageBubble } from "./MessageBubble";
 export { default as TypingIndicator } from "./TypingIndicator";
@@ -33,6 +41,7 @@ export {
   inputBase,
   statusStyles,
   surfaceBase,
+  featuredStyles,
   type Accent,
   type SemanticStatus,
 } from "./tokens";

@@ -150,3 +150,10 @@ export const calloutStatusStyles: Record<SemanticStatus, string> = {
   neutral:
     "rounded-lg border border-rule bg-smoke px-4 py-3 text-ink-soft",
 };
+
+/** Von Restorff — featured / recommended tier isolation */
+export const featuredStyles = {
+  base: "border-wine/50 bg-wine/5 shadow-[0_8px_30px_oklch(0.22_0.025_265/0.12)]",
+  hero: "border-wine/60 bg-wine/8 z-10 scale-105 motion-reduce:scale-100",
+  ribbon: "bg-wine text-parchment",
+} as const;

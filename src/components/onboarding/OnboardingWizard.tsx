@@ -2,12 +2,15 @@
 
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useOnboardingDraft } from "@/components/auth/OnboardingDraftProvider";
+import { computeOnboardingPercent } from "@/lib/ux/pendingTasks";
 import {
   BackLink,
-  Button,
+  FormActions,
   OnboardingProgress,
   ONBOARDING_STEPS,
   PageShell,
+  Wizard,
 } from "@/components/ui";
 import OnboardingPreviewPanel from "./OnboardingPreviewPanel";
 import ChamberPickerStep from "./steps/ChamberPickerStep";
@@ -30,9 +33,10 @@ export default function OnboardingWizard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { profile } = useAuth();
+  const { draft } = useOnboardingDraft();
 
   const phase = parsePhase(searchParams.get("step"));
-  const progressActive = phase === "claim" ? 2 : 1;
+  const phaseIndex = PHASE_ORDER.indexOf(phase);
 
   function goToPhase(next: WizardPhase) {
     const query = next === "chambers" ? "/onboarding" : `/onboarding?step=${next}`;
@@ -52,7 +56,7 @@ export default function OnboardingWizard() {
     );
   }
 
-  const phaseIndex = PHASE_ORDER.indexOf(phase);
+  const draftPercent = computeOnboardingPercent(profile, draft);
 
   return (
     <PageShell maxWidth="lg">
@@ -66,46 +70,41 @@ export default function OnboardingWizard() {
           </p>
         </div>
 
-        <OnboardingProgress
+        <Wizard
           steps={ONBOARDING_STEPS}
-          activeStep={progressActive}
-          className="mb-10"
-        />
+          activeStep={phaseIndex}
+          progressSlot={
+            <OnboardingProgress
+              steps={ONBOARDING_STEPS}
+              activeStep={phaseIndex}
+              percent={draftPercent}
+              className="mb-10"
+            />
+          }
+        >
+          <div className="grid gap-10 lg:grid-cols-[1fr_280px]">
+            <div>
+              {phase === "chambers" && <ChamberPickerStep />}
+              {phase === "prefs" && <AccentNotificationStep />}
+              {phase === "identity" && <IdentityStarterStep />}
+              {phase === "claim" && <ClaimLedgerStep />}
 
-        <div className="grid gap-10 lg:grid-cols-[1fr_280px]">
-          <div>
-            {phase === "chambers" && <ChamberPickerStep />}
-            {phase === "prefs" && <AccentNotificationStep />}
-            {phase === "identity" && <IdentityStarterStep />}
-            {phase === "claim" && <ClaimLedgerStep />}
+              {phase !== "claim" && (
+                <FormActions
+                  primaryLabel="Continue"
+                  onPrimary={() => goToPhase(PHASE_ORDER[phaseIndex + 1]!)}
+                  onBack={
+                    phaseIndex > 0
+                      ? () => goToPhase(PHASE_ORDER[phaseIndex - 1]!)
+                      : undefined
+                  }
+                />
+              )}
+            </div>
 
-            {phase !== "claim" && (
-              <div className="mt-8 flex justify-between gap-3">
-                {phaseIndex > 0 ? (
-                  <Button
-                    type="button"
-                    variant="ghost"
-                    accent="wine"
-                    onClick={() => goToPhase(PHASE_ORDER[phaseIndex - 1]!)}
-                  >
-                    Back
-                  </Button>
-                ) : (
-                  <span />
-                )}
-                <Button
-                  type="button"
-                  accent="wine"
-                  onClick={() => goToPhase(PHASE_ORDER[phaseIndex + 1]!)}
-                >
-                  Continue
-                </Button>
-              </div>
-            )}
+            <OnboardingPreviewPanel />
           </div>
-
-          <OnboardingPreviewPanel />
-        </div>
+        </Wizard>
       </div>
     </PageShell>
   );

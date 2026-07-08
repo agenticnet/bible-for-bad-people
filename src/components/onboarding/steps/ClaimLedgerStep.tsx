@@ -10,7 +10,7 @@ import { starterPackCopy } from "@/lib/auth/upsellCopy";
 import { isValidUsername, normalizeUsername } from "@/lib/auth/types";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useOnboardingDraft } from "@/components/auth/OnboardingDraftProvider";
-import { Button, Input, Label, SectionHeader } from "@/components/ui";
+import { Button, FormActions, Input, Label, SectionHeader, SuccessMoment } from "@/components/ui";
 
 export default function ClaimLedgerStep() {
   const router = useRouter();
@@ -23,6 +23,7 @@ export default function ClaimLedgerStep() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [claimed, setClaimed] = useState(false);
 
   async function finishProfile() {
     const normalized = normalizeUsername(draft.username);
@@ -40,9 +41,13 @@ export default function ClaimLedgerStep() {
 
     clearOnboardingDraft();
     await refreshProfile();
+    setClaimed(true);
+    return true;
+  }
+
+  function handleSuccessDismiss() {
     router.push(next);
     router.refresh();
-    return true;
   }
 
   async function handleEmailSignup(e: React.FormEvent) {
@@ -101,6 +106,17 @@ export default function ClaimLedgerStep() {
     if (!ok) return;
   }
 
+  if (claimed) {
+    return (
+      <SuccessMoment
+        title="Ledger claimed!"
+        description="Your salvation dashboard is ready. Welcome to the fold."
+        autoDismissMs={2500}
+        onDismiss={handleSuccessDismiss}
+      />
+    );
+  }
+
   return (
     <div>
       <SectionHeader
@@ -115,12 +131,21 @@ export default function ClaimLedgerStep() {
       </p>
 
       {user ? (
-        <Button accent="wine" onClick={() => void handleExistingUser()} disabled={loading}>
-          {loading ? "Claiming..." : "Claim Your Ledger"}
-        </Button>
+        <FormActions
+          primaryLabel={loading ? "Claiming..." : "Claim Your Ledger"}
+          onPrimary={() => void handleExistingUser()}
+          primaryDisabled={loading}
+        />
       ) : (
         <div className="flex flex-col gap-4">
-          <Button type="button" accent="wine" onClick={handleGoogle} disabled={loading}>
+          <Button
+            type="button"
+            size="lg"
+            accent="wine"
+            className="w-full sm:ml-auto sm:w-auto"
+            onClick={handleGoogle}
+            disabled={loading}
+          >
             Continue with Google
           </Button>
           <form onSubmit={handleEmailSignup} className="flex flex-col gap-3">
@@ -148,9 +173,11 @@ export default function ClaimLedgerStep() {
               />
             </div>
             {error && <p className="text-sm text-ember">{error}</p>}
-            <Button type="submit" accent="wine" disabled={loading}>
-              {loading ? "Creating ledger..." : "Claim Your Ledger"}
-            </Button>
+            <FormActions
+              primaryLabel={loading ? "Creating ledger..." : "Claim Your Ledger"}
+              primaryType="submit"
+              primaryDisabled={loading}
+            />
           </form>
         </div>
       )}

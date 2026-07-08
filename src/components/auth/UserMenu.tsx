@@ -3,15 +3,20 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { LogOut, User } from "lucide-react";
+import { LogOut, Settings, User } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useOnboardingDraft } from "@/components/auth/OnboardingDraftProvider";
+import { getPendingTasks } from "@/lib/ux/pendingTasks";
 import { createClient } from "@/lib/supabase/client";
 
 export default function UserMenu() {
   const { user, profile, isLoading } = useAuth();
+  const { draft } = useOnboardingDraft();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
+
+  const pendingCount = getPendingTasks(profile, draft).length;
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -37,16 +42,16 @@ export default function UserMenu() {
 
   if (!user) {
     return (
-      <div className="hidden items-center gap-2 md:flex">
+      <div className="flex items-center gap-2">
         <Link
           href="/login"
-          className="rounded-sm px-3 py-1.5 text-sm text-binding-muted transition-colors hover:text-binding-ivory"
+          className="rounded-sm px-2 py-1.5 text-xs text-binding-muted transition-colors hover:text-binding-ivory sm:px-3 sm:text-sm"
         >
           Log In
         </Link>
         <Link
           href="/signup"
-          className="rounded-sm border border-ivory/20 px-3 py-1.5 text-sm text-binding-ivory transition-colors hover:border-ivory/35"
+          className="rounded-sm border border-ivory/20 px-2 py-1.5 text-xs text-binding-ivory transition-colors hover:border-ivory/35 sm:px-3 sm:text-sm"
         >
           Sign Up
         </Link>
@@ -55,19 +60,28 @@ export default function UserMenu() {
   }
 
   const initial = (profile?.username ?? user.email ?? "?")[0]?.toUpperCase();
+  const settingsHref = profile
+    ? `/onboarding?step=prefs`
+    : "/onboarding";
 
   return (
-    <div className="relative hidden md:block" ref={menuRef}>
+    <div className="relative" ref={menuRef}>
       <button
         type="button"
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 rounded-sm border border-ivory/15 px-2 py-1.5 text-sm text-binding-ivory transition-colors hover:border-ivory/30"
+        className="relative flex items-center gap-2 rounded-sm border border-ivory/15 px-2 py-1.5 text-sm text-binding-ivory transition-colors hover:border-ivory/30"
         aria-expanded={open}
       >
-        <span className="flex h-7 w-7 items-center justify-center rounded-full bg-wine/20 text-xs font-semibold text-wine">
+        <span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-wine/20 text-xs font-semibold text-wine">
           {initial}
+          {pendingCount > 0 && (
+            <span
+              className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border border-binding bg-wine"
+              aria-label={`${pendingCount} pending setup tasks`}
+            />
+          )}
         </span>
-        <span className="max-w-[8rem] truncate">
+        <span className="hidden max-w-[8rem] truncate sm:inline">
           {profile ? `u/${profile.username}` : "Set username"}
         </span>
       </button>
@@ -93,6 +107,14 @@ export default function UserMenu() {
               Finish your ledger
             </Link>
           )}
+          <Link
+            href={settingsHref}
+            className="flex items-center gap-2 px-3 py-2 text-sm text-binding-muted hover:bg-ivory/5 hover:text-binding-ivory"
+            onClick={() => setOpen(false)}
+          >
+            <Settings className="h-4 w-4" />
+            Settings
+          </Link>
           <button
             type="button"
             onClick={handleSignOut}

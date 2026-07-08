@@ -4,6 +4,7 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { accentStyles } from "./tokens";
+import ProgressBar from "./ProgressBar";
 
 export interface OnboardingStep {
   id: string;
@@ -14,33 +15,36 @@ export interface OnboardingStep {
 interface OnboardingProgressProps {
   steps: OnboardingStep[];
   activeStep: number;
+  percent?: number;
   className?: string;
 }
 
 export default function OnboardingProgress({
   steps,
   activeStep,
+  percent,
   className,
 }: OnboardingProgressProps) {
   const reducedMotion = useReducedMotion();
   const completedCount = steps.filter((_, i) => i < activeStep).length;
-  const progressPercent = Math.round((completedCount / steps.length) * 100);
+  const stepPercent = Math.round((completedCount / steps.length) * 100);
+  const progressPercent = percent ?? stepPercent;
 
   return (
     <div className={cn("w-full", className)}>
-      <div className="mb-3 flex items-center justify-between">
-        <p className="verse-ref text-ink-soft">Ledger assembly</p>
-        <p className="verse-ref text-wine">{progressPercent}% assembled</p>
-      </div>
+      <ProgressBar
+        percent={progressPercent}
+        label="Ledger assembly"
+        showPercent
+        className="mb-6"
+      />
 
-      <div className="mb-6 h-1.5 overflow-hidden rounded-full bg-rule">
-        <div
-          className="h-full rounded-full bg-wine transition-all duration-500"
-          style={{ width: `${Math.max(progressPercent, 33)}%` }}
-        />
-      </div>
-
-      <ol className="grid gap-3 sm:grid-cols-3">
+      <ol
+        className={cn(
+          "grid gap-3",
+          steps.length <= 3 ? "sm:grid-cols-3" : "sm:grid-cols-2 lg:grid-cols-4"
+        )}
+      >
         {steps.map((step, index) => {
           const isComplete = index < activeStep;
           const isActive = index === activeStep;
@@ -94,18 +98,23 @@ export default function OnboardingProgress({
 
 export const ONBOARDING_STEPS: OnboardingStep[] = [
   {
-    id: "access",
-    label: "Chamber Access",
-    description: "All nine chambers unlocked. You're already in.",
+    id: "chambers",
+    label: "Pin Chambers",
+    description: "Favorite and reorder your home grid.",
   },
   {
-    id: "build",
-    label: "Build Your Ledger",
-    description: "Pick chambers, accents, and alerts.",
+    id: "prefs",
+    label: "Accent & Alerts",
+    description: "Binding color and notification defaults.",
+  },
+  {
+    id: "identity",
+    label: "Your Identity",
+    description: "Display name, username, starter pack.",
   },
   {
     id: "claim",
-    label: "Claim Your Salvation",
+    label: "Claim Ledger",
     description: "Name yourself. Keep what you built.",
   },
 ];

@@ -18,7 +18,15 @@ import {
   RevealAnimation,
   useCollectiblesOptional,
 } from "@/components/collectibles";
-import { Badge, Button, Modal, Surface } from "@/components/ui";
+import {
+  Badge,
+  Button,
+  FeaturedCard,
+  FormActions,
+  Modal,
+  SuccessMoment,
+  Surface,
+} from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +35,8 @@ interface ProductCardProps {
   onPurchased: () => void;
   displayName: string;
   showContrast?: boolean;
+  featured?: boolean;
+  hero?: boolean;
 }
 
 const tierAccents = {
@@ -44,6 +54,8 @@ export default function ProductCard({
   onPurchased,
   displayName,
   showContrast = true,
+  featured = false,
+  hero = false,
 }: ProductCardProps) {
   const { user } = useAuth();
   const { openSignUp } = useAuthModal();
@@ -123,57 +135,67 @@ export default function ProductCard({
     setShowModal(true);
   }
 
+  const card = (
+    <Surface
+      as="article"
+      accent={accent}
+      className={cn(
+        "flex h-full flex-col",
+        accent && accentStyles[accent].borderHover,
+        hero && "pt-2"
+      )}
+    >
+      <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
+        <span className="text-3xl">{product.icon}</span>
+        <div className="flex flex-wrap gap-1.5">
+          <InventoryCounter productId={product.id} />
+          {product.tier === "ultimate" && <Badge tone="plum">Ultimate</Badge>}
+          {product.pricingTier === "recommended" && !hero && (
+            <Badge tone="wine">Popular</Badge>
+          )}
+          {product.isMysteryPack && <Badge tone="plum">Mystery</Badge>}
+        </div>
+      </div>
+
+      <CartPressureIndicator productId={product.id} />
+
+      <h3 className="mb-1 font-semibold text-ink">{product.name}</h3>
+      <p className="mb-3 text-xs text-wine">{product.tagline}</p>
+      <p className="mb-4 flex-1 text-sm leading-relaxed text-ink-soft">
+        {product.description}
+      </p>
+      {product.leaderboardBoost && (
+        <p className="verse-ref mb-3 text-slate">
+          +{product.leaderboardBoost} Salvation Score
+        </p>
+      )}
+      <div className="flex items-end justify-between gap-3">
+        <AnchoredPrice product={product} />
+        <div className="flex shrink-0 flex-col gap-2">
+          <Button accent="wine" variant="ghost" size="sm" onClick={() => setShowInspect(true)}>
+            <Eye className="h-4 w-4" />
+            Inspect
+          </Button>
+          <Button
+            accent="wine"
+            size="lg"
+            className="w-full min-w-[7rem]"
+            onClick={handleBuyClick}
+            disabled={cannotBuy}
+          >
+            <ShoppingCart className="h-4 w-4" />
+            {soldOut ? "Sold Out" : dropBlocked ? "Unavailable" : "Buy"}
+          </Button>
+        </div>
+      </div>
+    </Surface>
+  );
+
   return (
     <>
-      <Surface
-        as="article"
-        accent={accent}
-        className={cn(
-          "flex flex-col",
-          accent && accentStyles[accent].borderHover
-        )}
-      >
-        <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
-          <span className="text-3xl">{product.icon}</span>
-          <div className="flex flex-wrap gap-1.5">
-            <InventoryCounter productId={product.id} />
-            {product.tier === "ultimate" && <Badge tone="plum">Ultimate</Badge>}
-            {product.pricingTier === "recommended" && <Badge tone="wine">Popular</Badge>}
-            {product.isMysteryPack && <Badge tone="plum">Mystery</Badge>}
-          </div>
-        </div>
-
-        <CartPressureIndicator productId={product.id} />
-
-        <h3 className="mb-1 font-semibold text-ink">{product.name}</h3>
-        <p className="mb-3 text-xs text-wine">{product.tagline}</p>
-        <p className="mb-4 flex-1 text-sm leading-relaxed text-ink-soft">
-          {product.description}
-        </p>
-        {product.leaderboardBoost && (
-          <p className="verse-ref mb-3 text-slate">
-            +{product.leaderboardBoost} Salvation Score
-          </p>
-        )}
-        <div className="flex items-end justify-between gap-3">
-          <AnchoredPrice product={product} />
-          <div className="flex shrink-0 flex-col gap-2">
-            <Button accent="wine" variant="ghost" size="sm" onClick={() => setShowInspect(true)}>
-              <Eye className="h-4 w-4" />
-              Inspect
-            </Button>
-            <Button
-              accent="wine"
-              size="sm"
-              onClick={handleBuyClick}
-              disabled={cannotBuy}
-            >
-              <ShoppingCart className="h-4 w-4" />
-              {soldOut ? "Sold Out" : dropBlocked ? "Unavailable" : "Buy"}
-            </Button>
-          </div>
-        </div>
-      </Surface>
+      <FeaturedCard featured={featured} hero={hero}>
+        {card}
+      </FeaturedCard>
 
       <CollectibleInspectModal
         product={product}
@@ -248,25 +270,22 @@ export default function ProductCard({
             <p className="mb-6 text-sm text-ink-soft">
               No real payment processed. Purchasing as {displayName || "you"}.
             </p>
-            <Button
-              accent="wine"
-              className="w-full py-3"
-              onClick={handlePurchase}
-              disabled={processing || cannotBuy}
-            >
-              {processing
-                ? "Processing divine transaction..."
-                : "Confirm Mock Purchase"}
-            </Button>
+            <FormActions
+              primaryLabel={
+                processing
+                  ? "Processing divine transaction..."
+                  : "Confirm Mock Purchase"
+              }
+              onPrimary={() => void handlePurchase()}
+              primaryDisabled={processing || cannotBuy}
+            />
           </>
         ) : (
-          <div className="py-6 text-center">
-            <span className="mb-4 block text-5xl">{product.icon}</span>
-            <p className="mb-2 text-lg font-bold text-wine">Purchase Complete!</p>
-            <p className="text-sm text-ink-soft">
-              Certificate added to your vault. Salvation score updated.
-            </p>
-          </div>
+          <SuccessMoment
+            title="Purchase Complete!"
+            description="Certificate added to your vault. Salvation score updated."
+            icon={<span className="text-3xl">{product.icon}</span>}
+          />
         )}
       </Modal>
     </>

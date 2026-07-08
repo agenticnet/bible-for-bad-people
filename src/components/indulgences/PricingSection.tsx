@@ -2,8 +2,9 @@
 
 import type { IndulgenceProduct } from "@/lib/indulgenceTypes";
 import ProductCard from "@/components/indulgences/ProductCard";
-import { SectionHeader, Surface } from "@/components/ui";
+import { Disclosure, SectionHeader, Surface } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
+import { MAX_PRIMARY_OPTIONS } from "@/lib/ux/constraints";
 import { cn } from "@/lib/utils";
 
 export type PricingTier = "anchor" | "recommended" | "everyday" | "subscription";
@@ -49,6 +50,31 @@ export default function PricingSection({
   variant = "everyday",
 }: PricingSectionProps) {
   const styles = variantStyles[variant];
+  const isRecommended = variant === "recommended";
+  const heroIndex = Math.floor(products.length / 2);
+
+  const primaryProducts =
+    variant === "everyday" && products.length > MAX_PRIMARY_OPTIONS
+      ? products.slice(0, MAX_PRIMARY_OPTIONS)
+      : products;
+  const overflowProducts =
+    variant === "everyday" && products.length > MAX_PRIMARY_OPTIONS
+      ? products.slice(MAX_PRIMARY_OPTIONS)
+      : [];
+
+  function renderCard(product: PricedProduct, index: number) {
+    return (
+      <ProductCard
+        key={product.id}
+        product={product}
+        displayName={displayName}
+        onPurchased={onPurchased}
+        showContrast={variant !== "anchor"}
+        featured={isRecommended}
+        hero={isRecommended && index === heroIndex}
+      />
+    );
+  }
 
   return (
     <section className="mb-10">
@@ -70,19 +96,26 @@ export default function PricingSection({
       <div
         className={cn(
           "grid gap-4",
-          variant === "anchor" ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3"
+          variant === "anchor" ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3",
+          isRecommended && "items-center py-2"
         )}
       >
-        {products.map((product) => (
-          <ProductCard
-            key={product.id}
-            product={product}
-            displayName={displayName}
-            onPurchased={onPurchased}
-            showContrast={variant !== "anchor"}
-          />
-        ))}
+        {primaryProducts.map((product, index) => renderCard(product, index))}
       </div>
+
+      {overflowProducts.length > 0 && (
+        <Disclosure
+          label="More indulgences"
+          summary={`${overflowProducts.length} additional options`}
+          className="mt-4"
+        >
+          <div className="grid gap-4 sm:grid-cols-2">
+            {overflowProducts.map((product, index) =>
+              renderCard(product, index + primaryProducts.length)
+            )}
+          </div>
+        </Disclosure>
+      )}
     </section>
   );
 }
