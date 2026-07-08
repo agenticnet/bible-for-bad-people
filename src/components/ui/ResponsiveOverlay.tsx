@@ -13,6 +13,8 @@ interface ResponsiveOverlayProps {
   children: React.ReactNode;
   className?: string;
   closeDisabled?: boolean;
+  /** Mobile bottom sheet snap height */
+  snapHeight?: string;
 }
 
 export default function ResponsiveOverlay({
@@ -23,6 +25,7 @@ export default function ResponsiveOverlay({
   children,
   className,
   closeDisabled = false,
+  snapHeight,
 }: ResponsiveOverlayProps) {
   const isMobile = useIsMobile();
 
@@ -35,6 +38,7 @@ export default function ResponsiveOverlay({
         title={title}
         className={className}
         closeDisabled={closeDisabled}
+        snapHeight={snapHeight}
       >
         {children}
       </BottomSheet>

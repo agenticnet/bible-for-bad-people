@@ -4,7 +4,7 @@ import { useDropCountdown } from "@/lib/collectibles/useServerTime";
 import { useCollectiblesOptional } from "./CollectiblesProvider";
 import { INDULGENCE_PRODUCTS } from "@/lib/indulgenceProducts";
 import { Badge, FixedBottomBar } from "@/components/ui";
-import { Z_DROP } from "@/lib/ux/constraints";
+import { FIXED_CHROME_SPACER_HEIGHT, Z_DROP } from "@/lib/ux/constraints";
 import { cn } from "@/lib/utils";
 
 interface DropTimerProps {
@@ -34,12 +34,14 @@ export default function DropTimer({ className }: DropTimerProps) {
   const product = INDULGENCE_PRODUCTS.find((p) => p.id === activeDrop.productId);
 
   return (
-    <FixedBottomBar
-      variant="binding"
-      zIndex={Z_DROP}
-      className={className}
-      innerClassName="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
-    >
+    <>
+      <div className={FIXED_CHROME_SPACER_HEIGHT} aria-hidden />
+      <FixedBottomBar
+        variant="binding"
+        zIndex={Z_DROP}
+        className={className}
+        innerClassName="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
+      >
       <div className="flex min-w-0 items-center gap-2">
         <Badge tone={countdown.isEndingSoon ? "warning" : "wine"} size="sm">
           Timed Drop
@@ -63,7 +65,8 @@ export default function DropTimer({ className }: DropTimerProps) {
           {pad(countdown.seconds)}
         </span>
       </div>
-    </FixedBottomBar>
+      </FixedBottomBar>
+    </>
   );
 }
 

@@ -13,6 +13,8 @@ export interface PricedProduct extends IndulgenceProduct {
   pricingTier: PricingTier;
 }
 
+export type SectionLayout = "full" | "wide" | "sidebar" | "anchor";
+
 interface PricingSectionProps {
   title: string;
   description?: string;
@@ -20,24 +22,36 @@ interface PricingSectionProps {
   displayName: string;
   onPurchased: () => void;
   variant?: "anchor" | "recommended" | "everyday" | "subscription";
+  layout?: SectionLayout;
 }
+
+const layoutGridClass: Record<SectionLayout, string> = {
+  anchor: "sm:grid-cols-2",
+  full: "sm:grid-cols-2 lg:grid-cols-3",
+  wide: "sm:grid-cols-2 lg:grid-cols-2",
+  sidebar: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-1",
+};
 
 const variantStyles = {
   anchor: {
     surface: "plum" as const,
     hint: "Reference pricing — for context, not your wallet.",
+    layout: "anchor" as const,
   },
   recommended: {
     surface: "wine" as const,
     hint: "Most sinners stop here.",
+    layout: "full" as const,
   },
   everyday: {
     surface: undefined,
     hint: undefined,
+    layout: "full" as const,
   },
   subscription: {
     surface: "slate" as const,
     hint: "Compare monthly peace of mind.",
+    layout: "sidebar" as const,
   },
 };
 
@@ -48,8 +62,10 @@ export default function PricingSection({
   displayName,
   onPurchased,
   variant = "everyday",
+  layout,
 }: PricingSectionProps) {
   const styles = variantStyles[variant];
+  const gridLayout = layout ?? styles.layout;
   const isRecommended = variant === "recommended";
   const heroIndex = Math.floor(products.length / 2);
 
@@ -96,7 +112,7 @@ export default function PricingSection({
       <div
         className={cn(
           "grid gap-4",
-          variant === "anchor" ? "sm:grid-cols-2" : "sm:grid-cols-2 lg:grid-cols-3",
+          layoutGridClass[gridLayout],
           isRecommended && "items-center py-2"
         )}
       >

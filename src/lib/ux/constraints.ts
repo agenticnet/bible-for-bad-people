@@ -4,8 +4,8 @@ export const MAX_PRIMARY_OPTIONS = 4;
 
 export const PRIMARY_CTA_MIN_HEIGHT = "min-h-11";
 
-/** Thumb-zone primary actions — 56px minimum touch target */
-export const THUMB_CTA_MIN_HEIGHT = "min-h-14";
+/** Thumb-zone on mobile; standard control height on desktop */
+export const THUMB_CTA_MIN_HEIGHT = "min-h-14 md:min-h-11";
 
 /** Bottom sheet default snap height */
 export const BOTTOM_SHEET_HEIGHT = "max-h-[60dvh]";
@@ -13,9 +13,23 @@ export const BOTTOM_SHEET_HEIGHT = "max-h-[60dvh]";
 /** Safe area padding for fixed bottom chrome */
 export const SAFE_BOTTOM = "pb-[max(1rem,env(safe-area-inset-bottom))]";
 
-/** Scroll clearance when fixed bottom chrome is present */
+/** Scroll clearance when fixed bottom chrome is present (mobile thumb zone) */
 export const CONTENT_PAD_BOTTOM =
-  "pb-[calc(5.5rem+env(safe-area-inset-bottom))]";
+  "max-md:pb-[calc(5.5rem+env(safe-area-inset-bottom))]";
+
+/** In-flow spacer matching fixed bottom chrome — pair with FixedBottomBar */
+export const FIXED_CHROME_SPACER_HEIGHT =
+  "h-[calc(4.5rem+env(safe-area-inset-bottom))]";
+
+/** Match PageShell maxWidth tokens for fixed chrome alignment */
+export const PAGE_CONTENT_MAX_WIDTH = {
+  md: "max-w-3xl",
+  lg: "max-w-5xl",
+  xl: "max-w-6xl",
+  full: "max-w-full",
+} as const;
+
+export type PageContentMaxWidth = keyof typeof PAGE_CONTENT_MAX_WIDTH;
 
 /** Align with Tailwind `md` (768px) — single source for JS media queries */
 export const MOBILE_BREAKPOINT = "(max-width: 767px)";

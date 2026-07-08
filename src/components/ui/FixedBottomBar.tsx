@@ -1,7 +1,11 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { SAFE_BOTTOM } from "@/lib/ux/constraints";
+import {
+  PAGE_CONTENT_MAX_WIDTH,
+  SAFE_BOTTOM,
+  type PageContentMaxWidth,
+} from "@/lib/ux/constraints";
 
 export type FixedBottomBarVariant = "binding" | "parchment";
 
@@ -14,6 +18,8 @@ interface FixedBottomBarProps {
   children: React.ReactNode;
   variant?: FixedBottomBarVariant;
   zIndex: string;
+  /** Align inner content with PageShell width */
+  contentMaxWidth?: PageContentMaxWidth;
   className?: string;
   innerClassName?: string;
 }
@@ -22,6 +28,7 @@ export default function FixedBottomBar({
   children,
   variant = "parchment",
   zIndex,
+  contentMaxWidth = "lg",
   className,
   innerClassName,
 }: FixedBottomBarProps) {
@@ -36,7 +43,11 @@ export default function FixedBottomBar({
       )}
     >
       <div
-        className={cn("mx-auto max-w-4xl px-4 py-3", innerClassName)}
+        className={cn(
+          "mx-auto px-4 py-3 sm:px-6",
+          PAGE_CONTENT_MAX_WIDTH[contentMaxWidth],
+          innerClassName
+        )}
       >
         {children}
       </div>

@@ -13,7 +13,7 @@ import {
   useCollectiblesOptional,
 } from "@/components/collectibles";
 import {
-  BottomSheet,
+  ResponsiveOverlay,
   SuccessMoment,
   Surface,
   THUMB_CTA_MIN_HEIGHT,
@@ -159,13 +159,14 @@ export default function CheckoutBottomSheet({
   );
 
   return (
-    <BottomSheet
+    <ResponsiveOverlay
       open={open}
       onClose={() => !processing && onClose()}
       accent="wine"
       title={`Checkout — ${product.name}`}
       closeDisabled={processing}
       snapHeight="max-h-[85dvh]"
+      className="md:max-w-lg"
     >
       {step === "anchor" && (
         <>
@@ -265,6 +266,6 @@ export default function CheckoutBottomSheet({
           )}
         </div>
       )}
-    </BottomSheet>
+    </ResponsiveOverlay>
   );
 }

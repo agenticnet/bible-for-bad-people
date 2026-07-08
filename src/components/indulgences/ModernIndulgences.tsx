@@ -20,7 +20,6 @@ import AuthGate from "@/components/auth/AuthGate";
 import { DropTimer } from "@/components/collectibles";
 import {
   ChamberHeader,
-  CONTENT_PAD_BOTTOM,
   EmptyState,
   MetricCard,
   PageShell,
@@ -123,7 +122,7 @@ export default function ModernIndulgences() {
       />
 
       {activeTab === "shop" && (
-        <div className={CONTENT_PAD_BOTTOM}>
+        <div>
           <PricingSection
             title="Premium Absolution (Anchor Pricing)"
             products={grouped.anchor}
@@ -138,13 +137,14 @@ export default function ModernIndulgences() {
             onPurchased={refreshProfile}
             variant="recommended"
           />
-          <div className="grid gap-10 lg:grid-cols-[2fr_1fr]">
+          <div className="grid min-w-0 items-start gap-10 lg:grid-cols-[2fr_1fr]">
             <PricingSection
               title="Everyday Absolution"
               products={grouped.everyday}
               displayName={displayName}
               onPurchased={refreshProfile}
               variant="everyday"
+              layout="wide"
             />
             <PricingSection
               title="Monthly Peace of Mind"
