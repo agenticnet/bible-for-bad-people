@@ -1,13 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
-import { ShoppingCart } from "lucide-react";
+import { Eye, ShoppingCart } from "lucide-react";
 import type { IndulgenceProduct } from "@/lib/indulgenceTypes";
 import { formatPrice, generateCertificateId, INDULGENCE_PRODUCTS } from "@/lib/indulgenceProducts";
 import { addIndulgencePurchase } from "@/lib/data/indulgences";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useAuthModal } from "@/components/auth/AuthModalProvider";
+import {
+  AnchoredPrice,
+  CartPressureIndicator,
+  CollectibleInspectModal,
+  InventoryCounter,
+  isDropUnavailable,
+  isProductSoldOut,
+  RevealAnimation,
+  useCollectiblesOptional,
+} from "@/components/collectibles";
 import { Badge, Button, Modal, Surface } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
@@ -38,15 +48,30 @@ export default function ProductCard({
   const { user } = useAuth();
   const { openSignUp } = useAuthModal();
   const pathname = usePathname();
+  const collectibles = useCollectiblesOptional();
   const [showModal, setShowModal] = useState(false);
+  const [showInspect, setShowInspect] = useState(false);
+  const [showReveal, setShowReveal] = useState(false);
   const [processing, setProcessing] = useState(false);
   const [success, setSuccess] = useState(false);
   const [addInsurance, setAddInsurance] = useState(false);
+  const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const accent = tierAccents[product.tier];
 
+  const soldOut = isProductSoldOut(product.id, collectibles);
+  const dropBlocked = isDropUnavailable(product.id, collectibles);
+  const cannotBuy = soldOut || !!dropBlocked;
+
+  useEffect(() => {
+    if (!showModal || !collectibles) return;
+    const cleanup = collectibles.registerCartInterest(product.id);
+    return cleanup;
+  }, [showModal, collectibles, product.id]);
+
   async function handlePurchase() {
-    if (processing || !user) return;
+    if (processing || !user || cannotBuy) return;
     setProcessing(true);
+    setPurchaseError(null);
 
     setTimeout(async () => {
       const result = await addIndulgencePurchase({
@@ -68,10 +93,14 @@ export default function ProductCard({
       }
 
       setProcessing(false);
-      if (result.error) return;
+      if (result.error) {
+        setPurchaseError(result.error);
+        return;
+      }
 
       setSuccess(true);
       onPurchased();
+      void collectibles?.refreshInventory();
 
       setTimeout(() => {
         setShowModal(false);
@@ -82,8 +111,13 @@ export default function ProductCard({
   }
 
   function handleBuyClick() {
+    if (cannotBuy) return;
     if (!user) {
       openSignUp("indulgences", pathname);
+      return;
+    }
+    if (product.isMysteryPack) {
+      setShowReveal(true);
       return;
     }
     setShowModal(true);
@@ -99,11 +133,18 @@ export default function ProductCard({
           accent && accentStyles[accent].borderHover
         )}
       >
-        <div className="mb-3 flex items-start justify-between">
+        <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
           <span className="text-3xl">{product.icon}</span>
-          {product.tier === "ultimate" && <Badge tone="plum">Ultimate</Badge>}
-          {product.pricingTier === "recommended" && <Badge tone="wine">Popular</Badge>}
+          <div className="flex flex-wrap gap-1.5">
+            <InventoryCounter productId={product.id} />
+            {product.tier === "ultimate" && <Badge tone="plum">Ultimate</Badge>}
+            {product.pricingTier === "recommended" && <Badge tone="wine">Popular</Badge>}
+            {product.isMysteryPack && <Badge tone="plum">Mystery</Badge>}
+          </div>
         </div>
+
+        <CartPressureIndicator productId={product.id} />
+
         <h3 className="mb-1 font-semibold text-ink">{product.name}</h3>
         <p className="mb-3 text-xs text-wine">{product.tagline}</p>
         <p className="mb-4 flex-1 text-sm leading-relaxed text-ink-soft">
@@ -114,16 +155,45 @@ export default function ProductCard({
             +{product.leaderboardBoost} Salvation Score
           </p>
         )}
-        <div className="flex items-center justify-between gap-3">
-          <span className="text-lg font-bold text-wine">
-            {formatPrice(product.price, product.priceLabel)}
-          </span>
-          <Button accent="wine" size="sm" onClick={handleBuyClick}>
-            <ShoppingCart className="h-4 w-4" />
-            Buy
-          </Button>
+        <div className="flex items-end justify-between gap-3">
+          <AnchoredPrice product={product} />
+          <div className="flex shrink-0 flex-col gap-2">
+            <Button accent="wine" variant="ghost" size="sm" onClick={() => setShowInspect(true)}>
+              <Eye className="h-4 w-4" />
+              Inspect
+            </Button>
+            <Button
+              accent="wine"
+              size="sm"
+              onClick={handleBuyClick}
+              disabled={cannotBuy}
+            >
+              <ShoppingCart className="h-4 w-4" />
+              {soldOut ? "Sold Out" : dropBlocked ? "Unavailable" : "Buy"}
+            </Button>
+          </div>
         </div>
       </Surface>
+
+      <CollectibleInspectModal
+        product={product}
+        open={showInspect}
+        onClose={() => setShowInspect(false)}
+      />
+
+      <RevealAnimation
+        product={product}
+        active={showReveal}
+        onComplete={() => {
+          setShowReveal(false);
+          onPurchased();
+          void collectibles?.refreshInventory();
+        }}
+        onError={(msg) => {
+          setShowReveal(false);
+          setPurchaseError(msg);
+        }}
+      />
 
       <Modal
         open={showModal}
@@ -146,9 +216,13 @@ export default function ProductCard({
               </p>
             )}
 
-            <p className="mb-6 text-2xl font-bold text-wine">
-              {formatPrice(product.price, product.priceLabel)}
-            </p>
+            <div className="mb-6">
+              <AnchoredPrice product={product} size="lg" />
+            </div>
+
+            {purchaseError && (
+              <p className="mb-4 text-sm text-ember">{purchaseError}</p>
+            )}
 
             {SOUL_INSURANCE && product.id !== SOUL_INSURANCE.id && (
               <Surface accent="slate" accentTint className="mb-6" padding="sm">
@@ -178,7 +252,7 @@ export default function ProductCard({
               accent="wine"
               className="w-full py-3"
               onClick={handlePurchase}
-              disabled={processing}
+              disabled={processing || cannotBuy}
             >
               {processing
                 ? "Processing divine transaction..."

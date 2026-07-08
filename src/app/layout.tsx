@@ -5,6 +5,7 @@ import { AuthModalProvider } from "@/components/auth/AuthModalProvider";
 import { OnboardingDraftProvider } from "@/components/auth/OnboardingDraftProvider";
 import AuthModalRoot from "@/components/auth/AuthModalRoot";
 import { MotionProvider } from "@/components/MotionProvider";
+import CollectiblesRoot from "@/components/collectibles/CollectiblesRoot";
 import "./globals.css";
 
 const fontSerif = Source_Serif_4({
@@ -46,8 +47,10 @@ export default function RootLayout({
           <AuthModalProvider>
             <OnboardingDraftProvider>
               <MotionProvider>
-                {children}
-                <AuthModalRoot />
+                <CollectiblesRoot>
+                  {children}
+                  <AuthModalRoot />
+                </CollectiblesRoot>
               </MotionProvider>
             </OnboardingDraftProvider>
           </AuthModalProvider>

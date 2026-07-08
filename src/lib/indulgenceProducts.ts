@@ -13,6 +13,13 @@ export const INDULGENCE_PRODUCTS: IndulgenceProduct[] = [
     icon: "📜",
     absolutionLevel: "total",
     leaderboardBoost: 25,
+    estimatedMarketValue: 2499,
+    historicalHigh: 1899,
+    inspectMode: "auto",
+    previewAssets: [
+      { type: "emoji", src: "📜" },
+      { type: "emoji", src: "✨" },
+    ],
   },
   {
     id: "weekend-pass",
@@ -64,6 +71,13 @@ export const INDULGENCE_PRODUCTS: IndulgenceProduct[] = [
     pricingTier: "anchor",
     icon: "🃏",
     leaderboardBoost: 40,
+    estimatedMarketValue: 1200,
+    historicalHigh: 999,
+    inspectMode: "auto",
+    previewAssets: [
+      { type: "emoji", src: "🃏" },
+      { type: "emoji", src: "🔥" },
+    ],
   },
   {
     id: "leaderboard-boost",
@@ -88,6 +102,9 @@ export const INDULGENCE_PRODUCTS: IndulgenceProduct[] = [
     pricingTier: "everyday",
     icon: "⭐",
     leaderboardBoost: 10,
+    estimatedMarketValue: 399,
+    inspectMode: "auto",
+    previewAssets: [{ type: "emoji", src: "⭐" }],
   },
   {
     id: "probably-fine-registry",
@@ -126,6 +143,21 @@ export const INDULGENCE_PRODUCTS: IndulgenceProduct[] = [
     pricingTier: "subscription",
     icon: "👑",
     leaderboardBoost: 12,
+  },
+  {
+    id: "sin-mystery-crate",
+    name: "Sin Mystery Crate",
+    tagline: "Blind box. Regret included.",
+    description:
+      "A sealed crate containing one randomly assigned indulgence. Could be a venial coupon. Could be something that makes your priest nervous. Tear at your own risk.",
+    price: 24.99,
+    tier: "premium",
+    pricingTier: "recommended",
+    icon: "📦",
+    isMysteryPack: true,
+    estimatedMarketValue: 89,
+    inspectMode: "auto",
+    previewAssets: [{ type: "emoji", src: "📦" }],
   },
 ];
 

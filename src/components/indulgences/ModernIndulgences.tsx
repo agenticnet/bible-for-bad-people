@@ -17,6 +17,7 @@ import { fetchSinLog } from "@/lib/data/sin";
 import type { LeaderboardEntry, UserSalvationProfile } from "@/lib/indulgenceTypes";
 import { useAuth } from "@/components/auth/AuthProvider";
 import AuthGate from "@/components/auth/AuthGate";
+import { DropTimer } from "@/components/collectibles";
 import {
   ChamberHeader,
   EmptyState,
@@ -121,7 +122,7 @@ export default function ModernIndulgences() {
       />
 
       {activeTab === "shop" && (
-        <div>
+        <div className="pb-20">
           <PricingSection
             title="Premium Absolution (Anchor Pricing)"
             products={grouped.anchor}
@@ -153,6 +154,7 @@ export default function ModernIndulgences() {
               variant="subscription"
             />
           </div>
+          <DropTimer />
         </div>
       )}
 

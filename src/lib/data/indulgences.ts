@@ -62,6 +62,16 @@ export async function addIndulgencePurchase(
   const userId = await requireUserId();
   if (!userId) return { error: "Sign in to purchase indulgences." };
 
+  const { validateDropWindow, decrementStockIfTracked } = await import(
+    "@/lib/data/collectibles"
+  );
+
+  const dropError = await validateDropWindow(purchase.productId);
+  if (dropError) return { error: dropError };
+
+  const stockError = await decrementStockIfTracked(purchase.productId);
+  if (stockError) return { error: stockError };
+
   const supabase = await createClient();
   const { error: insertError } = await supabase.from("indulgence_purchases").insert({
     user_id: userId,

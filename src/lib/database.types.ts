@@ -384,9 +384,110 @@ export type Database = {
         };
         Relationships: [];
       };
+      product_inventory: {
+        Row: {
+          product_id: string;
+          stock_total: number;
+          stock_remaining: number;
+          low_stock_threshold: number;
+          updated_at: string;
+        };
+        Insert: {
+          product_id: string;
+          stock_total: number;
+          stock_remaining: number;
+          low_stock_threshold?: number;
+          updated_at?: string;
+        };
+        Update: {
+          product_id?: string;
+          stock_total?: number;
+          stock_remaining?: number;
+          low_stock_threshold?: number;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      timed_drops: {
+        Row: {
+          id: string;
+          product_id: string;
+          starts_at: string;
+          ends_at: string;
+          is_active: boolean;
+        };
+        Insert: {
+          id?: string;
+          product_id: string;
+          starts_at: string;
+          ends_at: string;
+          is_active?: boolean;
+        };
+        Update: {
+          id?: string;
+          product_id?: string;
+          starts_at?: string;
+          ends_at?: string;
+          is_active?: boolean;
+        };
+        Relationships: [];
+      };
+      purchase_activity_events: {
+        Row: {
+          id: string;
+          product_id: string;
+          product_name: string;
+          display_name: string;
+          city: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          product_id: string;
+          product_name: string;
+          display_name: string;
+          city?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          product_id?: string;
+          product_name?: string;
+          display_name?: string;
+          city?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
+      cart_sessions: {
+        Row: {
+          id: string;
+          product_id: string;
+          session_id: string;
+          expires_at: string;
+        };
+        Insert: {
+          id?: string;
+          product_id: string;
+          session_id: string;
+          expires_at: string;
+        };
+        Update: {
+          id?: string;
+          product_id?: string;
+          session_id?: string;
+          expires_at?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      decrement_product_stock: {
+        Args: { p_product_id: string };
+        Returns: number;
+      };
+    };
     Enums: {
       vote_type: "absolve" | "condemn";
       chat_chamber: "god" | "lucifer" | "support";

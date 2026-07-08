@@ -37,3 +37,17 @@ export {
   type SemanticStatus,
 } from "./tokens";
 export { Reveal, Stagger, MotionLink } from "./motion";
+export {
+  CollectiblesProvider,
+  useCollectibles,
+  useCollectiblesOptional,
+  InventoryCounter,
+  DropTimer,
+  AnchoredPrice,
+  MagnifierGallery,
+  ThreeDViewer,
+  CollectibleInspectModal,
+  RevealAnimation,
+  LiveActivityFeed,
+  CartPressureIndicator,
+} from "../collectibles";
