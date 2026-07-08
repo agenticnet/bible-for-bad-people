@@ -122,7 +122,7 @@ export default function ModernIndulgences() {
       />
 
       {activeTab === "shop" && (
-        <div className="pb-20">
+        <div className="pb-28">
           <PricingSection
             title="Premium Absolution (Anchor Pricing)"
             products={grouped.anchor}

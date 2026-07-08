@@ -2,8 +2,10 @@
 
 import { useCallback, useRef, useState } from "react";
 import type { PreviewAsset } from "@/lib/indulgenceTypes";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { Surface } from "@/components/ui";
 import { cn } from "@/lib/utils";
+import SwipeGallery from "./SwipeGallery";
 
 interface MagnifierGalleryProps {
   assets: PreviewAsset[];
@@ -18,6 +20,33 @@ export default function MagnifierGallery({
   onInspectStart,
   onInspectEnd,
 }: MagnifierGalleryProps) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+    return (
+      <SwipeGallery
+        assets={assets}
+        fallbackIcon={fallbackIcon}
+      />
+    );
+  }
+
+  return (
+    <DesktopMagnifier
+      assets={assets}
+      fallbackIcon={fallbackIcon}
+      onInspectStart={onInspectStart}
+      onInspectEnd={onInspectEnd}
+    />
+  );
+}
+
+function DesktopMagnifier({
+  assets,
+  fallbackIcon,
+  onInspectStart,
+  onInspectEnd,
+}: MagnifierGalleryProps) {
   const items = assets.length ? assets : [{ type: "emoji" as const, src: fallbackIcon }];
   const [activeIndex, setActiveIndex] = useState(0);
   const [lens, setLens] = useState({ x: 50, y: 50, visible: false });
@@ -25,8 +54,8 @@ export default function MagnifierGallery({
 
   const active = items[activeIndex];
 
-  const handleMove = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+  const handlePointerMove = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
       if (!containerRef.current) return;
       onInspectStart?.();
       const rect = containerRef.current.getBoundingClientRect();
@@ -37,17 +66,20 @@ export default function MagnifierGallery({
     [onInspectStart]
   );
 
+  const handlePointerLeave = useCallback(() => {
+    setLens((l) => ({ ...l, visible: false }));
+    onInspectEnd?.();
+  }, [onInspectEnd]);
+
   return (
     <div className="space-y-3">
       <Surface padding="none" className="relative overflow-hidden">
         <div
           ref={containerRef}
-          className="relative flex h-64 cursor-crosshair items-center justify-center bg-smoke/40"
-          onMouseMove={handleMove}
-          onMouseLeave={() => {
-            setLens((l) => ({ ...l, visible: false }));
-            onInspectEnd?.();
-          }}
+          className="relative flex h-64 cursor-crosshair touch-none items-center justify-center bg-smoke/40"
+          onPointerMove={handlePointerMove}
+          onPointerLeave={handlePointerLeave}
+          onPointerDown={onInspectStart}
         >
           <span className="select-none text-8xl">{active.src}</span>
           {lens.visible && (

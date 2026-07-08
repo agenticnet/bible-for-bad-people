@@ -4,8 +4,10 @@ export { default as InventoryCounter, isProductSoldOut } from "./InventoryCounte
 export { default as DropTimer, isDropUnavailable } from "./DropTimer";
 export { default as AnchoredPrice } from "./AnchoredPrice";
 export { default as MagnifierGallery } from "./MagnifierGallery";
+export { default as SwipeGallery } from "./SwipeGallery";
 export { default as ThreeDViewer } from "./ThreeDViewer";
 export { default as CollectibleInspectModal } from "./CollectibleInspectModal";
+export { default as MysteryReveal } from "./MysteryReveal";
 export { default as RevealAnimation } from "./RevealAnimation";
 export { default as LiveActivityFeed } from "./LiveActivityFeed";
 export { default as CartPressureIndicator } from "./CartPressureIndicator";

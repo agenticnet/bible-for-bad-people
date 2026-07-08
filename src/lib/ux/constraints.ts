@@ -4,6 +4,22 @@ export const MAX_PRIMARY_OPTIONS = 4;
 
 export const PRIMARY_CTA_MIN_HEIGHT = "min-h-11";
 
+/** Thumb-zone primary actions — 56px minimum touch target */
+export const THUMB_CTA_MIN_HEIGHT = "min-h-14";
+
+/** Bottom sheet default snap height */
+export const BOTTOM_SHEET_HEIGHT = "max-h-[60dvh]";
+
+/** Safe area padding for fixed bottom chrome */
+export const SAFE_BOTTOM = "pb-[max(1rem,env(safe-area-inset-bottom))]";
+
+/**
+ * Z-index scale: drop timer (30) → sticky action bar (40) → bottom sheet (50)
+ */
+export const Z_DROP = "z-30";
+export const Z_STICKY_ACTION = "z-40";
+export const Z_BOTTOM_SHEET = "z-50";
+
 export const FEATURED_SCALE = "scale-105 motion-reduce:scale-100";
 
 /** Ink-tinted elevation — not glow */

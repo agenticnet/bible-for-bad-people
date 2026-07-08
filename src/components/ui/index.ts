@@ -6,6 +6,9 @@ export { default as Select } from "./Select";
 export { default as Label } from "./Label";
 export { default as Callout } from "./Callout";
 export { default as Modal } from "./Modal";
+export { default as BottomSheet } from "./BottomSheet";
+export { default as StickyActionBar } from "./StickyActionBar";
+export { default as TearSlider } from "./TearSlider";
 export { default as IconButton } from "./IconButton";
 export { default as BackLink } from "./BackLink";
 export { default as BindingBar } from "./BindingBar";
@@ -36,6 +39,16 @@ export { default as MessageBubble } from "./MessageBubble";
 export { default as TypingIndicator } from "./TypingIndicator";
 export { default as ChatComposer, ChatShell, ChatHeader } from "./ChatShell";
 export {
+  MAX_PRIMARY_OPTIONS,
+  PRIMARY_CTA_MIN_HEIGHT,
+  THUMB_CTA_MIN_HEIGHT,
+  BOTTOM_SHEET_HEIGHT,
+  SAFE_BOTTOM,
+  Z_DROP,
+  Z_STICKY_ACTION,
+  Z_BOTTOM_SHEET,
+} from "@/lib/ux/constraints";
+export {
   accentStyles,
   chamberAccent,
   inputBase,
@@ -56,6 +69,7 @@ export {
   MagnifierGallery,
   ThreeDViewer,
   CollectibleInspectModal,
+  MysteryReveal,
   RevealAnimation,
   LiveActivityFeed,
   CartPressureIndicator,

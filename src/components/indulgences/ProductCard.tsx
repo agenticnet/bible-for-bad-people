@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Eye, ShoppingCart } from "lucide-react";
 import type { IndulgenceProduct } from "@/lib/indulgenceTypes";
-import { formatPrice, generateCertificateId, INDULGENCE_PRODUCTS } from "@/lib/indulgenceProducts";
-import { addIndulgencePurchase } from "@/lib/data/indulgences";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useAuthModal } from "@/components/auth/AuthModalProvider";
 import {
@@ -15,17 +13,16 @@ import {
   InventoryCounter,
   isDropUnavailable,
   isProductSoldOut,
-  RevealAnimation,
+  MysteryReveal,
   useCollectiblesOptional,
 } from "@/components/collectibles";
+import CheckoutBottomSheet from "@/components/indulgences/CheckoutBottomSheet";
 import {
   Badge,
   Button,
   FeaturedCard,
-  FormActions,
-  Modal,
-  SuccessMoment,
   Surface,
+  THUMB_CTA_MIN_HEIGHT,
 } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
@@ -46,9 +43,6 @@ const tierAccents = {
   subscription: "slate",
 } as const;
 
-const ANCHOR_PRODUCT = INDULGENCE_PRODUCTS.find((p) => p.id === "total-absolution");
-const SOUL_INSURANCE = INDULGENCE_PRODUCTS.find((p) => p.id === "soul-insurance");
-
 export default function ProductCard({
   product,
   onPurchased,
@@ -61,11 +55,9 @@ export default function ProductCard({
   const { openSignUp } = useAuthModal();
   const pathname = usePathname();
   const collectibles = useCollectiblesOptional();
-  const [showModal, setShowModal] = useState(false);
+  const [showCheckout, setShowCheckout] = useState(false);
   const [showInspect, setShowInspect] = useState(false);
   const [showReveal, setShowReveal] = useState(false);
-  const [processing, setProcessing] = useState(false);
-  const [success, setSuccess] = useState(false);
   const [addInsurance, setAddInsurance] = useState(false);
   const [purchaseError, setPurchaseError] = useState<string | null>(null);
   const accent = tierAccents[product.tier];
@@ -75,52 +67,10 @@ export default function ProductCard({
   const cannotBuy = soldOut || !!dropBlocked;
 
   useEffect(() => {
-    if (!showModal || !collectibles) return;
+    if (!showCheckout || !collectibles) return;
     const cleanup = collectibles.registerCartInterest(product.id);
     return cleanup;
-  }, [showModal, collectibles, product.id]);
-
-  async function handlePurchase() {
-    if (processing || !user || cannotBuy) return;
-    setProcessing(true);
-    setPurchaseError(null);
-
-    setTimeout(async () => {
-      const result = await addIndulgencePurchase({
-        productId: product.id,
-        productName: product.name,
-        purchasedAt: new Date().toISOString(),
-        certificateId: generateCertificateId(),
-        pricePaid: product.price,
-      });
-
-      if (addInsurance && SOUL_INSURANCE) {
-        await addIndulgencePurchase({
-          productId: SOUL_INSURANCE.id,
-          productName: SOUL_INSURANCE.name,
-          purchasedAt: new Date().toISOString(),
-          certificateId: generateCertificateId(),
-          pricePaid: SOUL_INSURANCE.price,
-        });
-      }
-
-      setProcessing(false);
-      if (result.error) {
-        setPurchaseError(result.error);
-        return;
-      }
-
-      setSuccess(true);
-      onPurchased();
-      void collectibles?.refreshInventory();
-
-      setTimeout(() => {
-        setShowModal(false);
-        setSuccess(false);
-        setAddInsurance(false);
-      }, 2500);
-    }, 1500);
-  }
+  }, [showCheckout, collectibles, product.id]);
 
   function handleBuyClick() {
     if (cannotBuy) return;
@@ -132,8 +82,10 @@ export default function ProductCard({
       setShowReveal(true);
       return;
     }
-    setShowModal(true);
+    setShowCheckout(true);
   }
+
+  const buyLabel = soldOut ? "Sold Out" : dropBlocked ? "Unavailable" : "Buy";
 
   const card = (
     <Surface
@@ -169,23 +121,54 @@ export default function ProductCard({
           +{product.leaderboardBoost} Salvation Score
         </p>
       )}
-      <div className="flex items-end justify-between gap-3">
+
+      <div className="mt-auto space-y-3">
         <AnchoredPrice product={product} />
-        <div className="flex shrink-0 flex-col gap-2">
-          <Button accent="wine" variant="ghost" size="sm" onClick={() => setShowInspect(true)}>
+
+        {purchaseError && (
+          <p className="text-sm text-ember">{purchaseError}</p>
+        )}
+
+        <div className="flex gap-2 lg:hidden">
+          <Button
+            accent="wine"
+            variant="ghost"
+            size="lg"
+            className={cn("shrink-0", THUMB_CTA_MIN_HEIGHT)}
+            onClick={() => setShowInspect(true)}
+          >
             <Eye className="h-4 w-4" />
             Inspect
           </Button>
           <Button
             accent="wine"
             size="lg"
-            className="w-full min-w-[7rem]"
+            className={cn("flex-1", THUMB_CTA_MIN_HEIGHT)}
             onClick={handleBuyClick}
             disabled={cannotBuy}
           >
             <ShoppingCart className="h-4 w-4" />
-            {soldOut ? "Sold Out" : dropBlocked ? "Unavailable" : "Buy"}
+            {buyLabel}
           </Button>
+        </div>
+
+        <div className="hidden items-end justify-between gap-3 lg:flex">
+          <div className="flex shrink-0 flex-col gap-2">
+            <Button accent="wine" variant="ghost" size="sm" onClick={() => setShowInspect(true)}>
+              <Eye className="h-4 w-4" />
+              Inspect
+            </Button>
+            <Button
+              accent="wine"
+              size="lg"
+              className="w-full min-w-[7rem]"
+              onClick={handleBuyClick}
+              disabled={cannotBuy}
+            >
+              <ShoppingCart className="h-4 w-4" />
+              {buyLabel}
+            </Button>
+          </div>
         </div>
       </div>
     </Surface>
@@ -203,7 +186,7 @@ export default function ProductCard({
         onClose={() => setShowInspect(false)}
       />
 
-      <RevealAnimation
+      <MysteryReveal
         product={product}
         active={showReveal}
         onComplete={() => {
@@ -217,77 +200,16 @@ export default function ProductCard({
         }}
       />
 
-      <Modal
-        open={showModal}
-        onClose={() => !processing && setShowModal(false)}
-        accent="wine"
-        closeDisabled={processing}
-      >
-        {!success ? (
-          <>
-            <p className="verse-ref mb-2 text-wine">Mock Checkout</p>
-            <h3 className="mb-4 text-lg font-bold text-ink">{product.name}</h3>
-
-            {showContrast && ANCHOR_PRODUCT && product.id !== ANCHOR_PRODUCT.id && (
-              <p className="mb-3 text-sm text-ink-soft">
-                Total Absolution runs {formatPrice(ANCHOR_PRODUCT.price)}. This{" "}
-                {product.name.split(" ")[0]?.toLowerCase() ?? "item"}:{" "}
-                <span className="font-semibold text-wine">
-                  {formatPrice(product.price, product.priceLabel)}
-                </span>
-              </p>
-            )}
-
-            <div className="mb-6">
-              <AnchoredPrice product={product} size="lg" />
-            </div>
-
-            {purchaseError && (
-              <p className="mb-4 text-sm text-ember">{purchaseError}</p>
-            )}
-
-            {SOUL_INSURANCE && product.id !== SOUL_INSURANCE.id && (
-              <Surface accent="slate" accentTint className="mb-6" padding="sm">
-                <label className="flex cursor-pointer items-start gap-3">
-                  <input
-                    type="checkbox"
-                    checked={addInsurance}
-                    onChange={(e) => setAddInsurance(e.target.checked)}
-                    className="mt-1 accent-slate"
-                  />
-                  <div>
-                    <p className="text-sm font-medium text-ink">
-                      Add {SOUL_INSURANCE.name} — {formatPrice(SOUL_INSURANCE.price, SOUL_INSURANCE.priceLabel)}
-                    </p>
-                    <p className="text-xs text-ink-soft">
-                      Covers 3 unexpected sins. Makes your main purchase feel trivial.
-                    </p>
-                  </div>
-                </label>
-              </Surface>
-            )}
-
-            <p className="mb-6 text-sm text-ink-soft">
-              No real payment processed. Purchasing as {displayName || "you"}.
-            </p>
-            <FormActions
-              primaryLabel={
-                processing
-                  ? "Processing divine transaction..."
-                  : "Confirm Mock Purchase"
-              }
-              onPrimary={() => void handlePurchase()}
-              primaryDisabled={processing || cannotBuy}
-            />
-          </>
-        ) : (
-          <SuccessMoment
-            title="Purchase Complete!"
-            description="Certificate added to your vault. Salvation score updated."
-            icon={<span className="text-3xl">{product.icon}</span>}
-          />
-        )}
-      </Modal>
+      <CheckoutBottomSheet
+        open={showCheckout}
+        onClose={() => setShowCheckout(false)}
+        product={product}
+        displayName={displayName}
+        addInsurance={addInsurance}
+        onAddInsuranceChange={setAddInsurance}
+        onPurchased={onPurchased}
+        showContrast={showContrast}
+      />
     </>
   );
 }

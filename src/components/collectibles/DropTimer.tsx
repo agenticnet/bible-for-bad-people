@@ -4,6 +4,7 @@ import { useDropCountdown } from "@/lib/collectibles/useServerTime";
 import { useCollectiblesOptional } from "./CollectiblesProvider";
 import { INDULGENCE_PRODUCTS } from "@/lib/indulgenceProducts";
 import { Badge } from "@/components/ui";
+import { Z_DROP } from "@/lib/ux/constraints";
 import { cn } from "@/lib/utils";
 
 interface DropTimerProps {
@@ -35,7 +36,8 @@ export default function DropTimer({ className }: DropTimerProps) {
   return (
     <div
       className={cn(
-        "fixed inset-x-0 bottom-0 z-30 border-t border-rule bg-binding/95 px-4 py-3 backdrop-blur-sm",
+        "fixed inset-x-0 bottom-0 border-t border-rule bg-binding/95 px-4 py-3 backdrop-blur-sm",
+        Z_DROP,
         className
       )}
     >
