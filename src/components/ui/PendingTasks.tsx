@@ -1,12 +1,16 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useOnboardingDraft } from "@/components/auth/OnboardingDraftProvider";
 import {
   computeOnboardingPercent,
   getPendingTasks,
+  getPendingTasksWidgetCopy,
+  getPendingTaskStage,
   hasIncompleteOnboarding,
 } from "@/lib/ux/pendingTasks";
+import { isWelcomeComplete } from "@/lib/ux/welcome";
 import LinkButton from "./LinkButton";
 import ProgressBar from "./ProgressBar";
 import Surface from "./Surface";
@@ -18,21 +22,26 @@ interface PendingTasksProps {
 export default function PendingTasks({ className }: PendingTasksProps) {
   const { profile } = useAuth();
   const { draft } = useOnboardingDraft();
+  const [welcomeComplete, setWelcomeComplete] = useState(false);
 
-  if (!hasIncompleteOnboarding(profile, draft)) return null;
+  useEffect(() => {
+    setWelcomeComplete(isWelcomeComplete());
+  }, [profile?.onboarding_completed_at]);
 
-  const tasks = getPendingTasks(profile, draft);
-  const percent = computeOnboardingPercent(profile, draft);
+  if (!hasIncompleteOnboarding(profile, draft, welcomeComplete)) return null;
+
+  const tasks = getPendingTasks(profile, draft, welcomeComplete);
+  const percent = computeOnboardingPercent(profile, draft, welcomeComplete);
+  const stage = getPendingTaskStage(profile, welcomeComplete);
+  const copy = getPendingTasksWidgetCopy(stage);
   const resumeHref = tasks[0]?.href ?? "/onboarding";
 
   return (
     <Surface accent="wine" accentTint className={className} padding="md">
       <div className="mb-4 flex items-start justify-between gap-4">
         <div>
-          <p className="verse-ref mb-1 text-wine">Pending setup</p>
-          <h3 className="font-serif text-lg text-ink">
-            Onboarding {percent}% complete
-          </h3>
+          <p className="verse-ref mb-1 text-wine">{copy.kicker}</p>
+          <h3 className="font-serif text-lg text-ink">{copy.title}</h3>
         </div>
         <div
           className="relative flex h-12 w-12 shrink-0 items-center justify-center"
@@ -79,7 +88,7 @@ export default function PendingTasks({ className }: PendingTasksProps) {
       </ul>
 
       <LinkButton href={resumeHref} className="w-full sm:w-auto">
-        Resume setup
+        {stage === "pre_claim" ? "Resume setup" : "Continue"}
       </LinkButton>
     </Surface>
   );

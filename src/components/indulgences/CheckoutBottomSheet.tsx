@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import Link from "next/link";
 import type { IndulgenceProduct } from "@/lib/indulgenceTypes";
 import {
   formatPrice,
@@ -259,6 +260,13 @@ export default function CheckoutBottomSheet({
             description="Certificate added to your vault. Salvation score updated."
             icon={<span className="text-3xl">{product.icon}</span>}
           />
+          <p className="mt-4 text-center text-sm text-ink-soft">
+            Want to make it yours?{" "}
+            <Link href="/settings" className="text-wine hover:underline">
+              Pin chambers and set your accent in Settings
+            </Link>
+            .
+          </p>
           {serverPending && (
             <div className="absolute inset-x-0 top-2 flex justify-center">
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-wine/30 border-t-wine" />

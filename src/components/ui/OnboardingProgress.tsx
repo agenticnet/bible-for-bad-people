@@ -98,23 +98,13 @@ export default function OnboardingProgress({
 
 export const ONBOARDING_STEPS: OnboardingStep[] = [
   {
-    id: "chambers",
-    label: "Pin Chambers",
-    description: "Favorite and reorder your home grid.",
-  },
-  {
-    id: "prefs",
-    label: "Accent & Alerts",
-    description: "Binding color and notification defaults.",
-  },
-  {
     id: "identity",
     label: "Your Identity",
-    description: "Display name, username, starter pack.",
+    description: "Display name and username.",
   },
   {
     id: "claim",
     label: "Claim Ledger",
-    description: "Name yourself. Keep what you built.",
+    description: "Create your account.",
   },
 ];

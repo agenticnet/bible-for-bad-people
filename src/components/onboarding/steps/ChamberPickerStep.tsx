@@ -14,8 +14,38 @@ const SUGGESTED_CHAMBER_IDS = [
   "modern-indulgences",
 ].slice(0, MAX_PRIMARY_OPTIONS);
 
-export default function ChamberPickerStep() {
+export interface ChamberPickerValues {
+  favoriteChambers: string[];
+  chamberOrder: string[];
+}
+
+interface ChamberPickerStepProps {
+  mode?: "draft" | "profile";
+  value?: ChamberPickerValues;
+  onChange?: (updates: Partial<ChamberPickerValues>) => void;
+  kicker?: string;
+}
+
+export default function ChamberPickerStep({
+  mode = "draft",
+  value,
+  onChange,
+  kicker = "Step 1",
+}: ChamberPickerStepProps) {
   const { draft, updateDraft } = useOnboardingDraft();
+
+  const favoriteChambers =
+    mode === "profile" ? (value?.favoriteChambers ?? []) : draft.favoriteChambers;
+  const chamberOrder =
+    mode === "profile" ? (value?.chamberOrder ?? []) : draft.chamberOrder;
+
+  function applyUpdate(updates: Partial<ChamberPickerValues>) {
+    if (mode === "profile") {
+      onChange?.(updates);
+    } else {
+      updateDraft(updates);
+    }
+  }
 
   const liveChambers = chambers.filter((c) => c.status === "live");
   const suggestedChambers = liveChambers.filter((c) =>
@@ -26,26 +56,26 @@ export default function ChamberPickerStep() {
   );
 
   function toggleFavorite(id: string) {
-    const current = draft.favoriteChambers;
+    const current = favoriteChambers;
     const next = current.includes(id)
       ? current.filter((c) => c !== id)
       : [...current, id];
-    updateDraft({ favoriteChambers: next });
+    applyUpdate({ favoriteChambers: next });
   }
 
   function moveChamber(id: string, direction: -1 | 1) {
-    const order = [...draft.chamberOrder];
+    const order = [...chamberOrder];
     const index = order.indexOf(id);
     if (index < 0) return;
     const swapIndex = index + direction;
     if (swapIndex < 0 || swapIndex >= order.length) return;
     [order[index], order[swapIndex]] = [order[swapIndex], order[index]];
-    updateDraft({ chamberOrder: order });
+    applyUpdate({ chamberOrder: order });
   }
 
   function renderChamberTile(chamber: (typeof liveChambers)[number]) {
-    const selected = draft.favoriteChambers.includes(chamber.id);
-    const orderIndex = draft.chamberOrder.indexOf(chamber.id);
+    const selected = favoriteChambers.includes(chamber.id);
+    const orderIndex = chamberOrder.indexOf(chamber.id);
     const Icon = chamber.icon;
 
     return (
@@ -73,7 +103,7 @@ export default function ChamberPickerStep() {
           <button
             type="button"
             onClick={() => moveChamber(chamber.id, 1)}
-            disabled={orderIndex >= draft.chamberOrder.length - 1}
+            disabled={orderIndex >= chamberOrder.length - 1}
             className="rounded border border-rule p-1 text-ink-soft hover:text-ink disabled:opacity-30"
             aria-label={`Move ${chamber.title} down`}
           >
@@ -87,9 +117,9 @@ export default function ChamberPickerStep() {
   return (
     <div>
       <SectionHeader
-        kicker="Step 1"
+        kicker={kicker}
         title="Pin Your Chambers"
-        description="Most sinners start here. Pick favorites and reorder your home grid."
+        description="Pick favorites and reorder your home grid."
         accent="wine"
       />
 

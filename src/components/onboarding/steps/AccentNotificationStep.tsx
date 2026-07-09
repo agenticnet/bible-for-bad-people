@@ -1,6 +1,7 @@
 "use client";
 
 import { useOnboardingDraft } from "@/components/auth/OnboardingDraftProvider";
+import type { NotificationPrefs } from "@/lib/auth/onboardingDraft";
 import { Disclosure, OptionTile, SectionHeader } from "@/components/ui";
 import { accentStyles, type Accent } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
@@ -14,25 +15,61 @@ const NOTIFICATION_OPTIONS = [
   { key: "smiteAlerts" as const, label: "Smite alerts", hint: "When your free smites reset." },
 ];
 
-export default function AccentNotificationStep() {
+export interface AccentNotificationValues {
+  defaultAccent: Accent;
+  notificationPrefs: NotificationPrefs;
+}
+
+interface AccentNotificationStepProps {
+  mode?: "draft" | "profile";
+  value?: AccentNotificationValues;
+  onChange?: (updates: Partial<AccentNotificationValues>) => void;
+  kicker?: string;
+}
+
+export default function AccentNotificationStep({
+  mode = "draft",
+  value,
+  onChange,
+  kicker = "Step 2",
+}: AccentNotificationStepProps) {
   const { draft, updateDraft } = useOnboardingDraft();
 
-  function toggleNotification(key: keyof typeof draft.notificationPrefs) {
-    updateDraft({
+  const defaultAccent =
+    mode === "profile" ? (value?.defaultAccent ?? "wine") : draft.defaultAccent;
+  const notificationPrefs =
+    mode === "profile"
+      ? (value?.notificationPrefs ?? {
+          weeklyDigest: true,
+          sinReminders: true,
+          smiteAlerts: false,
+        })
+      : draft.notificationPrefs;
+
+  function applyUpdate(updates: Partial<AccentNotificationValues>) {
+    if (mode === "profile") {
+      onChange?.(updates);
+    } else {
+      updateDraft(updates);
+    }
+  }
+
+  function toggleNotification(key: keyof NotificationPrefs) {
+    applyUpdate({
       notificationPrefs: {
-        ...draft.notificationPrefs,
-        [key]: !draft.notificationPrefs[key],
+        ...notificationPrefs,
+        [key]: !notificationPrefs[key],
       },
     });
   }
 
-  const enabledCount = Object.values(draft.notificationPrefs).filter(Boolean).length;
+  const enabledCount = Object.values(notificationPrefs).filter(Boolean).length;
 
   return (
     <div className="space-y-8">
       <div>
         <SectionHeader
-          kicker="Step 2"
+          kicker={kicker}
           title="Choose Your Accent"
           description="The binding color for your ledger. Wine is the crowd favorite."
           accent="wine"
@@ -41,9 +78,9 @@ export default function AccentNotificationStep() {
           {PRIMARY_ACCENTS.map((accent) => (
             <OptionTile
               key={accent}
-              selected={draft.defaultAccent === accent}
+              selected={defaultAccent === accent}
               accent={accent}
-              onClick={() => updateDraft({ defaultAccent: accent })}
+              onClick={() => applyUpdate({ defaultAccent: accent })}
             >
               <span
                 className={cn(
@@ -62,9 +99,9 @@ export default function AccentNotificationStep() {
             {MORE_ACCENTS.map((accent) => (
               <OptionTile
                 key={accent}
-                selected={draft.defaultAccent === accent}
+                selected={defaultAccent === accent}
                 accent={accent}
-                onClick={() => updateDraft({ defaultAccent: accent })}
+                onClick={() => applyUpdate({ defaultAccent: accent })}
               >
                 <span
                   className={cn(
@@ -99,7 +136,7 @@ export default function AccentNotificationStep() {
               >
                 <input
                   type="checkbox"
-                  checked={draft.notificationPrefs[opt.key]}
+                  checked={notificationPrefs[opt.key]}
                   onChange={() => toggleNotification(opt.key)}
                   className="mt-1 accent-wine"
                 />

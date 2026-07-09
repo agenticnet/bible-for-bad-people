@@ -5,18 +5,17 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { LogOut, Settings, User } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
-import { useOnboardingDraft } from "@/components/auth/OnboardingDraftProvider";
-import { getPendingTasks } from "@/lib/ux/pendingTasks";
+import { shouldShowPendingBadge } from "@/lib/ux/pendingTasks";
 import { createClient } from "@/lib/supabase/client";
 
 export default function UserMenu() {
   const { user, profile, isLoading } = useAuth();
-  const { draft } = useOnboardingDraft();
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
 
-  const pendingCount = getPendingTasks(profile, draft).length;
+  const showBadge = shouldShowPendingBadge(profile);
+  const settingsHref = "/settings";
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -60,9 +59,6 @@ export default function UserMenu() {
   }
 
   const initial = (profile?.username ?? user.email ?? "?")[0]?.toUpperCase();
-  const settingsHref = profile
-    ? `/onboarding?step=prefs`
-    : "/onboarding";
 
   return (
     <div className="relative" ref={menuRef}>
@@ -74,10 +70,10 @@ export default function UserMenu() {
       >
         <span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-wine/20 text-xs font-semibold text-wine">
           {initial}
-          {pendingCount > 0 && (
+          {showBadge && (
             <span
               className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border border-binding bg-wine"
-              aria-label={`${pendingCount} pending setup tasks`}
+              aria-label="Finish claiming your ledger"
             />
           )}
         </span>

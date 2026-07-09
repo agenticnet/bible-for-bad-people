@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { createProfile } from "@/lib/auth/actions";
 import { draftToPreferences, loadOnboardingDraft, clearOnboardingDraft } from "@/lib/auth/onboardingDraft";
 import { suggestUsername } from "@/lib/auth/smartDefaults";
-import { safeRedirectPath } from "@/lib/auth/redirect";
+import { postSignupRedirectPath } from "@/lib/auth/redirect";
 import { isValidUsername, normalizeUsername } from "@/lib/auth/types";
 import AuthFormShell from "@/components/auth/AuthFormShell";
 import { Button, Input, Label } from "@/components/ui";
@@ -17,18 +17,21 @@ export default function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { refreshProfile } = useAuth();
-  const next = safeRedirectPath(searchParams.get("next"));
+  const next = postSignupRedirectPath(searchParams.get("next"));
   const draft = loadOnboardingDraft();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [displayName, setDisplayName] = useState(draft.displayName);
   const [username, setUsername] = useState(draft.username || suggestUsername());
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    setUsername(loadOnboardingDraft().username || suggestUsername());
+    const loaded = loadOnboardingDraft();
+    setDisplayName(loaded.displayName);
+    setUsername(loaded.username || suggestUsername());
   }, []);
 
   async function handleSubmit(e: React.FormEvent) {
@@ -73,7 +76,12 @@ export default function SignupForm() {
       return;
     }
 
-    const preferences = draftToPreferences(loadOnboardingDraft());
+    const currentDraft = loadOnboardingDraft();
+    const preferences = draftToPreferences({
+      ...currentDraft,
+      displayName,
+      username: normalized,
+    });
     const profileResult = await createProfile(normalized, preferences);
     if (profileResult.error) {
       setError(profileResult.error);
@@ -104,13 +112,24 @@ export default function SignupForm() {
 
   return (
     <AuthFormShell
-      title="Build Your Ledger"
-      subtitle="Not a sign-up form — the final step in customizing your salvation dashboard."
+      title="Claim Your Ledger"
+      subtitle="Name yourself. Keep your sins. Customization comes later."
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Button type="button" accent="wine" onClick={handleGoogle}>
           Continue with Google
         </Button>
+        <div>
+          <Label htmlFor="display-name">Display name</Label>
+          <Input
+            id="display-name"
+            accent="wine"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            placeholder="KarenWhoReturnsCarts"
+            maxLength={40}
+          />
+        </div>
         <div>
           <Label htmlFor="username">Username</Label>
           <Input
@@ -155,10 +174,6 @@ export default function SignupForm() {
           {loading ? "Creating ledger..." : "Claim with email"}
         </Button>
         <p className="text-center text-sm text-ink-soft">
-          <Link href="/onboarding" className="text-wine hover:underline">
-            Customize your dashboard first
-          </Link>
-          {" · "}
           Already damned?{" "}
           <Link
             href={`/login?next=${encodeURIComponent(next)}`}

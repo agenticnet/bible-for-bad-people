@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { createProfile } from "@/lib/auth/actions";
 import { draftToPreferences, loadOnboardingDraft, clearOnboardingDraft } from "@/lib/auth/onboardingDraft";
 import { suggestUsername } from "@/lib/auth/smartDefaults";
+import { postSignupRedirectPath } from "@/lib/auth/redirect";
 import { getLossCopy, getSignUpModalTitle, type LossContext } from "@/lib/auth/upsellCopy";
 import { isValidUsername, normalizeUsername } from "@/lib/auth/types";
 import { useAuth } from "@/components/auth/AuthProvider";
@@ -30,6 +31,7 @@ export default function SignUpModal({
   const router = useRouter();
   const { refreshProfile } = useAuth();
   const draft = loadOnboardingDraft();
+  const redirectPath = postSignupRedirectPath(nextPath);
 
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [email, setEmail] = useState("");
@@ -55,7 +57,7 @@ export default function SignUpModal({
     await refreshProfile();
     setLoading(false);
     onClose();
-    router.push(nextPath);
+    router.push(redirectPath);
     router.refresh();
   }
 
@@ -111,7 +113,7 @@ export default function SignUpModal({
       );
     }
     const origin = window.location.origin;
-    const onboardingNext = `/onboarding?step=claim&next=${encodeURIComponent(nextPath)}`;
+    const onboardingNext = `/onboarding?step=claim&next=${encodeURIComponent(redirectPath)}`;
     const { error: oauthError } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: {

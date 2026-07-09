@@ -5,8 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { createProfile } from "@/lib/auth/actions";
 import { draftToPreferences, clearOnboardingDraft } from "@/lib/auth/onboardingDraft";
-import { safeRedirectPath } from "@/lib/auth/redirect";
-import { starterPackCopy } from "@/lib/auth/upsellCopy";
+import { postSignupRedirectPath } from "@/lib/auth/redirect";
 import { isValidUsername, normalizeUsername } from "@/lib/auth/types";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useOnboardingDraft } from "@/components/auth/OnboardingDraftProvider";
@@ -17,7 +16,7 @@ export default function ClaimLedgerStep() {
   const searchParams = useSearchParams();
   const { user, refreshProfile } = useAuth();
   const { draft } = useOnboardingDraft();
-  const next = safeRedirectPath(searchParams.get("next"));
+  const next = postSignupRedirectPath(searchParams.get("next"));
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -120,15 +119,11 @@ export default function ClaimLedgerStep() {
   return (
     <div>
       <SectionHeader
-        kicker="Step 4"
+        kicker="Step 2"
         title="Claim Your Salvation"
-        description="Not a sign-up form — the final step in building your ledger."
+        description="Create your account and lock in your ledger."
         accent="wine"
       />
-
-      <p className="mb-6 text-sm text-ink-soft">
-        {starterPackCopy(draft.starterPackId)}
-      </p>
 
       {user ? (
         <FormActions

@@ -10,6 +10,9 @@ import {
   generateCertificateId,
   INDULGENCE_PRODUCTS,
 } from "@/lib/indulgenceProducts";
+import type { Database } from "@/lib/database.types";
+
+type ProfileUpdate = Database["public"]["Tables"]["profiles"]["Update"];
 
 export async function checkUsernameAvailable(username: string): Promise<boolean> {
   const normalized = normalizeUsername(username);
@@ -133,6 +136,52 @@ export async function createProfile(
 
   if (preferences?.starterPackId) {
     await grantStarterPack(user.id, preferences.starterPackId);
+  }
+
+  return {};
+}
+
+export async function updateProfilePreferences(
+  prefs: Partial<OnboardingPreferences>
+): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { error: "You must be logged in to update preferences." };
+  }
+
+  const updateData: ProfileUpdate = {};
+
+  if (prefs.favoriteChambers !== undefined) {
+    updateData.favorite_chambers = prefs.favoriteChambers;
+  }
+  if (prefs.chamberOrder !== undefined) {
+    updateData.chamber_order = prefs.chamberOrder;
+  }
+  if (prefs.defaultAccent !== undefined) {
+    updateData.default_accent = prefs.defaultAccent;
+  }
+  if (prefs.notificationPrefs !== undefined) {
+    updateData.notification_prefs = prefs.notificationPrefs;
+  }
+  if (prefs.displayName !== undefined) {
+    updateData.display_name = prefs.displayName;
+  }
+
+  if (Object.keys(updateData).length === 0) {
+    return {};
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .update(updateData)
+    .eq("id", user.id);
+
+  if (error) {
+    return { error: error.message };
   }
 
   return {};

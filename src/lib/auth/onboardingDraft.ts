@@ -73,6 +73,6 @@ export function draftToPreferences(draft: OnboardingDraft): OnboardingPreference
     chamberOrder: draft.chamberOrder,
     defaultAccent: draft.defaultAccent,
     notificationPrefs: draft.notificationPrefs,
-    starterPackId: draft.starterPackId || null,
+    starterPackId: null,
   };
 }

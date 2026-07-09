@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useSearchParams } from "next/navigation";
 import { Eye, Skull, Sparkles } from "lucide-react";
 import DoomCardDisplay from "./DoomCardDisplay";
+import PostSignupWelcome from "./PostSignupWelcome";
 import type { DailyReading } from "@/lib/oracleTypes";
 import { SPREAD_LABELS } from "@/lib/oracleTypes";
 import {
@@ -22,12 +24,20 @@ import {
 } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
+import { isWelcomeComplete } from "@/lib/ux/welcome";
 
 export default function OracleOfDoom() {
+  const searchParams = useSearchParams();
   const { user } = useAuth();
   const [reading, setReading] = useState<DailyReading | null>(null);
   const [revealing, setRevealing] = useState(false);
   const [cardsRevealed, setCardsRevealed] = useState(false);
+  const [welcomeActive, setWelcomeActive] = useState(false);
+
+  useEffect(() => {
+    const isWelcomeParam = searchParams.get("welcome") === "1";
+    setWelcomeActive(isWelcomeParam && !isWelcomeComplete());
+  }, [searchParams]);
 
   const dateKey = getDateKey();
   const formattedDate = new Date().toLocaleDateString([], {
@@ -107,6 +117,8 @@ export default function OracleOfDoom() {
           maximum existential dread.
         </p>
       </ChamberHeader>
+
+      <PostSignupWelcome active={welcomeActive} cardsRevealed={cardsRevealed} />
 
       {cardsRevealed && (
         <div className="mb-10 flex justify-center">

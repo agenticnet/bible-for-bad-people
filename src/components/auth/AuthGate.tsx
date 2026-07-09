@@ -78,15 +78,15 @@ export default function AuthGate({
     const next = encodeURIComponent(pathname);
     return (
       <Callout tone={tone}>
-        <p className="font-medium text-ink">Finish building your ledger</p>
+        <p className="font-medium text-ink">Finish claiming your ledger</p>
         <p className="mb-3 mt-1 text-sm text-ink-soft">
-          Your customization is waiting. Complete onboarding before saving chamber data.
+          Complete your ledger before saving chamber data.
         </p>
         <Link
           href={`/onboarding?step=claim&next=${next}`}
           className="inline-block rounded-lg border border-wine/40 bg-wine/10 px-4 py-2 text-sm font-medium text-wine transition-colors hover:bg-wine/20"
         >
-          Continue Building
+          Claim your ledger
         </Link>
       </Callout>
     );
