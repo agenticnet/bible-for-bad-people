@@ -50,9 +50,9 @@ export default function OnboardingPreviewPanel() {
         </div>
 
         <div className="mb-4">
-          <p className="verse-ref mb-2 text-ink-soft">Display name</p>
+          <p className="verse-ref mb-2 text-ink-soft">Username</p>
           <p className="text-sm font-medium text-ink">
-            {draft.displayName.trim() || "Anonymous Sinner"}
+            {draft.username.trim() || "Not chosen yet"}
           </p>
         </div>
 

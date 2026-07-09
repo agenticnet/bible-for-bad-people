@@ -50,7 +50,6 @@ export function createDefaultDraft(): OnboardingDraft {
     chamberOrder: order,
     defaultAccent: DEFAULT_ACCENT,
     notificationPrefs: { ...DEFAULT_NOTIFICATION_PREFS },
-    displayName: "",
     username: suggestUsername(),
     starterPackId: DEFAULT_STARTER_PACK_ID,
   };

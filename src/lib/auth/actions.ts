@@ -115,7 +115,6 @@ export async function createProfile(
   const insertData = {
     id: user.id,
     username: normalized,
-    display_name: preferences?.displayName ?? null,
     favorite_chambers: preferences?.favoriteChambers ?? [],
     chamber_order: preferences?.chamberOrder ?? [],
     default_accent: preferences?.defaultAccent ?? "wine",
@@ -166,9 +165,6 @@ export async function updateProfilePreferences(
   }
   if (prefs.notificationPrefs !== undefined) {
     updateData.notification_prefs = prefs.notificationPrefs;
-  }
-  if (prefs.displayName !== undefined) {
-    updateData.display_name = prefs.displayName;
   }
 
   if (Object.keys(updateData).length === 0) {
@@ -229,7 +225,7 @@ export async function getLeaderboardProfiles(limit = 20) {
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("profiles")
-    .select("id, username, salvation_score, display_name")
+    .select("id, username, salvation_score")
     .order("salvation_score", { ascending: false })
     .limit(limit);
 

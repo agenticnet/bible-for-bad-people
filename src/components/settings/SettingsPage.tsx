@@ -195,7 +195,7 @@ export default function SettingsPage() {
         <p className="mt-8 text-sm text-ink-soft">
           View your public profile at{" "}
           <Link href={`/u/${profile.username}`} className="text-wine hover:underline">
-            u/{profile.username}
+            {profile.username}
           </Link>
         </p>
       </div>

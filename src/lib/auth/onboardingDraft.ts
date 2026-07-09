@@ -14,13 +14,11 @@ export interface OnboardingDraft {
   chamberOrder: string[];
   defaultAccent: Accent;
   notificationPrefs: NotificationPrefs;
-  displayName: string;
   username: string;
   starterPackId: string;
 }
 
 export interface OnboardingPreferences {
-  displayName: string | null;
   favoriteChambers: string[];
   chamberOrder: string[];
   defaultAccent: Accent;
@@ -68,7 +66,6 @@ export function clearOnboardingDraft(): void {
 
 export function draftToPreferences(draft: OnboardingDraft): OnboardingPreferences {
   return {
-    displayName: draft.displayName.trim() || null,
     favoriteChambers: draft.favoriteChambers,
     chamberOrder: draft.chamberOrder,
     defaultAccent: draft.defaultAccent,

@@ -29,7 +29,7 @@ export function sinLogCopy(summary: LocalDataSummary = getLocalDataSummary()): s
 }
 
 export function confessionalPostCopy(): string {
-  return "Your confession preview disappears when you leave. Post as u/you and let strangers judge you properly.";
+  return "Your confession preview disappears when you leave. Post as you and let strangers judge you properly.";
 }
 
 export function chatSaveCopy(summary: LocalDataSummary = getLocalDataSummary()): string {

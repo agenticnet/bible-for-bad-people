@@ -22,7 +22,6 @@ export default function SignupForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [displayName, setDisplayName] = useState(draft.displayName);
   const [username, setUsername] = useState(draft.username || suggestUsername());
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -30,7 +29,6 @@ export default function SignupForm() {
 
   useEffect(() => {
     const loaded = loadOnboardingDraft();
-    setDisplayName(loaded.displayName);
     setUsername(loaded.username || suggestUsername());
   }, []);
 
@@ -79,7 +77,6 @@ export default function SignupForm() {
     const currentDraft = loadOnboardingDraft();
     const preferences = draftToPreferences({
       ...currentDraft,
-      displayName,
       username: normalized,
     });
     const profileResult = await createProfile(normalized, preferences);
@@ -113,23 +110,12 @@ export default function SignupForm() {
   return (
     <AuthFormShell
       title="Claim Your Ledger"
-      subtitle="Name yourself. Keep your sins. Customization comes later."
+      subtitle="Pick a username. Keep your sins. Customization comes later."
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Button type="button" accent="wine" onClick={handleGoogle}>
           Continue with Google
         </Button>
-        <div>
-          <Label htmlFor="display-name">Display name</Label>
-          <Input
-            id="display-name"
-            accent="wine"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
-            placeholder="KarenWhoReturnsCarts"
-            maxLength={40}
-          />
-        </div>
         <div>
           <Label htmlFor="username">Username</Label>
           <Input

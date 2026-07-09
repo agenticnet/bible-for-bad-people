@@ -1,4 +1,5 @@
 import type { OnboardingDraft } from "@/lib/auth/onboardingDraft";
+import { isValidUsername, normalizeUsername } from "@/lib/auth/types";
 import {
   DEFAULT_ACCENT,
   DEFAULT_FAVORITE_CHAMBERS,
@@ -36,9 +37,9 @@ const PRE_CLAIM_TASK_DEFS: {
 }[] = [
   {
     id: "identity",
-    label: "Set your display name",
+    label: "Choose your username",
     href: "/onboarding",
-    check: (draft) => draft.displayName.trim().length > 0,
+    check: (draft) => isValidUsername(normalizeUsername(draft.username)),
   },
   {
     id: "claim",

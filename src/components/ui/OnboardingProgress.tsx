@@ -100,7 +100,7 @@ export const ONBOARDING_STEPS: OnboardingStep[] = [
   {
     id: "identity",
     label: "Your Identity",
-    description: "Display name and username.",
+    description: "Choose a username.",
   },
   {
     id: "claim",

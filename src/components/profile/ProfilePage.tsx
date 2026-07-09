@@ -31,7 +31,6 @@ export default function ProfilePage({ data, isOwner }: ProfilePageProps) {
       <Header />
       <PageShell maxWidth="md" showBack>
         <header className="mb-8">
-          <p className="verse-ref mb-1 text-wine">u/{data.profile.username}</p>
           <h1 className="font-serif text-3xl font-bold text-ink">
             {data.profile.username}
           </h1>

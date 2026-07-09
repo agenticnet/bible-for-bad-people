@@ -43,7 +43,7 @@ export default function ConfessionCard({
       <div className="mb-3 flex flex-wrap items-center justify-between gap-2 border-b border-rule pb-3">
         <div className="flex items-center gap-2">
           <Badge tone="plum" size="sm">
-            u/{confession.authorLabel}
+            {confession.authorLabel}
           </Badge>
           {confession.isUser && (
             <span className="verse-ref text-wine">Your post</span>

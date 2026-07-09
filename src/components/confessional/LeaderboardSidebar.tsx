@@ -55,7 +55,7 @@ function LeaderboardList({
               {i + 1}.
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-ink-soft">u/{item.authorLabel}</p>
+              <p className="truncate text-ink-soft">{item.authorLabel}</p>
               <p className="line-clamp-2 text-ink-soft">{item.content}</p>
               <p className={`mt-0.5 font-mono ${accentClass}`}>
                 {metric === "absolve" ? item.absolveVotes : item.condemnVotes}{" "}

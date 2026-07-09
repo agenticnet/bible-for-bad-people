@@ -64,7 +64,7 @@ function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
             accent="plum"
             onClick={() => openSignUp("confessional", pathname)}
           >
-            Post as u/you
+            Post as you
           </Button>
           <Button type="button" variant="ghost" accent="plum" onClick={() => setPreview(false)}>
             Edit
@@ -77,7 +77,7 @@ function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
   return (
     <Surface as="form" accent="plum" accentTint onSubmit={handleSubmit}>
       <p className={cn("verse-ref mb-1", accentStyles.plum.text)}>
-        {profile ? `Posting as u/${profile.username}` : "Confession"}
+        {profile ? `Posting as ${profile.username}` : "Confession"}
       </p>
       <h2 className="mb-3 font-serif text-lg font-semibold text-ink">Unburden Thyself</h2>
       <Textarea

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useOnboardingDraft } from "@/components/auth/OnboardingDraftProvider";
@@ -30,6 +30,7 @@ export default function OnboardingWizard() {
   const searchParams = useSearchParams();
   const { profile } = useAuth();
   const { draft } = useOnboardingDraft();
+  const [usernameValid, setUsernameValid] = useState(false);
 
   const phase = parsePhase(searchParams.get("step"));
   const phaseIndex = PHASE_ORDER.indexOf(phase);
@@ -70,7 +71,7 @@ export default function OnboardingWizard() {
       <div className="py-8">
         <div className="mb-8">
           <p className="verse-ref mb-2 text-wine">Claim Your Ledger</p>
-          <h1 className="mb-2 font-serif text-3xl text-ink">Name Yourself. Keep Your Sins.</h1>
+          <h1 className="mb-2 font-serif text-3xl text-ink">Pick Your Username. Keep Your Sins.</h1>
           <p className="max-w-xl text-sm text-ink-soft">
             Two quick steps to claim your salvation ledger. Chamber access is already
             yours — customization comes later.
@@ -90,13 +91,16 @@ export default function OnboardingWizard() {
           }
         >
           <div>
-            {phase === "identity" && <IdentityStarterStep />}
+            {phase === "identity" && (
+              <IdentityStarterStep onValidityChange={setUsernameValid} />
+            )}
             {phase === "claim" && <ClaimLedgerStep />}
 
             {phase !== "claim" && (
               <FormActions
                 primaryLabel="Continue"
                 onPrimary={() => goToPhase(PHASE_ORDER[phaseIndex + 1]!)}
+                primaryDisabled={!usernameValid}
                 onBack={
                   phaseIndex > 0
                     ? () => goToPhase(PHASE_ORDER[phaseIndex - 1]!)

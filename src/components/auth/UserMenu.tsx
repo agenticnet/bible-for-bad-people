@@ -78,7 +78,7 @@ export default function UserMenu() {
           )}
         </span>
         <span className="hidden max-w-[8rem] truncate sm:inline">
-          {profile ? `u/${profile.username}` : "Set username"}
+          {profile ? profile.username : "Set username"}
         </span>
       </button>
 
