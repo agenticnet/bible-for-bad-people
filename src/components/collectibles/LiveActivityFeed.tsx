@@ -64,7 +64,11 @@ export default function LiveActivityFeed() {
             exit="hidden"
             transition={resolveTransition(transition.base, false)}
           >
-            <Surface accent="wine" accentTint className="px-4 py-3 shadow-lg" padding="sm">
+            <Surface
+              accent="wine"
+              className="px-4 py-3 shadow-[0_8px_30px_oklch(0.22_0.025_265/0.12)]"
+              padding="sm"
+            >
               <p className="text-contain text-sm text-ink">
                 <span className="font-semibold">{toast.displayName}</span>
                 {toast.city ? ` in ${toast.city}` : ""} just acquired{" "}
