@@ -58,7 +58,11 @@ export default function ChamberChatInterface({ config }: ChamberChatInterfacePro
               onSubmit={sendMessage}
               disabled={isTyping || (isAnonymous && previewExhausted)}
               placeholder={config.composer.placeholder}
-              hint={config.composer.hint}
+              hint={
+                isAnonymous && !previewExhausted
+                  ? "Guests get one free message — then you'll need a ledger to continue."
+                  : config.composer.hint
+              }
             />
           </AuthGate>
         )

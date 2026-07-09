@@ -41,7 +41,7 @@ export default function UserMenu() {
 
   if (!user) {
     return (
-      <div className="flex items-center gap-2">
+      <div className="hidden items-center gap-2 md:flex">
         <Link
           href="/login"
           className="rounded-sm px-2 py-1.5 text-xs text-binding-muted transition-colors hover:text-binding-ivory sm:px-3 sm:text-sm"
@@ -67,6 +67,7 @@ export default function UserMenu() {
         onClick={() => setOpen(!open)}
         className="relative flex items-center gap-2 rounded-sm border border-ivory/15 px-2 py-1.5 text-sm text-binding-ivory transition-colors hover:border-ivory/30"
         aria-expanded={open}
+        aria-label={profile ? `Account menu for ${profile.username}` : "Account menu"}
       >
         <span className="relative flex h-7 w-7 items-center justify-center rounded-full bg-wine/20 text-xs font-semibold text-wine">
           {initial}

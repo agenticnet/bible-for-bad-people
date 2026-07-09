@@ -12,6 +12,7 @@ interface ConfessionCardProps {
   userVote: VoteType | null;
   onVote: (id: string, vote: VoteType) => void;
   votingDisabled?: boolean;
+  voteDisabledReason?: string;
 }
 
 const verdictTones: Record<
@@ -34,6 +35,7 @@ export default function ConfessionCard({
   userVote,
   onVote,
   votingDisabled = false,
+  voteDisabledReason,
 }: ConfessionCardProps) {
   const verdict = getVerdict(confession.absolveVotes, confession.condemnVotes);
   const score = getScore(confession.absolveVotes, confession.condemnVotes);
@@ -92,6 +94,10 @@ export default function ConfessionCard({
         </div>
       </div>
 
+      {votingDisabled && voteDisabledReason && (
+        <p className="verse-ref mt-2 text-ink-soft">{voteDisabledReason}</p>
+      )}
+
       <p className="verse-ref mt-3 text-ink-soft">
         {new Date(confession.createdAt).toLocaleString([], {
           month: "short",
@@ -100,7 +106,7 @@ export default function ConfessionCard({
           minute: "2-digit",
         })}
         {" · "}
-        Tap again to remove vote
+        {!votingDisabled && "Tap again to remove vote"}
       </p>
     </Surface>
   );

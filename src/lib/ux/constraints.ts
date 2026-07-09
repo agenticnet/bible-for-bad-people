@@ -13,6 +13,12 @@ export const BOTTOM_SHEET_HEIGHT = "max-h-[60dvh]";
 /** Safe area padding for fixed bottom chrome */
 export const SAFE_BOTTOM = "pb-[max(1rem,env(safe-area-inset-bottom))]";
 
+/** Offset below fixed site Header (BindingBar follows in flow) */
+export const HEADER_OFFSET = "pt-16 sm:pt-[4.5rem]";
+
+/** Full viewport below fixed Header — for chat shells */
+export const VIEWPORT_BELOW_HEADER = "h-[calc(100dvh-4rem)] sm:h-[calc(100dvh-4.5rem)]";
+
 /** Scroll clearance when fixed bottom chrome is present (mobile thumb zone) */
 export const CONTENT_PAD_BOTTOM =
   "max-md:pb-[calc(5.5rem+env(safe-area-inset-bottom))]";

@@ -9,6 +9,7 @@ export type LossContext =
   | "confessional"
   | "chat"
   | "indulgences"
+  | "support"
   | "generic";
 
 export function smiteSaveCopy(summary: LocalDataSummary = getLocalDataSummary()): string {
@@ -53,6 +54,10 @@ export function indulgenceCheckoutCopy(): string {
   return "Certificates in your vault vanish without an account. Complete your ledger before the marketplace forgets you.";
 }
 
+export function supportTicketCopy(): string {
+  return "Prayer tickets require a ledger. Sign in to file requests and track Heavenly Administration's corporate non-responses.";
+}
+
 export function genericAuthCopy(): string {
   const total = getTotalLocalItems();
   if (total > 0) {
@@ -76,6 +81,8 @@ export function getLossCopy(context: LossContext): string {
       return chatSaveCopy(summary);
     case "indulgences":
       return indulgenceCheckoutCopy();
+    case "support":
+      return supportTicketCopy();
     case "generic":
       return genericAuthCopy();
     default: {
@@ -99,6 +106,8 @@ export function getSignUpModalTitle(context: LossContext): string {
       return "Save This Conversation";
     case "indulgences":
       return "Complete Your Purchase";
+    case "support":
+      return "File a Prayer Ticket";
     case "generic":
       return "Claim Your Ledger";
     default: {

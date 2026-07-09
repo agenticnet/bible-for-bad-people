@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -33,9 +34,32 @@ export default function Modal({
   closeDisabled = false,
 }: ModalProps) {
   const reducedMotion = useReducedMotion();
+  const panelRef = useRef<HTMLDivElement>(null);
   const backdropVariants = resolveVariants(fadeIn, reducedMotion);
   const panelVariants = resolveVariants(fadeUpScale, reducedMotion);
   const enterT = resolveTransition(transition.base, reducedMotion);
+
+  useEffect(() => {
+    if (!open) return;
+
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape" && !closeDisabled) onClose();
+    }
+
+    document.addEventListener("keydown", onKeyDown);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.body.style.overflow = prev;
+    };
+  }, [open, closeDisabled, onClose]);
+
+  useEffect(() => {
+    if (!open || !panelRef.current) return;
+    panelRef.current.focus();
+  }, [open]);
 
   return (
     <AnimatePresence>
@@ -50,15 +74,17 @@ export default function Modal({
           onClick={closeDisabled ? undefined : onClose}
         >
           <motion.div
+            ref={panelRef}
             className={cn(
               surfaceBase,
-              "relative w-full max-w-md p-6",
+              "relative w-full max-w-md p-6 outline-none",
               accentStyles[accent].borderMuted,
               className
             )}
             role="dialog"
             aria-modal="true"
             aria-label={title}
+            tabIndex={-1}
             initial="hidden"
             animate="visible"
             exit="hidden"

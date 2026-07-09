@@ -71,6 +71,14 @@ export default function SmiteButtonApp() {
   const freeRemaining = Math.max(FREE_DAILY_LIMIT - dailyCount, 0);
   const needsPremium = freeRemaining <= 0;
 
+  useEffect(() => {
+    if (needsPremium) {
+      setPremium(true);
+    } else {
+      setPremium(false);
+    }
+  }, [needsPremium]);
+
   const handleAnimationComplete = useCallback(() => {
     setShowAnimation(false);
     setSmiteing(false);
@@ -79,8 +87,9 @@ export default function SmiteButtonApp() {
   function handleSmite() {
     if (smiteing) return;
     if (target === "custom" && !customName.trim()) return;
+    if (needsPremium && !premium) return;
 
-    const usePremium = premium || (user ? needsPremium : false);
+    const usePremium = premium || needsPremium;
 
     setSmiteing(true);
     setShowAnimation(true);
@@ -182,14 +191,19 @@ export default function SmiteButtonApp() {
             🎯 Custom Target
           </OptionTile>
           {target === "custom" && (
-            <Input
-              accent="ember"
-              className="mt-2"
-              value={customName}
-              onChange={(e) => setCustomName(e.target.value)}
-              placeholder="Name thy enemy..."
-              maxLength={60}
-            />
+            <>
+              <Input
+                accent="ember"
+                className="mt-2"
+                value={customName}
+                onChange={(e) => setCustomName(e.target.value)}
+                placeholder="Name thy enemy..."
+                maxLength={60}
+              />
+              {!customName.trim() && (
+                <p className="mt-2 text-xs text-ink-soft">Name thy enemy to smite.</p>
+              )}
+            </>
           )}
         </section>
 
@@ -221,9 +235,9 @@ export default function SmiteButtonApp() {
           <label className="flex cursor-pointer items-start gap-3">
             <input
               type="checkbox"
-              checked={premium || Boolean(user && needsPremium)}
+              checked={premium}
               onChange={(e) => setPremium(e.target.checked)}
-              disabled={user ? needsPremium : false}
+              disabled={needsPremium}
               className="mt-1 accent-wine"
             />
             <div>
@@ -232,7 +246,7 @@ export default function SmiteButtonApp() {
                 Premium Smite (+ AI Visual Mock) — ${PREMIUM_PRICE.toFixed(2)}
               </p>
               <p className="mt-1 text-xs text-ink-soft">
-                {user && needsPremium
+                {needsPremium
                   ? smiteLimitCopy()
                   : "Optional cinematic smite description. Real AI video when Grok API arrives."}
               </p>
@@ -245,7 +259,11 @@ export default function SmiteButtonApp() {
             <button
               type="button"
               onClick={handleSmite}
-              disabled={smiteing || (target === "custom" && !customName.trim()) || Boolean(user && needsPremium && !premium)}
+              disabled={
+                smiteing ||
+                (target === "custom" && !customName.trim()) ||
+                (needsPremium && !premium)
+              }
               className={cn(
                 "group flex h-32 w-32 flex-col items-center justify-center rounded-full border-4 transition-colors disabled:opacity-50 sm:h-40 sm:w-40",
                 accentStyles.ember.border,

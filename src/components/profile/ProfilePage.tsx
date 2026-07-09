@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { MetricCard, PageShell, Surface } from "@/components/ui";
 import type { Database } from "@/lib/database.types";
@@ -28,7 +27,6 @@ export default function ProfilePage({ data, isOwner }: ProfilePageProps) {
 
   return (
     <>
-      <Header />
       <PageShell maxWidth="md" showBack>
         <header className="mb-8">
           <h1 className="font-serif text-3xl font-bold text-ink">

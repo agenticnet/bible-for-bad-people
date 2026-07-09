@@ -90,6 +90,13 @@ export default function ConfessionalLeaderboard() {
                 userVote={votes[confession.id] ?? null}
                 onVote={handleVote}
                 votingDisabled={!user || confession.id.startsWith("seed-")}
+                voteDisabledReason={
+                  confession.id.startsWith("seed-")
+                    ? "Demo confession — votes are for display only."
+                    : !user
+                      ? "Sign in to absolve or condemn."
+                      : undefined
+                }
               />
             ))}
           </div>

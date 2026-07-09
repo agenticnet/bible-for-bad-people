@@ -66,7 +66,7 @@ export default function Header() {
         )}
         aria-hidden={!mobileOpen}
       >
-        <div className="min-h-0">
+        <div className={cn("min-h-0", !mobileOpen && "invisible")} inert={!mobileOpen}>
           <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto px-4 py-4">
             <div className="mb-4 flex flex-col gap-1">
               {primaryNavLinks.map((link) => (

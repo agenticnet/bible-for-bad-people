@@ -24,6 +24,7 @@ export default function SupportDesk() {
   const { user } = useAuth();
   const [tickets, setTickets] = useState<PrayerTicket[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -41,6 +42,7 @@ export default function SupportDesk() {
   }) {
     if (isSubmitting || !user) return;
 
+    setSubmitError(null);
     const ticketNumber = generateTicketNumber();
 
     const newTicket: PrayerTicket = {
@@ -67,6 +69,7 @@ export default function SupportDesk() {
     }).then((result) => {
       if (result.error || !result.ticket) {
         setTickets((prev) => prev.filter((t) => t.ticketNumber !== ticketNumber));
+        setSubmitError(result.error ?? "Could not file your ticket. Try again in a moment.");
         setIsSubmitting(false);
         return;
       }
@@ -134,9 +137,12 @@ export default function SupportDesk() {
       <div className="grid gap-8 lg:grid-cols-5">
         <div className="lg:col-span-2">
           <AuthGate
+            mode="block"
             tone="slate"
+            lossContext="support"
             title="Sign in to file a ticket"
             description="Browse the support desk for free. Log in to submit prayer tickets and track responses."
+            saveLabel="Sign in to submit"
           >
             <Surface className="sticky top-4" padding="lg">
               <h2 className="mb-1 text-lg font-semibold text-ink">Submit a Prayer Ticket</h2>
@@ -144,6 +150,11 @@ export default function SupportDesk() {
                 File your request with Heavenly Administration. Response times may
                 vary by sin level and planetary alignment.
               </p>
+              {submitError && (
+                <p className="mb-4 text-sm text-ember" role="alert">
+                  {submitError}
+                </p>
+              )}
               <TicketForm onSubmit={handleSubmit} disabled={isSubmitting} />
             </Surface>
           </AuthGate>
