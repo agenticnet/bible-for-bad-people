@@ -15,6 +15,8 @@ export { default as TearSlider } from "./TearSlider";
 export { default as IconButton } from "./IconButton";
 export { default as BackLink } from "./BackLink";
 export { default as BindingBar } from "./BindingBar";
+export { default as ChamberBindingBar } from "./ChamberBindingBar";
+export { default as ChamberNavMenu } from "./ChamberNavMenu";
 export { default as PageShell, ChatPageShell } from "./PageShell";
 export { default as ChamberHeader } from "./ChamberHeader";
 export { default as SectionHeader } from "./SectionHeader";

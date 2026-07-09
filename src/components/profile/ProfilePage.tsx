@@ -1,6 +1,8 @@
 import Link from "next/link";
+import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { MetricCard, PageShell, Surface } from "@/components/ui";
+import { HEADER_OFFSET } from "@/lib/ux/constraints";
 import type { Database } from "@/lib/database.types";
 
 type Profile = Database["public"]["Tables"]["profiles"]["Row"];
@@ -27,7 +29,9 @@ export default function ProfilePage({ data, isOwner }: ProfilePageProps) {
 
   return (
     <>
-      <PageShell maxWidth="md" showBack>
+      <Header />
+      <div className={HEADER_OFFSET}>
+        <PageShell maxWidth="md" showBack showChamberNav={false}>
         <header className="mb-8">
           <h1 className="font-serif text-3xl font-bold text-ink">
             {data.profile.username}
@@ -74,7 +78,8 @@ export default function ProfilePage({ data, isOwner }: ProfilePageProps) {
             </Link>
           </Surface>
         )}
-      </PageShell>
+        </PageShell>
+      </div>
       <Footer />
     </>
   );
