@@ -2,8 +2,10 @@
 
 import { createClient } from "@/lib/supabase/server";
 import type { PurchasedIndulgence, UserSalvationProfile } from "@/lib/indulgenceTypes";
-import { calculateBaseSalvationScore } from "@/lib/indulgenceProducts";
-import { getBoostForProduct } from "@/lib/indulgenceStorage";
+import {
+  calculateBaseSalvationScore,
+  sumPurchaseBoosts,
+} from "@/lib/indulgenceProducts";
 
 async function requireUserId(): Promise<string | null> {
   const supabase = await createClient();
@@ -11,6 +13,39 @@ async function requireUserId(): Promise<string | null> {
     data: { user },
   } = await supabase.auth.getUser();
   return user?.id ?? null;
+}
+
+/** Full recalc from sins + purchases; persists to profiles.salvation_score. */
+export async function recalculateAndPersistSalvationScore(
+  userId: string
+): Promise<number> {
+  const supabase = await createClient();
+
+  const [{ count: sinCount }, { data: purchases }] = await Promise.all([
+    supabase
+      .from("sin_log_items")
+      .select("*", { count: "exact", head: true })
+      .eq("user_id", userId),
+    supabase.from("indulgence_purchases").select("product_id").eq("user_id", userId),
+  ]);
+
+  const base = calculateBaseSalvationScore(sinCount ?? 0);
+  const boost = sumPurchaseBoosts((purchases ?? []).map((p) => p.product_id));
+  const score = Math.min(base + boost, 99);
+
+  await supabase
+    .from("profiles")
+    .update({ salvation_score: score })
+    .eq("id", userId);
+
+  return score;
+}
+
+/** Client-callable sync for the authenticated user (e.g. after local migration). */
+export async function syncSalvationScore(): Promise<void> {
+  const userId = await requireUserId();
+  if (!userId) return;
+  await recalculateAndPersistSalvationScore(userId);
 }
 
 export async function fetchSalvationProfile(): Promise<UserSalvationProfile | null> {
@@ -43,10 +78,7 @@ export async function fetchSalvationProfile(): Promise<UserSalvationProfile | nu
   }));
 
   const base = calculateBaseSalvationScore(sinCount ?? 0);
-  const boost = mappedPurchases.reduce((sum, p) => {
-    if (p.productId === "leaderboard-boost") return sum + 50;
-    return sum + getBoostForProduct(p.productId);
-  }, 0);
+  const boost = sumPurchaseBoosts(mappedPurchases.map((p) => p.productId));
 
   return {
     displayName: profile.username,
@@ -57,7 +89,10 @@ export async function fetchSalvationProfile(): Promise<UserSalvationProfile | nu
 }
 
 export async function addIndulgencePurchase(
-  purchase: Omit<PurchasedIndulgence, "id">
+  purchase: Omit<PurchasedIndulgence, "id"> & {
+    /** When set (e.g. mystery crate), stock/drop checks use this id while productId is scored. */
+    inventoryProductId?: string;
+  }
 ): Promise<{ profile?: UserSalvationProfile; error?: string }> {
   const userId = await requireUserId();
   if (!userId) return { error: "Sign in to purchase indulgences." };
@@ -66,10 +101,12 @@ export async function addIndulgencePurchase(
     "@/lib/data/collectibles"
   );
 
-  const dropError = await validateDropWindow(purchase.productId);
+  const inventoryId = purchase.inventoryProductId ?? purchase.productId;
+
+  const dropError = await validateDropWindow(inventoryId);
   if (dropError) return { error: dropError };
 
-  const stockError = await decrementStockIfTracked(purchase.productId);
+  const stockError = await decrementStockIfTracked(inventoryId);
   if (stockError) return { error: stockError };
 
   const supabase = await createClient();
@@ -92,29 +129,12 @@ export async function addIndulgencePurchase(
 
   const newTotal = Number(profile?.total_spent ?? 0) + purchase.pricePaid;
 
-  const { data: allPurchases } = await supabase
-    .from("indulgence_purchases")
-    .select("product_id")
-    .eq("user_id", userId);
-
-  const { count: sinCount } = await supabase
-    .from("sin_log_items")
-    .select("*", { count: "exact", head: true })
-    .eq("user_id", userId);
-
-  const base = calculateBaseSalvationScore(sinCount ?? 0);
-  const boost = (allPurchases ?? []).reduce((sum, p) => {
-    if (p.product_id === "leaderboard-boost") return sum + 50;
-    return sum + getBoostForProduct(p.product_id);
-  }, 0);
-
   await supabase
     .from("profiles")
-    .update({
-      total_spent: newTotal,
-      salvation_score: Math.min(base + boost, 99),
-    })
+    .update({ total_spent: newTotal })
     .eq("id", userId);
+
+  await recalculateAndPersistSalvationScore(userId);
 
   const updated = await fetchSalvationProfile();
   return { profile: updated ?? undefined };

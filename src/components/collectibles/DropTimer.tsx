@@ -43,7 +43,7 @@ export default function DropTimer({ className }: DropTimerProps) {
         innerClassName="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between"
       >
       <div className="flex min-w-0 items-center gap-2">
-        <Badge tone={countdown.isEndingSoon ? "warning" : "wine"} size="sm">
+        <Badge tone={countdown.isEndingSoon ? "ember" : "wine"} size="sm">
           Timed Drop
         </Badge>
         <span className="truncate text-sm font-medium text-ivory">
@@ -53,9 +53,8 @@ export default function DropTimer({ className }: DropTimerProps) {
       <div className="flex shrink-0 items-center gap-3">
         <span
           className={cn(
-            "verse-ref text-ink-soft",
-            countdown.phase === "upcoming" && "text-ink-soft",
-            countdown.isEndingSoon && "text-warning"
+            "verse-ref text-ivory/70",
+            countdown.isEndingSoon && "text-ember"
           )}
         >
           {countdown.label}

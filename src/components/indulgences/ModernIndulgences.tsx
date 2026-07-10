@@ -137,24 +137,21 @@ export default function ModernIndulgences() {
             onPurchased={refreshProfile}
             variant="recommended"
           />
-          <div className="grid min-w-0 items-start gap-10 lg:grid-cols-[2fr_1fr]">
-            <PricingSection
-              title="Everyday Absolution"
-              products={grouped.everyday}
-              displayName={displayName}
-              onPurchased={refreshProfile}
-              variant="everyday"
-              layout="wide"
-            />
-            <PricingSection
-              title="Monthly Peace of Mind"
-              description="Soul Insurance at $14.99/mo makes Indulgence+ at $9.99/mo feel like a steal."
-              products={grouped.subscription}
-              displayName={displayName}
-              onPurchased={refreshProfile}
-              variant="subscription"
-            />
-          </div>
+          <PricingSection
+            title="Everyday Absolution"
+            products={grouped.everyday}
+            displayName={displayName}
+            onPurchased={refreshProfile}
+            variant="everyday"
+          />
+          <PricingSection
+            title="Monthly Peace of Mind"
+            description="Soul Insurance at $14.99/mo makes Indulgence+ at $9.99/mo feel like a steal."
+            products={grouped.subscription}
+            displayName={displayName}
+            onPurchased={refreshProfile}
+            variant="subscription"
+          />
           <DropTimer />
         </div>
       )}

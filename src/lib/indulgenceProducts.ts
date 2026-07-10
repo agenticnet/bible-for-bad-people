@@ -195,6 +195,16 @@ export function calculateBaseSalvationScore(sinCount: number): number {
   return Math.max(base - penalty, 5);
 }
 
+/** Catalog-sourced boost — single source of truth for purchase score deltas. */
+export function getBoostForProduct(productId: string): number {
+  const product = INDULGENCE_PRODUCTS.find((p) => p.id === productId);
+  return product?.leaderboardBoost ?? 0;
+}
+
+export function sumPurchaseBoosts(productIds: string[]): number {
+  return productIds.reduce((sum, id) => sum + getBoostForProduct(id), 0);
+}
+
 export function buildLeaderboard(
   userName: string | null,
   userScore: number,

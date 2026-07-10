@@ -1,5 +1,9 @@
 import type { PurchasedIndulgence, UserSalvationProfile } from "./indulgenceTypes";
-import { calculateBaseSalvationScore } from "./indulgenceProducts";
+import {
+  calculateBaseSalvationScore,
+  getBoostForProduct,
+  sumPurchaseBoosts,
+} from "./indulgenceProducts";
 import { loadSinLog } from "./sinStorage";
 
 const PROFILE_KEY = "indulgence-profile";
@@ -33,29 +37,8 @@ export function saveProfile(profile: UserSalvationProfile): void {
 export function computeSalvationScore(profile: UserSalvationProfile): number {
   const sinCount = loadSinLog().length;
   const base = calculateBaseSalvationScore(sinCount);
-  const boost = profile.purchases.reduce((sum, p) => {
-    const product = p.productId;
-    if (product === "leaderboard-boost") return sum + 50;
-    return sum + getBoostForProduct(product);
-  }, 0);
-
+  const boost = sumPurchaseBoosts(profile.purchases.map((p) => p.productId));
   return Math.min(base + boost, 99);
-}
-
-function getBoostForProduct(productId: string): number {
-  const boosts: Record<string, number> = {
-    "total-absolution": 25,
-    "weekend-pass": 5,
-    "venial-coupon": 1,
-    "sin-bundle-5": 3,
-    "hell-free-card": 40,
-    "leaderboard-boost": 50,
-    "celebrity-prayer-jump": 10,
-    "probably-fine-registry": 15,
-    "soul-insurance": 8,
-    "indulgence-subscription": 12,
-  };
-  return boosts[productId] ?? 0;
 }
 
 export function addPurchase(

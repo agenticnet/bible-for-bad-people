@@ -24,7 +24,7 @@ export default function InventoryCounter({ productId }: InventoryCounterProps) {
 
   if (remaining <= threshold) {
     return (
-      <Badge tone="warning">
+      <Badge tone="ember">
         Only {remaining} left in existence
       </Badge>
     );

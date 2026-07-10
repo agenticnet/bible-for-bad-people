@@ -10,6 +10,7 @@ import {
   generateCertificateId,
   INDULGENCE_PRODUCTS,
 } from "@/lib/indulgenceProducts";
+import { recalculateAndPersistSalvationScore } from "@/lib/data/indulgences";
 import type { Database } from "@/lib/database.types";
 
 type ProfileUpdate = Database["public"]["Tables"]["profiles"]["Update"];
@@ -59,7 +60,6 @@ async function grantStarterPack(
   if (!product) return;
 
   const supabase = await createClient();
-  const boost = product.leaderboardBoost ?? 0;
 
   await supabase.from("indulgence_purchases").insert({
     user_id: userId,
@@ -70,23 +70,22 @@ async function grantStarterPack(
     purchased_at: new Date().toISOString(),
   });
 
-  if (boost > 0) {
-    const { data: profile } = await supabase
-      .from("profiles")
-      .select("salvation_score, total_spent")
-      .eq("id", userId)
-      .maybeSingle();
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("total_spent")
+    .eq("id", userId)
+    .maybeSingle();
 
-    if (profile) {
-      await supabase
-        .from("profiles")
-        .update({
-          salvation_score: profile.salvation_score + boost,
-          total_spent: Number(profile.total_spent) + product.price,
-        })
-        .eq("id", userId);
-    }
+  if (profile) {
+    await supabase
+      .from("profiles")
+      .update({
+        total_spent: Number(profile.total_spent) + product.price,
+      })
+      .eq("id", userId);
   }
+
+  await recalculateAndPersistSalvationScore(userId);
 }
 
 export async function createProfile(

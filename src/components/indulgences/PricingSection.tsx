@@ -51,7 +51,7 @@ const variantStyles = {
   subscription: {
     surface: "slate" as const,
     hint: "Compare monthly peace of mind.",
-    layout: "sidebar" as const,
+    layout: "full" as const,
   },
 };
 
@@ -95,7 +95,13 @@ export default function PricingSection({
   return (
     <section className="mb-10">
       <SectionHeader
-        kicker={variant === "anchor" ? "Anchor Tier" : variant === "subscription" ? "Subscriptions" : "Marketplace"}
+        kicker={
+          variant === "anchor"
+            ? "Anchor Tier"
+            : variant === "subscription"
+              ? "Subscriptions"
+              : "One-time"
+        }
         title={title}
         description={description ?? styles.hint}
         accent={styles.surface ?? "wine"}

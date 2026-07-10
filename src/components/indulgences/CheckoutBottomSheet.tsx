@@ -109,7 +109,9 @@ export default function CheckoutBottomSheet({
 
       setStep("confirmation");
 
-      const purchasePromise = addIndulgencePurchase({
+      setServerPending(true);
+
+      const result = await addIndulgencePurchase({
         productId: product.id,
         productName: product.name,
         purchasedAt: new Date().toISOString(),
@@ -117,27 +119,30 @@ export default function CheckoutBottomSheet({
         pricePaid: product.price,
       });
 
-      setServerPending(true);
+      if (result.error) {
+        setServerPending(false);
+        setProcessing(false);
+        setError(result.error);
+        setStep("anchor");
+        return;
+      }
 
       if (addInsurance && SOUL_INSURANCE) {
-        void addIndulgencePurchase({
+        const insuranceResult = await addIndulgencePurchase({
           productId: SOUL_INSURANCE.id,
           productName: SOUL_INSURANCE.name,
           purchasedAt: new Date().toISOString(),
           certificateId: generateCertificateId(),
           pricePaid: SOUL_INSURANCE.price,
         });
+        if (insuranceResult.error) {
+          // Main purchase succeeded; surface insurance failure without rolling back.
+          setError(insuranceResult.error);
+        }
       }
 
-      const result = await purchasePromise;
       setServerPending(false);
       setProcessing(false);
-
-      if (result.error) {
-        setError(result.error);
-        setStep("anchor");
-        return;
-      }
 
       onPurchased();
       void collectibles?.refreshInventory();

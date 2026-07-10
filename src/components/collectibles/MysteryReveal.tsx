@@ -93,8 +93,10 @@ export default function MysteryReveal({
     setStep("suspense");
     setPurchasePending(true);
 
+    // Score the rolled reward; decrement crate inventory separately.
     const purchasePromise = addIndulgencePurchase({
-      productId: product.id,
+      productId: rolled.productId,
+      inventoryProductId: product.id,
       productName: `${product.name} → ${rolled.productName}`,
       purchasedAt: new Date().toISOString(),
       certificateId: generateCertificateId(),
@@ -156,7 +158,7 @@ export default function MysteryReveal({
           <div className={cn("flex flex-1 flex-col overflow-y-auto bg-binding/90", CONTENT_PAD_BOTTOM)}>
             <div className="flex flex-1 flex-col items-center justify-center p-6">
               {error && step === "anticipation" && (
-                <Callout tone="warning" className="mb-6 max-w-sm">
+                <Callout tone="ember" className="mb-6 max-w-sm">
                   {error}
                 </Callout>
               )}
@@ -190,7 +192,7 @@ export default function MysteryReveal({
                   </motion.span>
                   <p className="verse-ref mb-4 text-wine">Step 2 — Suspense</p>
                   <div className="h-32 w-48 max-w-full animate-pulse rounded-xl border border-wine/30 bg-wine/10" />
-                  <p className="mt-4 text-sm text-ink-soft">The crate shimmies…</p>
+                  <p className="mt-4 text-sm text-ivory/70">The crate shimmies…</p>
                 </motion.div>
               )}
 

@@ -6,6 +6,7 @@ import { loadProfile } from "@/lib/indulgenceStorage";
 import { loadSinLog, loadCommunitySins } from "@/lib/sinStorage";
 import { loadSmiteHistory } from "@/lib/smiteStorage";
 import { loadReading, STORAGE_KEY_PREFIX } from "@/lib/mockOracleDeck";
+import { syncSalvationScore } from "@/lib/data/indulgences";
 import type { Json } from "@/lib/database.types";
 
 const MIGRATION_PREFIX = "bfb-migrated-";
@@ -177,6 +178,7 @@ export async function migrateLocalData(userId: string): Promise<void> {
   }
 
   if (!hadErrors) {
+    await syncSalvationScore();
     markMigrated(userId);
   }
 }

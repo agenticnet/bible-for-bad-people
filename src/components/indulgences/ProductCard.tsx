@@ -101,11 +101,11 @@ export default function ProductCard({
         <span className="text-3xl">{product.icon}</span>
         <div className="flex flex-wrap gap-1.5">
           <InventoryCounter productId={product.id} />
-          {product.tier === "ultimate" && <Badge tone="plum">Ultimate</Badge>}
+          {product.tier === "ultimate" && <Badge tone="active">Ultimate</Badge>}
           {product.pricingTier === "recommended" && !hero && (
             <Badge tone="wine">Popular</Badge>
           )}
-          {product.isMysteryPack && <Badge tone="plum">Mystery</Badge>}
+          {product.isMysteryPack && <Badge tone="wine">Mystery</Badge>}
         </div>
       </div>
 

@@ -112,13 +112,13 @@ export default function SuccessMoment({
     <div className={cn("relative py-6 text-center", className)}>
       {showParticles && !reducedMotion && <ParticleBurst active />}
       <motion.div
-        className="relative mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-green-500/30 bg-green-500/10"
+        className="relative mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full border border-wine/30 bg-wine/10"
         variants={fadeUpScale}
         initial="hidden"
         animate="visible"
         transition={resolveTransition(transition.base, reducedMotion)}
       >
-        {icon ?? <Check className="h-8 w-8 text-green-400" strokeWidth={2.5} />}
+        {icon ?? <Check className="h-8 w-8 text-wine" strokeWidth={2.5} />}
       </motion.div>
       <motion.p
         className="mb-2 text-lg font-bold text-wine"

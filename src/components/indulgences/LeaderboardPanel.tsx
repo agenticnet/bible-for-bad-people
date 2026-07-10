@@ -2,7 +2,7 @@
 
 import type { LeaderboardEntry } from "@/lib/indulgenceTypes";
 import { SectionHeader, Surface } from "@/components/ui";
-import { accentStyles, statusStyles } from "@/components/ui/tokens";
+import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
 interface LeaderboardPanelProps {
@@ -71,11 +71,9 @@ export default function LeaderboardPanel({
                 <span
                   className={cn(
                     "text-right font-mono text-sm font-bold",
-                    entry.salvationScore >= 80
-                      ? statusStyles.success.text
-                      : entry.salvationScore >= 50
-                        ? accentStyles.wine.text
-                        : accentStyles.ember.text
+                    entry.salvationScore >= 50
+                      ? accentStyles.wine.text
+                      : accentStyles.ember.text
                   )}
                 >
                   {entry.salvationScore}

@@ -2,8 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import type { ContributedSin, SinLogItem } from "@/lib/sinTypes";
-import { calculateBaseSalvationScore } from "@/lib/indulgenceProducts";
-import { getBoostForProduct } from "@/lib/indulgenceStorage";
+import { recalculateAndPersistSalvationScore } from "@/lib/data/indulgences";
 
 async function requireUserId(): Promise<string | null> {
   const supabase = await createClient();
@@ -158,24 +157,5 @@ export async function saveDailyCompleted(
 }
 
 async function recalculateSalvationScore(userId: string): Promise<void> {
-  const supabase = await createClient();
-
-  const [{ count: sinCount }, { data: purchases }] = await Promise.all([
-    supabase
-      .from("sin_log_items")
-      .select("*", { count: "exact", head: true })
-      .eq("user_id", userId),
-    supabase.from("indulgence_purchases").select("product_id").eq("user_id", userId),
-  ]);
-
-  const base = calculateBaseSalvationScore(sinCount ?? 0);
-  const boost = (purchases ?? []).reduce((sum, p) => {
-    if (p.product_id === "leaderboard-boost") return sum + 50;
-    return sum + getBoostForProduct(p.product_id);
-  }, 0);
-
-  await supabase
-    .from("profiles")
-    .update({ salvation_score: Math.min(base + boost, 99) })
-    .eq("id", userId);
+  await recalculateAndPersistSalvationScore(userId);
 }
