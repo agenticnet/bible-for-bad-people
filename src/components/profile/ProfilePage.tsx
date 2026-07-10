@@ -67,8 +67,8 @@ export default function ProfilePage({ data, isOwner }: ProfilePageProps) {
           <Surface accent="wine" accentTint>
             <h2 className="mb-2 font-serif text-lg font-semibold text-ink">Your Stats</h2>
             <ul className="space-y-2 text-sm text-ink-soft">
-              <li>Mock indulgences purchased: {data.stats.purchaseCount}</li>
-              <li>Total mock spend: ${Number(data.profile.total_spent).toFixed(2)}</li>
+              <li>Indulgences purchased: {data.stats.purchaseCount}</li>
+              <li>Total spent: ${Number(data.profile.total_spent).toFixed(2)}</li>
             </ul>
             <Link
               href="/indulgences"

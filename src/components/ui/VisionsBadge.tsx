@@ -12,7 +12,7 @@ interface VisionsBadgeProps {
 }
 
 export default function VisionsBadge({
-  label = "Visions Approximate",
+  label = "Satire, not scripture",
   accent = "plum",
   className,
 }: VisionsBadgeProps) {

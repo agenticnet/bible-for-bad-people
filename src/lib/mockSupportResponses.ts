@@ -9,7 +9,7 @@ const CATEGORY_RESPONSES: Record<TicketCategory, string[]> = {
   "miracle-request": [
     "Your miracle request has been escalated to Tier 2 Celestial Support. Previous troubleshooting steps: have you tried praying harder? Ticket {id} remains open pending evidence of effort.",
     "Miracle request received. Please note that miracles are subject to availability and divine mood. Current SLA: best effort. We recommend backup plans involving human agency.",
-    "We cannot fulfill your miracle at this time. Error code: MIR-403 (Insufficient Faith Credits). To purchase Faith Credits, please visit Modern Indulgences — coming soon.",
+    "We cannot fulfill your miracle at this time. Error code: MIR-403 (Insufficient Faith Credits). To purchase Faith Credits, please visit Modern Indulgences.",
   ],
   relationship: [
     "Your relationship ticket has been assigned to the Department of Free Will. We cannot override their decisions. Have you considered communication, therapy, or accepting that some people are lessons?",
@@ -60,7 +60,7 @@ export function getMockSupportResponse(
 
   if (subject.toLowerCase().includes("landlord")) {
     response =
-      "Your request to smite your landlord has been received. Current queue time is 400 years. Please note: smiting landlords requires a premium Modern Indulgences subscription (coming soon).";
+      "Your request to smite your landlord has been received. Current queue time is 400 years. Please note: smiting landlords requires a premium Modern Indulgences subscription.";
   }
 
   return response + PRIORITY_ADDENDUM[priority];

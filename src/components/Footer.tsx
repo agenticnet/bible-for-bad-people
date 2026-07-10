@@ -52,14 +52,17 @@ export default function Footer() {
               href="/#chambers"
               className="text-xs text-binding-muted transition-colors hover:text-binding-ivory"
             >
-              The Chambers
+              All chambers
             </Link>
-            <Link
-              href="/chat"
-              className="text-xs text-binding-muted transition-colors hover:text-binding-ivory"
-            >
-              Speak with GOD
-            </Link>
+            {chamberNavGroups.map((group) => (
+              <Link
+                key={group.title}
+                href={group.links[0]?.href ?? "/#chambers"}
+                className="text-xs text-binding-muted transition-colors hover:text-binding-ivory"
+              >
+                {group.title}
+              </Link>
+            ))}
           </div>
         </div>
 

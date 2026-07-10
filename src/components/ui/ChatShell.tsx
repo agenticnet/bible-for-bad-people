@@ -152,7 +152,7 @@ export function ChatHeader({
           <VisionsBadge
             label={badge}
             accent={accent}
-            className="ms-auto hidden sm:block"
+            className="ms-auto"
           />
         )}
       </div>

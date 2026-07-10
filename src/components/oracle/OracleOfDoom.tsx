@@ -106,7 +106,7 @@ export default function OracleOfDoom() {
         accent="plum"
         align="center"
         title="Oracle of Doom"
-        badge="Visions Approximate"
+        badge="Daily doom"
         className="mb-10 border-b border-rule pb-8"
       >
         <p className="verse-ref mt-2 text-ink-soft">

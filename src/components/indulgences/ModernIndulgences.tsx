@@ -83,8 +83,8 @@ export default function ModernIndulgences() {
         icon={Crown}
         accent="wine"
         title="Modern Indulgences"
-        subtitle="Salvation as a Service™ · Mock payments only"
-        badge="Stripe Never"
+        subtitle="Salvation as a Service™ · No real charges"
+        badge="No real charges"
       />
 
       {user && profile && (
@@ -106,7 +106,7 @@ export default function ModernIndulgences() {
             hint="−2 each from Sin Engine"
           />
           <MetricCard
-            label="Total Spent (Mock)"
+            label="Total Spent"
             value={`$${profile.totalSpent.toFixed(2)}`}
             hint={`${profile.purchases.length} purchases`}
           />

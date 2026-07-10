@@ -37,25 +37,25 @@ const TARGET_PREFIX: Record<SmiteTarget, (name: string) => string> = {
 
 const PREMIUM_VISUALS: Record<PlagueType, string> = {
   locusts:
-    "[AI VISUAL MOCK] A biblical swarm of locusts descends on a Prius stuck in traffic. Dashboard cam footage. 4K wrath.",
+    "A biblical swarm of locusts descends on a Prius stuck in traffic. Dashboard cam footage. 4K wrath.",
   frogs:
-    "[AI VISUAL MOCK] Thousands of frogs pour from an office elevator as your boss arrives for a board meeting. Slow motion. Cinematic.",
+    "Thousands of frogs pour from an office elevator as your boss arrives for a board meeting. Slow motion. Cinematic.",
   boils:
-    "[AI VISUAL MOCK] Close-up of boils forming on a landlord's forehead during a tenant inspection. Horror lighting. Uncomfortable.",
+    "Close-up of boils forming on a landlord's forehead during a tenant inspection. Horror lighting. Uncomfortable.",
   darkness:
-    "[AI VISUAL MOCK] Your neighbor's house goes pitch black mid-birthday party. Confused screaming. Found footage aesthetic.",
+    "Your neighbor's house goes pitch black mid-birthday party. Confused screaming. Found footage aesthetic.",
   hail:
-    "[AI VISUAL MOCK] Golf-ball hail destroys a slow walker's umbrella while they text in the middle of the crosswalk. Justice.",
+    "Golf-ball hail destroys a slow walker's umbrella while they text in the middle of the crosswalk. Justice.",
   pestilence:
-    "[AI VISUAL MOCK] Your ex opens a dating app to find every match has the same plague emoji bio. Wide shot. Tragic.",
+    "Your ex opens a dating app to find every match has the same plague emoji bio. Wide shot. Tragic.",
   "blood-river":
-    "[AI VISUAL MOCK] A suburban kitchen faucet runs crimson. The terrible customer from aisle 7 watches in the reflection.",
+    "A suburban kitchen faucet runs crimson. The terrible customer from aisle 7 watches in the reflection.",
   gnats:
-    "[AI VISUAL MOCK] Gnats form the word 'PETTY' in the air above your coworker's standing desk. Drone shot. Divine.",
+    "Gnats form the word 'PETTY' in the air above your coworker's standing desk. Drone shot. Divine.",
   "livestock-death":
-    "[AI VISUAL MOCK] Houseplants wilt in synchronized agony across a Zoom grid of annoying meeting attendees.",
+    "Houseplants wilt in synchronized agony across a Zoom grid of annoying meeting attendees.",
   "firstborn-wifi":
-    "[AI VISUAL MOCK] Router lights blink red as a teenager realizes Fortnite is offline during a ranked match. Documentary style.",
+    "Router lights blink red as a teenager realizes Fortnite is offline during a ranked match. Documentary style.",
 };
 
 const DEFAULT_NAMES: Record<SmiteTarget, string> = {

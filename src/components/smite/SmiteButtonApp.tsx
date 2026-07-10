@@ -154,8 +154,8 @@ export default function SmiteButtonApp() {
           accent="ember"
           align="center"
           title="Smite Button"
-          badge="Visions Approximate"
-          subtitle="Digitally smite minor inconveniences with classic biblical plagues. Free smites daily. Premium tier includes mock AI smiting visuals."
+          badge="Digital plagues"
+          subtitle="Digitally smite minor inconveniences with classic biblical plagues. Free smites daily. Premium tier includes a cinematic smite description."
           className="mb-8"
         >
           <p className={cn("mt-3 text-sm", accentStyles.wine.text)}>
@@ -243,12 +243,12 @@ export default function SmiteButtonApp() {
             <div>
               <p className={cn("flex items-center gap-2 text-sm font-semibold", accentStyles.wine.text)}>
                 <Crown className="h-4 w-4" />
-                Premium Smite (+ AI Visual Mock) — ${PREMIUM_PRICE.toFixed(2)}
+                Premium Smite (+ Cinematic Visual) — ${PREMIUM_PRICE.toFixed(2)}
               </p>
               <p className="mt-1 text-xs text-ink-soft">
                 {needsPremium
                   ? smiteLimitCopy()
-                  : "Optional cinematic smite description. Real AI video when Grok API arrives."}
+                  : "Optional cinematic smite description for the truly petty."}
               </p>
             </div>
           </label>

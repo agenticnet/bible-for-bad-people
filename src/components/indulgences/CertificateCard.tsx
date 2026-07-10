@@ -63,7 +63,7 @@ export default function CertificateCard({ purchase }: CertificateCardProps) {
               year: "numeric",
             })}
             {" · "}
-            Paid ${purchase.pricePaid.toFixed(2)} (mock)
+            Paid ${purchase.pricePaid.toFixed(2)} (no real charge)
           </p>
 
           <p className="verse-ref mt-4 italic text-ink-soft">

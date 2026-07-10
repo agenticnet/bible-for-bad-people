@@ -109,7 +109,7 @@ export default function ConfessionCard({
 
       {demoOnly && (
         <p className="verse-ref mt-2 text-ink-soft">
-          Demo confession — votes are for display only.
+          Votes are for display only.
         </p>
       )}
       {requiresAuth && !demoOnly && (

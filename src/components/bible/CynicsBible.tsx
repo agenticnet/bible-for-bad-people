@@ -48,6 +48,7 @@ export default function CynicsBible() {
         accent="wine"
         title="The Cynic's TL;DR Bible"
         subtitle="Canon, abridged"
+        badge="Skipped in church"
         className="mb-10 border-b border-rule pb-8"
       >
         <p className="mt-3 max-w-xl text-base leading-relaxed text-ink-soft">
@@ -124,7 +125,7 @@ export default function CynicsBible() {
       )}
 
       <p className="verse-ref mt-10 text-center text-ink-soft">
-        {results.length} curated passages — full searchable API coming later.
+        {results.length} curated passages. Sunday school never covered these.
       </p>
     </PageShell>
   );

@@ -11,11 +11,11 @@ export default function CTASection() {
           Ready to unload your sins?
         </h2>
         <p className="mx-auto mb-8 max-w-lg text-base leading-relaxed text-ink-soft">
-          The confessional is open 24/7. GOD is listening — probably.
+          GOD is listening — probably. Vent, confess, or demand a miracle.
           Responses may vary in divine indifference.
         </p>
         <LinkButton href="/chat" className="gap-2">
-          Open the Confessional
+          Speak with GOD
           <ArrowRight className="h-5 w-5" />
         </LinkButton>
       </Reveal>

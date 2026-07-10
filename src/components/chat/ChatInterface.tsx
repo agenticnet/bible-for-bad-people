@@ -14,6 +14,7 @@ const godChatConfig = {
     avatar: <span className="text-xl">✝</span>,
     title: "Speak with GOD",
     status: "Online — Judging silently",
+    badge: "Satire, not scripture",
   },
   authGate: {
     title: "Sign in to speak with GOD",
@@ -22,7 +23,7 @@ const godChatConfig = {
   },
   composer: {
     placeholder: "Confess, vent, or demand a miracle...",
-    hint: "Mock responses only. Enter to send, Shift+Enter for new line.",
+    hint: "Enter to send, Shift+Enter for a new line.",
   },
   bubbles: {
     assistantAvatar: "✝",

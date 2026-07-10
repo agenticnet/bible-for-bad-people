@@ -46,7 +46,7 @@ export default function SmiteResultCard({ record }: SmiteResultCardProps) {
       {record.visualDescription && (
         <Callout tone="wine" className="p-3">
           <p className={cn("verse-ref mb-1", accentStyles.wine.text)}>
-            Premium AI Visual (Mock)
+            Cinematic Visual
           </p>
           <p className="text-xs leading-relaxed text-ink-soft">
             {record.visualDescription}

@@ -43,6 +43,7 @@ export interface ChamberChatConfig {
     avatar: ReactNode;
     title: string;
     status: string;
+    badge?: string;
   };
   authGate: {
     title: string;

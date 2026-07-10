@@ -71,7 +71,7 @@ export default function ConfessionalLeaderboard() {
         accent="plum"
         title="The Confessional Leaderboard"
         subtitle="Anonymous sins · Absolve or Condemn · Democracy, but unhinged"
-        badge="Visions Approximate"
+        badge="Absolve or condemn"
       />
 
       <div className="grid gap-8 lg:grid-cols-3">

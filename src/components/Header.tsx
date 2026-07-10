@@ -3,9 +3,10 @@
 import Link from "next/link";
 import { Cross, Menu, X } from "lucide-react";
 import { useState } from "react";
-import { primaryNavLinks, chamberNavGroups } from "@/lib/navigation";
+import { chamberNavGroups } from "@/lib/navigation";
 import UserMenu from "@/components/auth/UserMenu";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { ChamberNavMenu } from "@/components/ui";
 import { cn } from "@/lib/utils";
 
 export default function Header() {
@@ -34,15 +35,7 @@ export default function Header() {
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex" aria-label="Primary">
-          {primaryNavLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className="whitespace-nowrap text-sm text-binding-muted transition-colors hover:text-binding-ivory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/40 focus-visible:ring-offset-2 focus-visible:ring-offset-binding"
-            >
-              {link.label}
-            </Link>
-          ))}
+          <ChamberNavMenu variant="header" />
         </nav>
 
         <div className="flex min-w-0 shrink-0 items-center gap-3">
@@ -69,16 +62,13 @@ export default function Header() {
         <div className={cn("min-h-0", !mobileOpen && "invisible")} inert={!mobileOpen}>
           <div className="max-h-[calc(100dvh-4rem)] overflow-y-auto px-4 py-4">
             <div className="mb-4 flex flex-col gap-1">
-              {primaryNavLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="rounded-sm px-3 py-2.5 text-sm font-medium text-binding-ivory transition-colors hover:bg-ivory/5"
-                  onClick={closeMobile}
-                >
-                  {link.label}
-                </Link>
-              ))}
+              <Link
+                href="/#chambers"
+                className="rounded-sm px-3 py-2.5 text-sm font-medium text-binding-ivory transition-colors hover:bg-ivory/5"
+                onClick={closeMobile}
+              >
+                All chambers
+              </Link>
             </div>
 
             {!user && (

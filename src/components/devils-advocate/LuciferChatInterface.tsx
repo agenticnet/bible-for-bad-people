@@ -10,7 +10,7 @@ import { getRandomLuciferResponse } from "@/lib/mockLuciferResponses";
 const luciferChatConfig = {
   channel: "lucifer" as const,
   assistantRole: "lucifer" as const,
-  accent: "ember" as const,
+  accent: "plum" as const,
   initialMessage: INITIAL_LUCIFER_MESSAGE,
   getMockResponse: getRandomLuciferResponse,
   mapStoredMessage: (m: ChamberMessage): ChamberMessage => ({
@@ -23,6 +23,7 @@ const luciferChatConfig = {
     avatar: <Flame className="h-5 w-5" />,
     title: "Devil's Advocate Mode",
     status: "Online — Enabling poor choices",
+    badge: "Counsel from below",
   },
   authGate: {
     title: "Sign in to chat with Lucifer",
@@ -31,7 +32,7 @@ const luciferChatConfig = {
   },
   composer: {
     placeholder: "What's the worst idea you're considering?",
-    hint: "Mock responses only. Enter to send.",
+    hint: "Enter to send.",
   },
   bubbles: {
     assistantAvatar: "😈",

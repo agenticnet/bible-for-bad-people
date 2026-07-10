@@ -45,7 +45,7 @@ export default function SinTranslationApp() {
         accent="terra"
         title='"Sin" Translation Engine'
         subtitle={`Petty sins → King James drama · ${SIN_LIBRARY.length} sins in library`}
-        badge="True prophecy pending"
+        badge="Petty → King James"
       />
 
       <TabGroup

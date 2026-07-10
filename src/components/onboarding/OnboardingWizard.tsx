@@ -78,7 +78,7 @@ export default function OnboardingWizard() {
           <h1 className="mb-2 font-serif text-3xl text-ink">Pick Your Username. Keep Your Sins.</h1>
           <p className="max-w-xl text-sm text-ink-soft">
             Two quick steps to claim your salvation ledger. Chamber access is already
-            yours — customization comes later.
+            yours.
           </p>
         </div>
 

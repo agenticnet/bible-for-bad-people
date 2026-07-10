@@ -38,7 +38,7 @@ export default function ChamberChatInterface({ config }: ChamberChatInterfacePro
           avatar={config.header.avatar}
           title={config.header.title}
           status={config.header.status}
-          badge="Visions Approximate"
+          badge={config.header.badge}
           online
         />
       }

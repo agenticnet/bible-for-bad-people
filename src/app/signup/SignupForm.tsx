@@ -111,7 +111,7 @@ export default function SignupForm() {
   return (
     <AuthFormShell
       title="Claim Your Ledger"
-      subtitle="Pick a username. Keep your sins. Customization comes later."
+      subtitle="Pick a username. Keep your sins."
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
         <Button type="button" accent="wine" onClick={handleGoogle}>

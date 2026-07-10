@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import type { SinCategory } from "@/lib/sinTypes";
-import { CATEGORY_LABELS } from "@/lib/sinTypes";
+import type { SinCategory, SinDifficulty } from "@/lib/sinTypes";
+import { CATEGORY_LABELS, DIFFICULTY_LABELS } from "@/lib/sinTypes";
 import { SIN_LIBRARY, searchSins } from "@/lib/sinLibrary";
 import { loadCommunitySins } from "@/lib/sinStorage";
 import { fetchCommunitySins } from "@/lib/data/sin";
@@ -125,7 +125,7 @@ export default function SinLibraryPanel({ refreshKey }: SinLibraryPanelProps) {
               petty={sin.petty}
               translation={sin.translation}
               category={sin.category}
-              badge={sin.difficulty}
+              badge={DIFFICULTY_LABELS[sin.difficulty as SinDifficulty] ?? sin.difficulty}
             />
           ))}
         </div>

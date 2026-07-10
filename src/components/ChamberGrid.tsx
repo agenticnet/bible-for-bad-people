@@ -49,13 +49,12 @@ export default function ChamberGrid() {
             </h2>
             {hasCustomLayout && (
               <Badge tone="wine" size="sm">
-                Your layout
+                Custom order
               </Badge>
             )}
           </div>
           <p className="text-base leading-relaxed text-ink-soft">
-            Your complete digital purgatory — all nine chambers stand open. Visions
-            approximate today; true prophecy when the APIs arrive.
+            Your complete digital purgatory — nine chambers. No kneeling required.
           </p>
         </Reveal>
 
@@ -84,11 +83,7 @@ export default function ChamberGrid() {
                         Pinned
                       </Badge>
                     )}
-                    {isOpen ? (
-                      <Badge tone="wine" size="sm" className="verse-ref rounded-sm normal-case tracking-normal">
-                        Open
-                      </Badge>
-                    ) : (
+                    {!isOpen && (
                       <Badge tone="active" size="sm" className="verse-ref flex items-center gap-1 rounded-sm normal-case tracking-normal">
                         <Lock className="h-2.5 w-2.5" />
                         Sealed

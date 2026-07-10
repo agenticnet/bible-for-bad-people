@@ -124,7 +124,7 @@ export default function SupportDesk() {
         accent="slate"
         title="The Divine Support Desk"
         subtitle="Heavenly Administration — Prayer Ticket System v4.0.0"
-        badge="Visions Approximate"
+        badge="Queue: 400 yr"
       >
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
           <StatTile icon={Clock} label="Queue Time" value="400 yrs" accent="slate" />

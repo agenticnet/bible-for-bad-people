@@ -222,7 +222,7 @@ export default function CheckoutBottomSheet({
 
           {showContrast && (
             <p className="mb-4 text-xs text-ink-soft">
-              Mock checkout — no real payment. Purchasing as {displayName || "you"}.
+              Satirical checkout — no real payment. Purchasing as {displayName || "you"}.
             </p>
           )}
 

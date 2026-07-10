@@ -2,13 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { chamberNavGroups } from "@/lib/navigation";
 import { cn } from "@/lib/utils";
 import { TOUCH_TARGET_MIN } from "@/lib/ux/constraints";
 import { focusVisibleRingBinding } from "./tokens";
 
-export default function ChamberNavMenu() {
+interface ChamberNavMenuProps {
+  /** Desktop trigger style: button dropdown (header) or compact (binding bar). */
+  variant?: "header" | "binding";
+}
+
+export default function ChamberNavMenu({ variant = "binding" }: ChamberNavMenuProps) {
   const [open, setOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -35,18 +40,31 @@ export default function ChamberNavMenu() {
     setOpen(false);
   }
 
+  const isHeader = variant === "header";
+
   return (
     <div className="relative" ref={menuRef}>
-      <Link
-        href="/#chambers"
+      <button
+        type="button"
         className={cn(
-          "hidden items-center justify-center rounded-sm border border-ivory/15 px-3 text-sm text-binding-muted transition-colors hover:border-ivory/30 hover:text-binding-ivory md:inline-flex",
+          "items-center justify-center rounded-sm text-binding-muted transition-colors hover:text-binding-ivory",
           TOUCH_TARGET_MIN,
-          focusVisibleRingBinding
+          focusVisibleRingBinding,
+          isHeader
+            ? "hidden gap-1.5 px-1 text-sm md:inline-flex"
+            : "hidden gap-1.5 border border-ivory/15 px-3 text-sm hover:border-ivory/30 md:inline-flex"
         )}
+        onClick={() => setOpen(!open)}
+        aria-label={open ? "Close chamber menu" : "Open chamber menu"}
+        aria-expanded={open}
+        aria-haspopup="true"
       >
         Chambers
-      </Link>
+        <ChevronDown
+          className={cn("h-3.5 w-3.5 transition-transform", open && "rotate-180")}
+          aria-hidden
+        />
+      </button>
 
       <button
         type="button"
@@ -67,10 +85,19 @@ export default function ChamberNavMenu() {
         <div
           role="menu"
           className={cn(
-            "absolute top-full end-0 z-50 mt-2 max-h-[70dvh] w-72 overflow-y-auto",
-            "rounded-sm border border-ivory/15 bg-binding-raised py-2 shadow-lg md:hidden"
+            "absolute top-full z-50 mt-2 max-h-[70dvh] w-72 overflow-y-auto",
+            "rounded-sm border border-ivory/15 bg-binding-raised py-2 shadow-lg",
+            isHeader ? "start-0" : "end-0"
           )}
         >
+          <Link
+            href="/#chambers"
+            role="menuitem"
+            className="mx-2 mb-2 flex min-h-12 items-center rounded-sm border-b border-ivory/10 px-2 pb-2 text-sm font-medium text-binding-ivory transition-colors hover:bg-ivory/5"
+            onClick={closeMenu}
+          >
+            All chambers
+          </Link>
           {chamberNavGroups.map((group) => (
             <div key={group.title} className="border-t border-ivory/10 px-2 py-2 first:border-t-0">
               <p className="verse-ref mb-1 px-2 text-[0.65rem] text-binding-muted">

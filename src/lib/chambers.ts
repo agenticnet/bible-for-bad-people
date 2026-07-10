@@ -99,7 +99,7 @@ export const chambers: Chamber[] = [
     id: "smite-button",
     title: "Smite Button",
     description:
-      "Digitally smite minor inconveniences — traffic, your boss, that one neighbor — with classic plagues. Premium tier includes AI-generated smiting visuals.",
+      "Digitally smite minor inconveniences — traffic, your boss, that one neighbor — with classic plagues. Premium tier includes a cinematic smite description.",
     icon: Zap,
     accent: "ember",
     status: "live",
