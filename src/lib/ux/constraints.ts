@@ -2,10 +2,13 @@
 
 export const MAX_PRIMARY_OPTIONS = 4;
 
-export const PRIMARY_CTA_MIN_HEIGHT = "min-h-11";
+/** WCAG / Material 48×48 minimum interactive target */
+export const TOUCH_TARGET_MIN = "min-h-12 min-w-12";
+
+export const PRIMARY_CTA_MIN_HEIGHT = "min-h-12";
 
 /** Thumb-zone on mobile; standard control height on desktop */
-export const THUMB_CTA_MIN_HEIGHT = "min-h-14 md:min-h-11";
+export const THUMB_CTA_MIN_HEIGHT = "min-h-14 md:min-h-12";
 
 /** Bottom sheet default snap height */
 export const BOTTOM_SHEET_HEIGHT = "max-h-[60dvh]";

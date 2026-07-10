@@ -32,7 +32,7 @@ export default function FormActions({
       ) : (
         <span />
       )}
-      <div className="ml-auto w-full sm:w-auto">
+      <div className="ms-auto w-full sm:w-auto">
         <Button
           type={primaryType}
           size="lg"

@@ -30,7 +30,7 @@ export const accentStyles: Record<
     bgHover: "hover:bg-wine/20",
     text: "text-wine",
     focus:
-      "focus:border-wine/50 focus:outline-none focus:ring-1 focus:ring-wine/30",
+      "focus-visible:border-wine/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wine/40",
     surfaceMuted: "border-wine/20 bg-wine/5 text-wine",
     dot: "bg-wine/60",
   },
@@ -43,7 +43,7 @@ export const accentStyles: Record<
     bgHover: "hover:bg-plum/25",
     text: "text-plum",
     focus:
-      "focus:border-plum/50 focus:outline-none focus:ring-1 focus:ring-plum/30",
+      "focus-visible:border-plum/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-plum/40",
     surfaceMuted: "border-plum/20 bg-plum/5 text-plum",
     dot: "bg-plum/60",
   },
@@ -56,7 +56,7 @@ export const accentStyles: Record<
     bgHover: "hover:bg-slate/20",
     text: "text-slate",
     focus:
-      "focus:border-slate/50 focus:outline-none focus:ring-1 focus:ring-slate/30",
+      "focus-visible:border-slate/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate/40",
     surfaceMuted: "border-slate/20 bg-slate/5 text-slate",
     dot: "bg-slate/60",
   },
@@ -69,7 +69,7 @@ export const accentStyles: Record<
     bgHover: "hover:bg-terra/20",
     text: "text-terra",
     focus:
-      "focus:border-terra/50 focus:outline-none focus:ring-1 focus:ring-terra/30",
+      "focus-visible:border-terra/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terra/40",
     surfaceMuted: "border-terra/20 bg-terra/5 text-terra",
     dot: "bg-terra/60",
   },
@@ -82,11 +82,20 @@ export const accentStyles: Record<
     bgHover: "hover:bg-ember/20",
     text: "text-ember",
     focus:
-      "focus:border-ember/50 focus:outline-none focus:ring-1 focus:ring-ember/30",
+      "focus-visible:border-ember/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ember/40",
     surfaceMuted: "border-ember/20 bg-ember/5 text-ember",
     dot: "bg-ember/60",
   },
 };
+
+/** Shared keyboard focus ring for buttons, chips, tabs, links */
+export const focusVisibleRing =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wine/40 focus-visible:ring-offset-2 focus-visible:ring-offset-parchment";
+
+/** Binding-shell chrome (dark header) focus ring */
+export const focusVisibleRingBinding =
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/40 focus-visible:ring-offset-2 focus-visible:ring-offset-binding";
+
 
 export const statusStyles: Record<
   SemanticStatus,
@@ -131,7 +140,8 @@ export const surfaceBase =
   "rounded-xl border border-rule bg-page transition-colors";
 
 export const inputBase =
-  "w-full rounded-lg border border-rule bg-page px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft focus:outline-none disabled:opacity-50";
+  "w-full min-h-12 rounded-lg border border-rule bg-page px-4 py-2.5 text-sm text-ink placeholder:text-ink-soft focus:outline-none disabled:opacity-50";
+
 
 export const calloutMutedStyles: Record<Accent, string> = {
   wine: "rounded-lg border border-wine/20 bg-wine/5 px-4 py-3 text-wine",

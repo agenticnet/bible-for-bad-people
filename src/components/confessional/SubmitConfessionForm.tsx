@@ -9,7 +9,7 @@ import { useAuthModal } from "@/components/auth/AuthModalProvider";
 import { usePathname } from "next/navigation";
 import { getLossCopy } from "@/lib/auth/upsellCopy";
 import AuthGate from "@/components/auth/AuthGate";
-import { Button, Surface, Textarea } from "@/components/ui";
+import { Button, Surface, Textarea, Label } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
@@ -80,7 +80,9 @@ function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
         {profile ? `Posting as ${profile.username}` : "Confession"}
       </p>
       <h2 className="mb-3 font-serif text-lg font-semibold text-ink">Unburden Thyself</h2>
+      <Label htmlFor="confession-content">Your confession</Label>
       <Textarea
+        id="confession-content"
         accent="plum"
         value={content}
         onChange={(e) => setContent(e.target.value)}
@@ -88,8 +90,14 @@ function ConfessionForm({ onSubmitted }: SubmitConfessionFormProps) {
         rows={4}
         maxLength={500}
         className="mb-3"
+        aria-invalid={!!error}
+        aria-describedby={error ? "confession-error" : undefined}
       />
-      {error && <p className="mb-2 text-sm text-ember">{error}</p>}
+      {error && (
+        <p id="confession-error" className="mb-2 text-sm text-ember" role="alert">
+          {error}
+        </p>
+      )}
       <div className="flex items-center justify-between gap-3">
         <span className="verse-ref text-ink-soft">{content.length}/500</span>
         <Button type="submit" accent="plum" disabled={!content.trim() || submitting}>

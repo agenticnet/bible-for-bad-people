@@ -51,7 +51,7 @@ export default function LiveActivityFeed() {
 
   return (
     <div
-      className="pointer-events-none fixed bottom-24 left-4 z-40 flex max-w-sm flex-col-reverse gap-2 md:bottom-24 md:left-auto md:right-6"
+      className="pointer-events-none fixed bottom-24 start-4 z-40 flex max-w-sm flex-col-reverse gap-2 md:bottom-24 md:start-auto md:end-6"
       aria-live="polite"
     >
       <AnimatePresence>

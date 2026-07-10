@@ -38,7 +38,7 @@ export default function Hero() {
           <div className="flex w-full max-w-md flex-col items-stretch gap-3 sm:mx-auto sm:max-w-none sm:flex-row sm:items-center sm:justify-center sm:gap-4">
             <LinkButton href="/chat" className="group">
               Speak with GOD
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 rtl:rotate-180 rtl:group-hover:-translate-x-0.5" aria-hidden />
             </LinkButton>
             <LinkButton href="/#chambers" variant="secondary">
               Explore the Chambers

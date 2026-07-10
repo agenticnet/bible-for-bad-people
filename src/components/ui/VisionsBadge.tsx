@@ -1,3 +1,6 @@
+"use client";
+
+import { useId } from "react";
 import { Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { accentStyles, type Accent } from "./tokens";
@@ -13,6 +16,8 @@ export default function VisionsBadge({
   accent = "plum",
   className,
 }: VisionsBadgeProps) {
+  const disclaimerId = useId();
+
   return (
     <div
       className={cn(
@@ -21,11 +26,15 @@ export default function VisionsBadge({
         accentStyles[accent].bgMuted,
         className
       )}
-      title="Responses are satirical approximations — not prophecy, therapy, or divine revelation."
+      aria-describedby={disclaimerId}
     >
-      <Sparkles className={cn("h-3 w-3", accentStyles[accent].text)} />
+      <Sparkles className={cn("h-3 w-3", accentStyles[accent].text)} aria-hidden />
       <span className={cn("verse-ref text-[0.65rem]", accentStyles[accent].text)}>
         {label}
+      </span>
+      <span id={disclaimerId} className="sr-only">
+        Responses are satirical approximations — not prophecy, therapy, or divine
+        revelation.
       </span>
     </div>
   );

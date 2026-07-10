@@ -4,10 +4,12 @@ import { useCallback, useEffect, useRef } from "react";
 import { AnimatePresence, motion, type PanInfo } from "motion/react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import {
   BOTTOM_SHEET_HEIGHT,
   SAFE_BOTTOM,
+  TOUCH_TARGET_MIN,
   Z_BOTTOM_SHEET,
 } from "@/lib/ux/constraints";
 import {
@@ -17,13 +19,14 @@ import {
   spring,
   transition,
 } from "@/lib/motion";
-import { accentStyles, surfaceBase, type Accent } from "./tokens";
+import { accentStyles, focusVisibleRing, surfaceBase, type Accent } from "./tokens";
 
 interface BottomSheetProps {
   open: boolean;
   onClose: () => void;
   accent?: Accent;
-  title?: string;
+  /** Accessible name — required for screen readers */
+  title: string;
   children: React.ReactNode;
   className?: string;
   closeDisabled?: boolean;
@@ -48,6 +51,8 @@ export default function BottomSheet({
   const backdropVariants = resolveVariants(fadeIn, reducedMotion);
   const enterT = resolveTransition(transition.base, reducedMotion);
   const dragT = resolveTransition(spring.gentle, reducedMotion);
+
+  useFocusTrap(open, panelRef);
 
   const handleDragEnd = useCallback(
     (_: unknown, info: PanInfo) => {
@@ -75,11 +80,6 @@ export default function BottomSheet({
       document.body.style.overflow = prev;
     };
   }, [open, closeDisabled, onClose]);
-
-  useEffect(() => {
-    if (!open || !panelRef.current) return;
-    panelRef.current.focus();
-  }, [open]);
 
   return (
     <AnimatePresence>
@@ -130,10 +130,14 @@ export default function BottomSheet({
               type="button"
               onClick={onClose}
               disabled={closeDisabled}
-              className="absolute top-4 right-4 text-ink-soft transition-colors hover:text-ink disabled:opacity-50"
+              className={cn(
+                "absolute top-4 end-4 inline-flex items-center justify-center rounded-sm text-ink-soft transition-colors hover:text-ink disabled:opacity-50",
+                TOUCH_TARGET_MIN,
+                focusVisibleRing
+              )}
               aria-label="Close"
             >
-              <X className="h-5 w-5" />
+              <X className="h-5 w-5" aria-hidden />
             </button>
 
             <div className="flex-1 overflow-y-auto px-6 pb-6">{children}</div>

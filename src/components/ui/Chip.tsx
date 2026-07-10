@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { accentStyles, type Accent } from "./tokens";
+import { TOUCH_TARGET_MIN } from "@/lib/ux/constraints";
+import { accentStyles, focusVisibleRing, type Accent } from "./tokens";
 
 interface ChipProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   accent?: Accent;
@@ -15,7 +16,9 @@ export default function Chip({
     <button
       type="button"
       className={cn(
-        "rounded-full border border-rule bg-smoke px-3 py-1.5 text-xs text-ink-soft transition-colors hover:text-ink",
+        "inline-flex items-center justify-center rounded-full border border-rule bg-smoke px-4 text-xs text-ink-soft transition-colors hover:text-ink",
+        TOUCH_TARGET_MIN,
+        focusVisibleRing,
         accent && accentStyles[accent].borderHover,
         className
       )}

@@ -59,7 +59,7 @@ export default function CynicsBible() {
       <div className="mb-6">
         <Label htmlFor="passage-search">Search</Label>
         <div className="relative">
-          <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-ink-soft" />
+          <Search className="pointer-events-none absolute top-1/2 start-3.5 h-4 w-4 -translate-y-1/2 text-ink-soft" aria-hidden />
           <Input
             id="passage-search"
             accent="wine"
@@ -67,7 +67,9 @@ export default function CynicsBible() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Book, verse, topic, or vibe (e.g. bears, slavery, shrimp)…"
-            className="rounded-sm py-3 pl-10"
+            className="rounded-sm py-3 ps-10"
+            data-shortcut="search"
+            aria-keyshortcuts="/"
           />
         </div>
       </div>

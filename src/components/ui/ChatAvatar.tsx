@@ -35,7 +35,7 @@ export default function ChatAvatar({
       {online !== undefined && (
         <span
           className={cn(
-            "absolute -right-0.5 -bottom-0.5 h-3.5 w-3.5 rounded-full border-2 border-parchment",
+            "absolute -end-0.5 -bottom-0.5 h-3.5 w-3.5 rounded-full border-2 border-parchment",
             online ? "bg-green-500" : "bg-ember"
           )}
         />

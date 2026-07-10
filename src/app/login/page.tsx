@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import LoginForm from "./LoginForm";
+import { LoadingState } from "@/components/ui";
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<p className="p-8 text-center text-ink-soft">Loading...</p>}>
+    <Suspense fallback={<LoadingState message="Loading…" />}>
       <LoginForm />
     </Suspense>
   );

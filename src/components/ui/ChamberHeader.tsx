@@ -55,7 +55,7 @@ export default function ChamberHeader({
           <VisionsBadge
             label={badge}
             accent={accent}
-            className={cn(!centered && "ml-auto hidden sm:flex")}
+            className={cn(!centered && "ms-auto hidden sm:flex")}
           />
         )}
       </div>

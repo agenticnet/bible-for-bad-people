@@ -63,7 +63,7 @@ export default function ChatComposer({
           disabled={!value.trim() || disabled}
           aria-label="Send message"
         >
-          <Send className="h-5 w-5" />
+          <Send className="h-5 w-5 rtl:rotate-180" aria-hidden />
         </IconButton>
       </form>
       {hint && (
@@ -87,7 +87,13 @@ export function ChatShell({ header, banner, children, composer }: ChatShellProps
     <div className="flex h-full flex-col">
       {header}
       {banner}
-      <div className="flex-1 overflow-y-auto px-4 py-6 sm:px-6">
+      <div
+        className="flex-1 overflow-y-auto px-4 py-6 sm:px-6"
+        role="log"
+        aria-live="polite"
+        aria-relevant="additions"
+        aria-label="Messages"
+      >
         <div className="mx-auto flex max-w-3xl flex-col gap-5">{children}</div>
       </div>
       {composer}
@@ -129,9 +135,10 @@ export function ChatHeader({
           {online !== undefined && (
             <span
               className={cn(
-                "absolute -right-0.5 -bottom-0.5 h-3.5 w-3.5 rounded-full border-2 border-parchment",
+                "absolute -end-0.5 -bottom-0.5 h-3.5 w-3.5 rounded-full border-2 border-parchment",
                 online ? "bg-green-500" : "bg-ember"
               )}
+              aria-label={online ? "Online" : "Offline"}
             />
           )}
         </div>
@@ -145,7 +152,7 @@ export function ChatHeader({
           <VisionsBadge
             label={badge}
             accent={accent}
-            className="ml-auto hidden sm:block"
+            className="ms-auto hidden sm:block"
           />
         )}
       </div>

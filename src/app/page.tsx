@@ -10,7 +10,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <main className="relative">
+      <main id="main-content" className="relative">
         <LampVignette />
         <Hero />
         <section className="px-4 sm:px-6">

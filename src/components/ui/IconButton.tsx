@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { accentStyles, type Accent } from "./tokens";
+import { TOUCH_TARGET_MIN } from "@/lib/ux/constraints";
+import { accentStyles, focusVisibleRing, type Accent } from "./tokens";
 
 interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   accent?: Accent;
@@ -7,7 +8,7 @@ interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
 }
 
 const sizeStyles = {
-  md: "h-10 w-10",
+  md: TOUCH_TARGET_MIN,
   lg: "h-12 w-12",
 };
 
@@ -24,6 +25,7 @@ export default function IconButton({
       type={type ?? "button"}
       className={cn(
         "inline-flex shrink-0 items-center justify-center rounded-xl border transition-colors disabled:cursor-not-allowed disabled:opacity-40",
+        focusVisibleRing,
         sizeStyles[size],
         accentStyles[accent].border,
         accentStyles[accent].bg,

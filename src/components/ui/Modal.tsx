@@ -4,7 +4,9 @@ import { useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { TOUCH_TARGET_MIN } from "@/lib/ux/constraints";
 import {
   fadeIn,
   fadeUpScale,
@@ -12,13 +14,14 @@ import {
   resolveVariants,
   transition,
 } from "@/lib/motion";
-import { accentStyles, surfaceBase, type Accent } from "./tokens";
+import { accentStyles, focusVisibleRing, surfaceBase, type Accent } from "./tokens";
 
 interface ModalProps {
   open: boolean;
   onClose: () => void;
   accent?: Accent;
-  title?: string;
+  /** Accessible name — required for screen readers */
+  title: string;
   children: React.ReactNode;
   className?: string;
   closeDisabled?: boolean;
@@ -39,6 +42,8 @@ export default function Modal({
   const panelVariants = resolveVariants(fadeUpScale, reducedMotion);
   const enterT = resolveTransition(transition.base, reducedMotion);
 
+  useFocusTrap(open, panelRef);
+
   useEffect(() => {
     if (!open) return;
 
@@ -56,28 +61,27 @@ export default function Modal({
     };
   }, [open, closeDisabled, onClose]);
 
-  useEffect(() => {
-    if (!open || !panelRef.current) return;
-    panelRef.current.focus();
-  }, [open]);
-
   return (
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-parchment/80 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
           initial="hidden"
           animate="visible"
           exit="hidden"
-          variants={backdropVariants}
-          transition={enterT}
-          onClick={closeDisabled ? undefined : onClose}
         >
+          <motion.div
+            className="absolute inset-0 bg-parchment/80"
+            variants={backdropVariants}
+            transition={enterT}
+            onClick={closeDisabled ? undefined : onClose}
+            aria-hidden
+          />
           <motion.div
             ref={panelRef}
             className={cn(
               surfaceBase,
-              "relative w-full max-w-md p-6 outline-none",
+              "relative z-10 w-full max-w-md p-6 outline-none",
               accentStyles[accent].borderMuted,
               className
             )}
@@ -96,10 +100,14 @@ export default function Modal({
               type="button"
               onClick={onClose}
               disabled={closeDisabled}
-              className="absolute top-4 right-4 text-ink-soft transition-colors hover:text-ink disabled:opacity-50"
+              className={cn(
+                "absolute top-4 end-4 inline-flex items-center justify-center rounded-sm text-ink-soft transition-colors hover:text-ink disabled:opacity-50",
+                TOUCH_TARGET_MIN,
+                focusVisibleRing
+              )}
               aria-label="Close"
             >
-              <X className="h-5 w-5" />
+              <X className="h-5 w-5" aria-hidden />
             </button>
             {children}
           </motion.div>

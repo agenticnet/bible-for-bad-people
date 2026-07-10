@@ -9,7 +9,8 @@ interface ResponsiveOverlayProps {
   open: boolean;
   onClose: () => void;
   accent?: Accent;
-  title?: string;
+  /** Accessible name — required for screen readers */
+  title: string;
   children: React.ReactNode;
   className?: string;
   closeDisabled?: boolean;

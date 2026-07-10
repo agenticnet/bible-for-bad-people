@@ -58,7 +58,7 @@ export default function MessageBubble({
       <div
         className={cn(
           "max-w-[85%] rounded-2xl px-4 py-3 sm:max-w-[75%]",
-          isStart ? "rounded-tl-sm border border-rule bg-page" : "rounded-tr-sm border",
+          isStart ? "rounded-ss-sm border border-rule bg-page" : "rounded-se-sm border",
           !isStart && cn(a.borderMuted, a.bgMuted)
         )}
       >

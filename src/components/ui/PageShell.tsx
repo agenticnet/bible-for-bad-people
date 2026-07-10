@@ -36,11 +36,12 @@ export default function PageShell({
             <BackLink href={backHref} />
           </BindingBar>
         ))}
-      <div
+      <main
+        id="main-content"
         className={`mx-auto min-w-0 overflow-x-clip px-4 py-8 sm:px-6 sm:py-12 ${maxWidthClass[maxWidth]}`}
       >
         {children}
-      </div>
+      </main>
     </div>
   );
 }
@@ -53,7 +54,9 @@ export function ChatPageShell({ children }: ChatPageShellProps) {
   return (
     <div className="flex h-dvh flex-col bg-parchment">
       <ChamberBindingBar />
-      <div className="min-h-0 flex-1 overflow-hidden">{children}</div>
+      <main id="main-content" className="min-h-0 flex-1 overflow-hidden">
+        {children}
+      </main>
     </div>
   );
 }

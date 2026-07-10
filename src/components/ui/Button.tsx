@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { accentStyles, statusStyles, type Accent } from "./tokens";
+import { PRIMARY_CTA_MIN_HEIGHT, TOUCH_TARGET_MIN } from "@/lib/ux/constraints";
+import { accentStyles, focusVisibleRing, statusStyles, type Accent } from "./tokens";
 
 type ButtonVariant = "accent" | "ghost" | "success" | "danger";
 
@@ -10,9 +11,9 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const sizeStyles = {
-  sm: "px-3 py-1.5 text-sm",
-  md: "px-5 py-2.5 text-sm font-semibold",
-  lg: "px-6 py-3.5 min-h-11 text-sm font-semibold",
+  sm: cn("px-3 py-1.5 text-sm", TOUCH_TARGET_MIN),
+  md: cn("px-5 py-2.5 text-sm font-semibold", TOUCH_TARGET_MIN),
+  lg: cn("px-6 py-3.5 text-sm font-semibold", PRIMARY_CTA_MIN_HEIGHT),
 };
 
 export default function Button({
@@ -58,6 +59,7 @@ export default function Button({
       type={type ?? "button"}
       className={cn(
         "inline-flex items-center justify-center gap-2 active:scale-[0.98] motion-reduce:active:scale-100",
+        focusVisibleRing,
         sizeStyles[size],
         variantClass,
         className

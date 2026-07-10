@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { accentStyles, type Accent } from "./tokens";
+import { TOUCH_TARGET_MIN } from "@/lib/ux/constraints";
+import { accentStyles, focusVisibleRing, type Accent } from "./tokens";
 
 interface OptionTileProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   selected?: boolean;
@@ -19,7 +20,9 @@ export default function OptionTile({
     <button
       type="button"
       className={cn(
-        "rounded-xl border p-3 text-left transition-colors",
+        "rounded-xl border p-3 text-start transition-colors",
+        TOUCH_TARGET_MIN,
+        focusVisibleRing,
         layout === "stack"
           ? "flex flex-col items-center gap-1 text-center"
           : "flex items-center gap-2",

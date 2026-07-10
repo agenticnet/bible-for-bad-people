@@ -36,7 +36,7 @@ export default function AuthGate({
 
   if (isLoading) {
     return (
-      <Callout tone={tone}>
+      <Callout tone={tone} role="status" aria-busy="true">
         <p className="font-medium text-ink">Checking credentials...</p>
         <p className="mt-1 text-sm text-ink-soft">The binding is consulting the ledger.</p>
       </Callout>

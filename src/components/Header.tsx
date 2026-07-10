@@ -17,11 +17,11 @@ export default function Header() {
   }
 
   return (
-    <header className="fixed top-0 right-0 left-0 z-50 border-b border-ivory/10 bg-binding">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-ivory/10 bg-binding">
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 sm:py-3.5">
         <Link href="/" className="group flex min-w-0 shrink items-center gap-2.5 sm:gap-3">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-sm border border-ivory/20 bg-binding-raised transition-colors group-hover:border-ivory/35 sm:h-9 sm:w-9">
-            <Cross className="h-3.5 w-3.5 rotate-45 text-ivory sm:h-4 sm:w-4" />
+            <Cross className="h-3.5 w-3.5 rotate-45 text-ivory sm:h-4 sm:w-4" aria-hidden />
           </div>
           <div className="flex min-w-0 flex-col leading-tight">
             <span className="truncate font-serif text-sm text-binding-ivory sm:text-base">
@@ -33,12 +33,12 @@ export default function Header() {
           </div>
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-6 md:flex" aria-label="Primary">
           {primaryNavLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="whitespace-nowrap text-sm text-binding-muted transition-colors hover:text-binding-ivory"
+              className="whitespace-nowrap text-sm text-binding-muted transition-colors hover:text-binding-ivory focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/40 focus-visible:ring-offset-2 focus-visible:ring-offset-binding"
             >
               {link.label}
             </Link>
@@ -49,12 +49,12 @@ export default function Header() {
           <UserMenu />
           <button
             type="button"
-            className="shrink-0 rounded-sm border border-ivory/15 p-2 text-binding-muted md:hidden"
+            className="inline-flex min-h-12 min-w-12 shrink-0 items-center justify-center rounded-sm border border-ivory/15 text-binding-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ivory/40 focus-visible:ring-offset-2 focus-visible:ring-offset-binding md:hidden"
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label={mobileOpen ? "Close menu" : "Open menu"}
             aria-expanded={mobileOpen}
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileOpen ? <X className="h-5 w-5" aria-hidden /> : <Menu className="h-5 w-5" aria-hidden />}
           </button>
         </div>
       </div>

@@ -1,9 +1,10 @@
 import { Suspense } from "react";
 import OracleOfDoom from "@/components/oracle/OracleOfDoom";
+import { LoadingState } from "@/components/ui";
 
 export default function OraclePage() {
   return (
-    <Suspense fallback={<p className="p-8 text-center text-ink-soft">Consulting the void...</p>}>
+    <Suspense fallback={<LoadingState message="Consulting the void…" />}>
       <OracleOfDoom />
     </Suspense>
   );

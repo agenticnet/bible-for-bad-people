@@ -42,9 +42,13 @@ export default function SwipeGallery({
   function handleDragEnd(_: unknown, info: PanInfo) {
     setDragOffset(0);
     if (!canSwipe) return;
-    if (info.offset.x < -SWIPE_THRESHOLD || info.velocity.x < -300) {
+    const isRtl =
+      typeof document !== "undefined" && document.documentElement.dir === "rtl";
+    const offsetX = isRtl ? -info.offset.x : info.offset.x;
+    const velocityX = isRtl ? -info.velocity.x : info.velocity.x;
+    if (offsetX < -SWIPE_THRESHOLD || velocityX < -300) {
       goNext();
-    } else if (info.offset.x > SWIPE_THRESHOLD || info.velocity.x > 300) {
+    } else if (offsetX > SWIPE_THRESHOLD || velocityX > 300) {
       goPrev();
     }
   }
@@ -81,12 +85,18 @@ export default function SwipeGallery({
               key={i}
               type="button"
               onClick={() => setIndex(i)}
-              className={cn(
-                "h-2 rounded-full transition-all",
-                i === index ? "w-6 bg-wine" : "w-2 bg-rule"
-              )}
+              className="inline-flex min-h-12 min-w-12 items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wine/40"
               aria-label={`View item ${i + 1}`}
-            />
+              aria-current={i === index ? "true" : undefined}
+            >
+              <span
+                className={cn(
+                  "h-2 rounded-full transition-all",
+                  i === index ? "w-6 bg-wine" : "w-2 bg-rule"
+                )}
+                aria-hidden
+              />
+            </button>
           ))}
         </div>
       )}

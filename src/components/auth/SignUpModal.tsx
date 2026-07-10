@@ -131,7 +131,7 @@ export default function SignUpModal({
   }
 
   return (
-    <Modal open={open} onClose={onClose} accent="wine" closeDisabled={loading}>
+    <Modal open={open} onClose={onClose} accent="wine" title={title} closeDisabled={loading}>
       <p className="verse-ref mb-2 text-wine">{title}</p>
       <h3 className="mb-2 text-lg font-bold text-ink">Create an account</h3>
       <p className="mb-6 text-sm leading-relaxed text-ink-soft">{lossCopy}</p>

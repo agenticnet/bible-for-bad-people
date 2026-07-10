@@ -41,6 +41,7 @@
     overflow-x: clip;
   }
 
+  /* QA: set <html dir="rtl"> to verify layout-ready RTL */
   body {
     @apply bg-parchment text-ink antialiased;
     font-family: var(--font-body);

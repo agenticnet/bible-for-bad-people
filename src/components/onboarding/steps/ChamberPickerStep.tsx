@@ -95,19 +95,19 @@ export default function ChamberPickerStep({
             type="button"
             onClick={() => moveChamber(chamber.id, -1)}
             disabled={orderIndex <= 0}
-            className="rounded border border-rule p-1 text-ink-soft hover:text-ink disabled:opacity-30"
+            className="inline-flex min-h-12 min-w-12 items-center justify-center rounded border border-rule text-ink-soft hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wine/40 disabled:opacity-30"
             aria-label={`Move ${chamber.title} up`}
           >
-            <ChevronUp className="h-3 w-3" />
+            <ChevronUp className="h-4 w-4" aria-hidden />
           </button>
           <button
             type="button"
             onClick={() => moveChamber(chamber.id, 1)}
             disabled={orderIndex >= chamberOrder.length - 1}
-            className="rounded border border-rule p-1 text-ink-soft hover:text-ink disabled:opacity-30"
+            className="inline-flex min-h-12 min-w-12 items-center justify-center rounded border border-rule text-ink-soft hover:text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-wine/40 disabled:opacity-30"
             aria-label={`Move ${chamber.title} down`}
           >
-            <ChevronDown className="h-3 w-3" />
+            <ChevronDown className="h-4 w-4" aria-hidden />
           </button>
         </div>
       </div>
