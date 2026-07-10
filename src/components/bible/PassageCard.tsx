@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import type { BiblePassage, PassageTag } from "@/lib/bibleTypes";
 import { TAG_LABELS } from "@/lib/bibleTypes";
-import { Badge, Surface } from "@/components/ui";
+import { Badge, Button, Callout, Surface } from "@/components/ui";
 import type { Accent } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
 
@@ -23,8 +23,32 @@ const TAG_ACCENTS: Partial<Record<PassageTag, Accent>> = {
   genocide: "ember",
 };
 
+const CONTENT_WARNING_TAGS: PassageTag[] = ["sexual", "genocide", "violent"];
+
+function needsContentWarning(tags: PassageTag[]): boolean {
+  return tags.some((tag) => CONTENT_WARNING_TAGS.includes(tag));
+}
+
 export default function PassageCard({ passage }: PassageCardProps) {
   const [expanded, setExpanded] = useState(false);
+  const [warningAccepted, setWarningAccepted] = useState(false);
+  const showWarning = needsContentWarning(passage.tags) && !warningAccepted;
+
+  function handleToggle() {
+    if (expanded) {
+      setExpanded(false);
+      return;
+    }
+    if (showWarning) {
+      setExpanded(true);
+      return;
+    }
+    setExpanded(true);
+  }
+
+  function acceptWarning() {
+    setWarningAccepted(true);
+  }
 
   return (
     <Surface
@@ -34,7 +58,7 @@ export default function PassageCard({ passage }: PassageCardProps) {
     >
       <button
         type="button"
-        onClick={() => setExpanded(!expanded)}
+        onClick={handleToggle}
         className="flex w-full items-start gap-4 px-1 py-6 text-left sm:px-2"
         aria-expanded={expanded}
       >
@@ -69,30 +93,48 @@ export default function PassageCard({ passage }: PassageCardProps) {
         </span>
       </button>
 
-      <div
-        className={cn(
-          "grid transition-[grid-template-rows] duration-200 ease-out motion-reduce:transition-none",
-          expanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
-        )}
-      >
-        <div className="overflow-hidden">
-          <div className="border-t border-rule px-1 pb-6 sm:px-2">
-            <div className="mt-5 border-t border-rule pt-5">
-              <p className="verse-ref mb-3 text-ink-soft">The passage (abridged)</p>
-              <blockquote className="scripture-block text-ink/90">
-                &ldquo;{passage.excerpt}&rdquo;
-              </blockquote>
-            </div>
-
-            <div className="mt-6 border-t border-rule pt-5">
-              <p className="verse-ref mb-2 text-ink-soft">Modern world connection</p>
-              <p className="text-sm leading-relaxed text-ink-soft">
-                {passage.modernWorld}
+      {expanded && (
+        <div className="border-t border-rule px-1 pb-6 sm:px-2">
+          {showWarning ? (
+            <Callout tone="ember" className="mt-5">
+              <p className="font-medium text-ink">Content warning</p>
+              <p className="mt-1 text-sm text-ink-soft">
+                This passage includes{" "}
+                {passage.tags
+                  .filter((tag) => CONTENT_WARNING_TAGS.includes(tag))
+                  .map((tag) => TAG_LABELS[tag].toLowerCase())
+                  .join(", ")}
+                . Scripture excerpt ahead — satire does not soften the source text.
               </p>
-            </div>
-          </div>
+              <Button
+                type="button"
+                accent="ember"
+                size="sm"
+                className="mt-3"
+                onClick={acceptWarning}
+              >
+                Show the passage
+              </Button>
+            </Callout>
+          ) : (
+            <>
+              <div className="mt-5 border-t border-rule pt-5">
+                <p className="verse-ref mb-3 text-ink-soft">The passage (abridged)</p>
+                <blockquote className="scripture-block text-ink/90">
+                  &ldquo;{passage.excerpt}&rdquo;
+                </blockquote>
+              </div>
+
+              <div className="mt-6 border-t border-rule pt-5">
+                <p className="verse-ref mb-2 text-ink-soft">Modern world connection</p>
+                <p className="text-sm leading-relaxed text-ink-soft">
+                  {passage.modernWorld}
+                </p>
+              </div>
+            </>
+          )}
         </div>
-      </div>
+      )}
     </Surface>
   );
 }

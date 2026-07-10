@@ -29,11 +29,15 @@ export default function OnboardingWizard() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { profile } = useAuth();
-  const { draft } = useOnboardingDraft();
+  const { draft, markStarted } = useOnboardingDraft();
   const [usernameValid, setUsernameValid] = useState(false);
 
   const phase = parsePhase(searchParams.get("step"));
   const phaseIndex = PHASE_ORDER.indexOf(phase);
+
+  useEffect(() => {
+    markStarted();
+  }, [markStarted]);
 
   useEffect(() => {
     const legacyStep = searchParams.get("step");

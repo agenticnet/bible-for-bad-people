@@ -53,9 +53,12 @@ export default function DoomCardDisplay({
             accentTint
             padding="none"
             className="absolute inset-0 flex flex-col items-center justify-center rounded-sm [backface-visibility:hidden]"
+            aria-hidden={revealed}
           >
             <div className="absolute inset-x-3 top-3 border-t border-plum/20" />
-            <span className="text-3xl opacity-60">🔮</span>
+            <span className="text-3xl opacity-60" aria-hidden>
+              🔮
+            </span>
             <p className={cn("verse-ref mt-3", accentStyles.plum.text)}>Oracle of Doom</p>
             <div className="absolute inset-x-3 bottom-3 border-b border-plum/20" />
           </Surface>
@@ -64,19 +67,26 @@ export default function DoomCardDisplay({
             accent="plum"
             padding="sm"
             className="absolute inset-0 flex flex-col rounded-sm [backface-visibility:hidden] [transform:rotateY(180deg)]"
+            aria-hidden={!revealed}
           >
-            <div className="flex flex-1 flex-col items-center justify-center border-b border-rule pb-3 text-center">
-              <span className="mb-3 text-4xl">{card.symbol}</span>
-              <h3 className="mb-2 font-serif text-sm leading-tight text-ink">
-                {card.name}
-              </h3>
-              <Badge tone={omenTone === "neutral" ? "active" : omenTone} size="sm">
-                {OMEN_LABELS[card.omen]}
-              </Badge>
-            </div>
-            <p className="mt-2 pt-2 text-center text-[11px] italic leading-relaxed text-ink-soft">
-              {card.tagline}
-            </p>
+            {revealed ? (
+              <>
+                <div className="flex flex-1 flex-col items-center justify-center border-b border-rule pb-3 text-center">
+                  <span className="mb-3 text-4xl" aria-hidden>
+                    {card.symbol}
+                  </span>
+                  <h3 className="mb-2 font-serif text-sm leading-tight text-ink">
+                    {card.name}
+                  </h3>
+                  <Badge tone={omenTone === "neutral" ? "active" : omenTone} size="sm">
+                    {OMEN_LABELS[card.omen]}
+                  </Badge>
+                </div>
+                <p className="mt-2 pt-2 text-center text-[11px] italic leading-relaxed text-ink-soft">
+                  {card.tagline}
+                </p>
+              </>
+            ) : null}
           </Surface>
         </motion.div>
       </div>

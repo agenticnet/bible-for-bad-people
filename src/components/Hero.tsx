@@ -19,12 +19,9 @@ export default function Hero() {
             Est. whenever guilt became optional
           </p>
 
-          <h1 className="mb-1 font-serif text-[clamp(2.5rem,6vw,4.75rem)] leading-[1.08] font-normal tracking-[-0.02em] text-ink">
-            Bible for
-          </h1>
-
-          <h1 className="mb-6 font-serif text-[clamp(2.5rem,6vw,4.75rem)] leading-[1.08] font-normal tracking-[-0.02em] text-wine">
-            Bad People
+          <h1 className="mb-6 font-serif text-[clamp(2.5rem,6vw,4.75rem)] leading-[1.08] font-normal tracking-[-0.02em]">
+            <span className="block text-ink">Bible for</span>
+            <span className="block text-wine">Bad People</span>
           </h1>
 
           <p className="mx-auto mb-4 max-w-xl text-lg leading-relaxed text-ink-soft">

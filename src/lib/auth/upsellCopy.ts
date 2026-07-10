@@ -63,7 +63,7 @@ export function genericAuthCopy(): string {
   if (total > 0) {
     return `You have ${total} unsaved item${total === 1 ? "" : "s"} on this device. Browsing is free — losing your progress is not.`;
   }
-  return "Browsing is free — salvation costs extra. Claim your ledger before your sins evaporate.";
+  return "Browsing is free — salvation costs extra. Create an account (your ledger) before your sins evaporate.";
 }
 
 export function getLossCopy(context: LossContext): string {

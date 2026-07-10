@@ -52,5 +52,6 @@ export function createDefaultDraft(): OnboardingDraft {
     notificationPrefs: { ...DEFAULT_NOTIFICATION_PREFS },
     username: suggestUsername(),
     starterPackId: DEFAULT_STARTER_PACK_ID,
+    started: false,
   };
 }

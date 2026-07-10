@@ -11,8 +11,11 @@ interface ConfessionCardProps {
   confession: Confession;
   userVote: VoteType | null;
   onVote: (id: string, vote: VoteType) => void;
-  votingDisabled?: boolean;
-  voteDisabledReason?: string;
+  /** Demo seed posts — votes are display-only. */
+  demoOnly?: boolean;
+  /** Guest: buttons stay enabled and call onGuestVote instead of casting. */
+  requiresAuth?: boolean;
+  onGuestVote?: () => void;
 }
 
 const verdictTones: Record<
@@ -34,11 +37,21 @@ export default function ConfessionCard({
   confession,
   userVote,
   onVote,
-  votingDisabled = false,
-  voteDisabledReason,
+  demoOnly = false,
+  requiresAuth = false,
+  onGuestVote,
 }: ConfessionCardProps) {
   const verdict = getVerdict(confession.absolveVotes, confession.condemnVotes);
   const score = getScore(confession.absolveVotes, confession.condemnVotes);
+
+  function handleVote(vote: VoteType) {
+    if (demoOnly) return;
+    if (requiresAuth) {
+      onGuestVote?.();
+      return;
+    }
+    onVote(confession.id, vote);
+  }
 
   return (
     <Surface as="article" accent="plum" accentTint hover padding="lg">
@@ -62,8 +75,8 @@ export default function ConfessionCard({
             variant={userVote === "absolve" ? "success" : "ghost"}
             accent="wine"
             size="sm"
-            disabled={votingDisabled}
-            onClick={() => onVote(confession.id, "absolve")}
+            disabled={demoOnly}
+            onClick={() => handleVote("absolve")}
             className={cn(
               userVote !== "absolve" &&
                 "hover:border-green-500/30 hover:text-green-400"
@@ -77,8 +90,8 @@ export default function ConfessionCard({
             variant={userVote === "condemn" ? "danger" : "ghost"}
             accent="ember"
             size="sm"
-            disabled={votingDisabled}
-            onClick={() => onVote(confession.id, "condemn")}
+            disabled={demoOnly}
+            onClick={() => handleVote("condemn")}
           >
             <ThumbsDown className="h-4 w-4" />
             Condemn
@@ -94,8 +107,15 @@ export default function ConfessionCard({
         </div>
       </div>
 
-      {votingDisabled && voteDisabledReason && (
-        <p className="verse-ref mt-2 text-ink-soft">{voteDisabledReason}</p>
+      {demoOnly && (
+        <p className="verse-ref mt-2 text-ink-soft">
+          Demo confession — votes are for display only.
+        </p>
+      )}
+      {requiresAuth && !demoOnly && (
+        <p className="verse-ref mt-2 text-ink-soft">
+          Sign in to cast a real vote.
+        </p>
       )}
 
       <p className="verse-ref mt-3 text-ink-soft">
@@ -106,7 +126,7 @@ export default function ConfessionCard({
           minute: "2-digit",
         })}
         {" · "}
-        {!votingDisabled && "Tap again to remove vote"}
+        {!demoOnly && !requiresAuth && "Tap again to remove vote"}
       </p>
     </Surface>
   );

@@ -16,6 +16,8 @@ export interface OnboardingDraft {
   notificationPrefs: NotificationPrefs;
   username: string;
   starterPackId: string;
+  /** True after the user opens signup or visits onboarding — not set by auto-generated drafts. */
+  started: boolean;
 }
 
 export interface OnboardingPreferences {
@@ -36,6 +38,7 @@ export function loadOnboardingDraft(): OnboardingDraft {
     return {
       ...defaults,
       ...parsed,
+      started: Boolean(parsed.started),
       notificationPrefs: {
         ...defaults.notificationPrefs,
         ...parsed.notificationPrefs,

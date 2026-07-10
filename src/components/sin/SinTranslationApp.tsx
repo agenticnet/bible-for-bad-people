@@ -27,7 +27,7 @@ const TABS = [
 ];
 
 export default function SinTranslationApp() {
-  const [activeTab, setActiveTab] = useState<SinTab>("library");
+  const [activeTab, setActiveTab] = useState<SinTab>("translate");
   const [communityRefresh, setCommunityRefresh] = useState(0);
 
   function handleLogUpdate() {

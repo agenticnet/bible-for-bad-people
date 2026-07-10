@@ -141,8 +141,8 @@ export default function SupportDesk() {
             tone="slate"
             lossContext="support"
             title="Sign in to file a ticket"
-            description="Browse the support desk for free. Log in to submit prayer tickets and track responses."
-            saveLabel="Sign in to submit"
+            description="Browse the support desk for free. Create an account to submit prayer tickets and track responses."
+            saveLabel="Create account to submit"
           >
             <Surface className="sticky top-4" padding="lg">
               <h2 className="mb-1 text-lg font-semibold text-ink">Submit a Prayer Ticket</h2>

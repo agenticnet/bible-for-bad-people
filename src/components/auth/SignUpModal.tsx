@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
@@ -11,6 +11,7 @@ import { postSignupRedirectPath } from "@/lib/auth/redirect";
 import { getLossCopy, getSignUpModalTitle, type LossContext } from "@/lib/auth/upsellCopy";
 import { isValidUsername, normalizeUsername } from "@/lib/auth/types";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useOnboardingDraft } from "@/components/auth/OnboardingDraftProvider";
 import { Button, Input, Label, Modal } from "@/components/ui";
 import { accentStyles } from "@/components/ui/tokens";
 import { cn } from "@/lib/utils";
@@ -30,7 +31,7 @@ export default function SignUpModal({
 }: SignUpModalProps) {
   const router = useRouter();
   const { refreshProfile } = useAuth();
-  const draft = loadOnboardingDraft();
+  const { draft, markStarted, updateDraft } = useOnboardingDraft();
   const redirectPath = postSignupRedirectPath(nextPath);
 
   const [showEmailForm, setShowEmailForm] = useState(false);
@@ -43,6 +44,15 @@ export default function SignUpModal({
 
   const lossCopy = getLossCopy(context);
   const title = getSignUpModalTitle(context);
+
+  useEffect(() => {
+    if (!open) return;
+    markStarted();
+    setUsername(draft.username || suggestUsername());
+    setShowEmailForm(false);
+    setError(null);
+    setSuccess(null);
+  }, [open, markStarted, draft.username]);
 
   async function finishSignup(normalizedUsername: string) {
     const preferences = draftToPreferences(loadOnboardingDraft());
@@ -107,10 +117,7 @@ export default function SignUpModal({
     const supabase = createClient();
     const normalized = normalizeUsername(username);
     if (isValidUsername(normalized)) {
-      localStorage.setItem(
-        "bfb-onboarding-draft",
-        JSON.stringify({ ...loadOnboardingDraft(), username: normalized })
-      );
+      updateDraft({ username: normalized, started: true });
     }
     const origin = window.location.origin;
     const onboardingNext = `/onboarding?step=claim&next=${encodeURIComponent(redirectPath)}`;
@@ -125,14 +132,14 @@ export default function SignUpModal({
 
   return (
     <Modal open={open} onClose={onClose} accent="wine" closeDisabled={loading}>
-      <p className="verse-ref mb-2 text-wine">Claim Your Ledger</p>
-      <h3 className="mb-2 text-lg font-bold text-ink">{title}</h3>
+      <p className="verse-ref mb-2 text-wine">{title}</p>
+      <h3 className="mb-2 text-lg font-bold text-ink">Create an account</h3>
       <p className="mb-6 text-sm leading-relaxed text-ink-soft">{lossCopy}</p>
 
       {!showEmailForm ? (
         <div className="flex flex-col gap-3">
           <div>
-            <Label htmlFor="modal-username">Username</Label>
+            <Label htmlFor="modal-username">Username (suggested)</Label>
             <Input
               id="modal-username"
               accent="wine"
@@ -141,6 +148,9 @@ export default function SignUpModal({
               placeholder="petty_saint"
               autoComplete="username"
             />
+            <p className="mt-1.5 text-xs text-ink-soft">
+              Suggested handle — edit it before claiming.
+            </p>
           </div>
           <Button type="button" accent="wine" onClick={handleGoogle} disabled={loading}>
             Continue with Google
@@ -163,7 +173,7 @@ export default function SignUpModal({
       ) : (
         <form onSubmit={handleEmailSubmit} className="flex flex-col gap-3">
           <div>
-            <Label htmlFor="modal-username-email">Username</Label>
+            <Label htmlFor="modal-username-email">Username (suggested)</Label>
             <Input
               id="modal-username-email"
               accent="wine"
@@ -172,6 +182,9 @@ export default function SignUpModal({
               required
               autoComplete="username"
             />
+            <p className="mt-1.5 text-xs text-ink-soft">
+              Suggested handle — edit it before claiming.
+            </p>
           </div>
           <div>
             <Label htmlFor="modal-email">Email</Label>
@@ -201,7 +214,7 @@ export default function SignUpModal({
           {error && <p className="text-sm text-ember">{error}</p>}
           {success && <p className={cn("text-sm", accentStyles.wine.text)}>{success}</p>}
           <Button type="submit" accent="wine" disabled={loading || !!success}>
-            {loading ? "Creating ledger..." : "Claim Your Ledger"}
+            {loading ? "Creating account..." : "Create account"}
           </Button>
           <Button type="button" variant="ghost" accent="wine" onClick={() => setShowEmailForm(false)}>
             Back

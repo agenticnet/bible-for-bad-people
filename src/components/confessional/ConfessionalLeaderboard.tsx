@@ -14,12 +14,16 @@ import {
   castConfessionVote,
 } from "@/lib/data/confessional";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useAuthModal } from "@/components/auth/AuthModalProvider";
 import { ChamberHeader, PageShell, TabGroup } from "@/components/ui";
+import { usePathname } from "next/navigation";
 
 const SORTS = Object.keys(SORT_LABELS) as ConfessionSort[];
 
 export default function ConfessionalLeaderboard() {
   const { user } = useAuth();
+  const { openSignUp } = useAuthModal();
+  const pathname = usePathname();
   const [confessions, setConfessions] = useState<Confession[]>([]);
   const [sort, setSort] = useState<ConfessionSort>("hot");
   const [votes, setVotes] = useState<Record<string, VoteType>>({});
@@ -83,22 +87,20 @@ export default function ConfessionalLeaderboard() {
           />
 
           <div className="flex flex-col gap-4">
-            {sorted.map((confession) => (
-              <ConfessionCard
-                key={confession.id}
-                confession={confession}
-                userVote={votes[confession.id] ?? null}
-                onVote={handleVote}
-                votingDisabled={!user || confession.id.startsWith("seed-")}
-                voteDisabledReason={
-                  confession.id.startsWith("seed-")
-                    ? "Demo confession — votes are for display only."
-                    : !user
-                      ? "Sign in to absolve or condemn."
-                      : undefined
-                }
-              />
-            ))}
+            {sorted.map((confession) => {
+              const isDemo = confession.id.startsWith("seed-");
+              return (
+                <ConfessionCard
+                  key={confession.id}
+                  confession={confession}
+                  userVote={votes[confession.id] ?? null}
+                  onVote={handleVote}
+                  demoOnly={isDemo}
+                  requiresAuth={!user && !isDemo}
+                  onGuestVote={() => openSignUp("confessional", pathname)}
+                />
+              );
+            })}
           </div>
         </div>
 

@@ -210,6 +210,10 @@ export function hasIncompleteOnboarding(
   draft: OnboardingDraft,
   welcomeComplete: boolean
 ): boolean {
+  // Guests only see the setup widget after explicit onboarding intent.
+  // Auto-generated drafts always have a valid username, which would otherwise
+  // show "Pending setup" on every first visit.
+  if (!profile && !draft.started) return false;
   return getPendingTasks(profile, draft, welcomeComplete).length > 0;
 }
 

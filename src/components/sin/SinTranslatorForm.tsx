@@ -166,9 +166,11 @@ export default function SinTranslatorForm({ onLogUpdate }: SinTranslatorFormProp
             <Chip
               key={sin.id}
               accent="terra"
+              title={sin.petty}
               onClick={() => fillSuggestion(sin.petty)}
+              className="max-w-full whitespace-normal text-left leading-snug"
             >
-              {sin.petty.length > 45 ? `${sin.petty.slice(0, 45)}…` : sin.petty}
+              {sin.petty}
             </Chip>
           ))}
         </div>

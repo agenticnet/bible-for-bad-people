@@ -12,13 +12,14 @@ import { isValidUsername, normalizeUsername } from "@/lib/auth/types";
 import AuthFormShell from "@/components/auth/AuthFormShell";
 import { Button, Input, Label } from "@/components/ui";
 import { useAuth } from "@/components/auth/AuthProvider";
+import { useOnboardingDraft } from "@/components/auth/OnboardingDraftProvider";
 
 export default function SignupForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { refreshProfile } = useAuth();
+  const { draft, markStarted } = useOnboardingDraft();
   const next = postSignupRedirectPath(searchParams.get("next"));
-  const draft = loadOnboardingDraft();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,9 +29,9 @@ export default function SignupForm() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const loaded = loadOnboardingDraft();
-    setUsername(loaded.username || suggestUsername());
-  }, []);
+    markStarted();
+    setUsername(draft.username || suggestUsername());
+  }, [markStarted, draft.username]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

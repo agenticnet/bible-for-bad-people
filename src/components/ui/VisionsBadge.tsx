@@ -21,6 +21,7 @@ export default function VisionsBadge({
         accentStyles[accent].bgMuted,
         className
       )}
+      title="Responses are satirical approximations — not prophecy, therapy, or divine revelation."
     >
       <Sparkles className={cn("h-3 w-3", accentStyles[accent].text)} />
       <span className={cn("verse-ref text-[0.65rem]", accentStyles[accent].text)}>

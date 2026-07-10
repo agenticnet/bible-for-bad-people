@@ -66,13 +66,13 @@ export default function LiveActivityFeed() {
           >
             <Surface
               accent="wine"
-              className="px-4 py-3 shadow-[0_8px_30px_oklch(0.22_0.025_265/0.12)]"
+              className="border border-rule bg-page px-4 py-3 shadow-[0_8px_30px_oklch(0.22_0.025_265/0.18)]"
               padding="sm"
             >
               <p className="text-contain text-sm text-ink">
                 <span className="font-semibold">{toast.displayName}</span>
                 {toast.city ? ` in ${toast.city}` : ""} just acquired{" "}
-                <span className="text-wine">{toast.productName}</span>
+                <span className="font-medium text-wine">{toast.productName}</span>
               </p>
             </Surface>
           </motion.div>

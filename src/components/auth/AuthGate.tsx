@@ -26,7 +26,7 @@ export default function AuthGate({
   mode = "preview",
   previewFallback,
   lossContext = "generic",
-  saveLabel = "Claim your ledger",
+  saveLabel = "Create an account",
 }: AuthGateProps) {
   const { user, profile, isLoading } = useAuth();
   const { openSignUp } = useAuthModal();
@@ -54,12 +54,6 @@ export default function AuthGate({
         <p className="font-medium text-ink">{title}</p>
         <p className="mb-3 mt-1 text-sm text-ink-soft">{resolvedDescription}</p>
         <div className="flex flex-wrap gap-2">
-          <Link
-            href={`/login?next=${next}`}
-            className="rounded-lg border border-rule px-4 py-2 text-sm font-medium text-ink transition-colors hover:border-ink/30"
-          >
-            Log In
-          </Link>
           <Button
             type="button"
             accent="wine"
@@ -68,6 +62,12 @@ export default function AuthGate({
           >
             {saveLabel}
           </Button>
+          <Link
+            href={`/login?next=${next}`}
+            className="rounded-lg px-4 py-2 text-sm text-ink-soft transition-colors hover:text-ink"
+          >
+            Already have an account? Log in
+          </Link>
         </div>
         {previewFallback}
       </Callout>
@@ -116,7 +116,7 @@ export function AuthSavePrompt({
         size="sm"
         onClick={() => openSignUp(lossContext, pathname)}
       >
-        {label ?? "Claim your ledger"}
+        {label ?? "Create an account"}
       </Button>
     </div>
   );

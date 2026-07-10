@@ -60,7 +60,7 @@ export default function ChamberChatInterface({ config }: ChamberChatInterfacePro
               placeholder={config.composer.placeholder}
               hint={
                 isAnonymous && !previewExhausted
-                  ? "Guests get one free message — then you'll need a ledger to continue."
+                  ? "Guests get one free message — then you'll need an account (your ledger) to continue."
                   : config.composer.hint
               }
             />

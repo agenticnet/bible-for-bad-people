@@ -28,7 +28,7 @@ export default function ChamberNavMenu() {
     <div className="relative" ref={menuRef}>
       <Link
         href="/#chambers"
-        className="hidden text-sm text-binding-muted transition-colors hover:text-binding-ivory md:inline"
+        className="hidden rounded-sm border border-ivory/15 px-3 py-1.5 text-sm text-binding-muted transition-colors hover:border-ivory/30 hover:text-binding-ivory md:inline"
       >
         Chambers
       </Link>
